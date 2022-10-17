@@ -6,6 +6,7 @@ sequenceDiagram
 autonumber
 participant Client
 participant Applikationsserver
+participant Google API Server
 participant OAuth 2.0 Dialog
 
 Client ->> Google API Server: Benutzer klickt auf den Sign-In Button. Die Autorisierungsanfrage <br> wurde an Google's OAuth Server gesendet

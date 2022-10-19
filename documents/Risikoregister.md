@@ -248,7 +248,7 @@
         <td colspan="6" width="945">
             <p>Alle Kommunikation/Daten&uuml;bertragung muss sicher (vertraulich, integrit&auml;tsgesch&uuml;tzt)
                 erfolgen.<br/> <br/> DSGVO schreibt Schutz der Daten gesetzlich vor.<br/> <br/> CON.10.A14<br/> <br/>
-                Betrifft: A8, A9, A10, A18, A19</p>
+                Betrifft: A8, A9, A10, A13, A18</p>
         </td>
     </tr>
     <tr>

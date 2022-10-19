@@ -17,3 +17,5 @@ Applikationsserver ->> Google API Server: Server tauscht Einmalcode gegen <br> a
 Google API Server ->> Applikationsserver: Google gibt den access_token <br> und den id_token zurück
 Applikationsserver -->> Client: Server bestätigt <br> "fully logged in" zum Client
 ```
+
+Der Austausch der Daten zwischen den einzelnen Beteiligten erfolgt über das Hypertext Transfer Protocol (HTTP).

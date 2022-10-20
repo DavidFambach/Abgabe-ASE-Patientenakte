@@ -1,5 +1,5 @@
 # Key concept: Google IdP  
-Mithilfe des Google Sign-In wird ein SSO ermöglicht. Das bedeutet, dass die Benutzer unsere Anwendung ihr Google-Konto zur Authentisierung verwenden können. Der einsatz von SSO schafft vile vorteile:
+Mithilfe des Google Sign-In wird ein SSO ermöglicht. Das bedeutet, dass die Benutzer unsere Anwendung ihr Google-Konto zur Authentisierung verwenden können. Der Einsatz von SSO schafft viele Vorteile:
 
 - Die einmalige Anmeldung für den Zugriff auf verschiedene Anwendungen spart Zeit.
 - Die Qualität der Zugangsdaten verbessert sich.

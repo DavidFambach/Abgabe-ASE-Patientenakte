@@ -23,3 +23,6 @@
 | F19 | Benutzerverwaltung | Das System muss Benutzern erlaben ihren Account und all ihre Daten zu löschen.                          |           |
 | F20 | Benutzerverwaltung | Das System muss es Administratoren ermöglichen beliebige Dateien zu löschen.                            |           |
 | F21 | Benutzerverwaltung | Das System muss es Administratoren ermöglichen beliebige Benutzer zu löschen.                           |           |
+| F22 | Datenbank          | Das System muss fähig sein, eine relationale Datenbank zu initialisieren.                               |           |
+| F23 | Datenbank          | Das System muss fähig sein, Eingabedaten in eine relationale Stuktur zu überführen.                     |           |
+| F24 | Datenbank          | Das System muss fähig sein, die Struktur von Eingabedaten auf Vollständigkeit zu prüfen.                |           |

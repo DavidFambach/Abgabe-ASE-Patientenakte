@@ -1,0 +1,38 @@
+# AD2: Architekturentscheidung Web Framework
+
+|                             |                                              |           |               |
+|-----------------------------|----------------------------------------------|-----------|---------------|
+| **Richtung**                | Eingesetzte externe <br> Komponenten         | **Thema** | Web Framework |
+| **Architekturentscheidung** | Verwendung von Django <br> als Web Framework | **ID**    | AD2           |   
+
+|                                    |                                                                   |
+|------------------------------------|-------------------------------------------------------------------|
+| **Problemstellung**                |                                                                   |
+| **Annahmen**                       | - Webframework basierend auf der Programmiersprache Python <br>   |
+| **Motivation**                     |                                                                   |
+| **Alternativen**                   | - Option 1: Django <br> - Option 2: Flask <br> - Option 3: Bottle |
+| **Entscheidung**                   | Django                                                            |
+| **Begründung**                     |                                                                   |
+| **Implikation**                    |                                                                   |
+| **Abgeleitete <br> Anforderungen** |                                                                   |
+| **Zugehörige <br> Entscheidungen** | Architekturentscheidung Programmiersprache: **Python**            |
+
+## Entscheidungsmatrix
+| Kriterien                                                                                    | Gewichtung | Django | Evaluierung | Flask | Evaluierung | Bottle |
+|----------------------------------------------------------------------------------------------|:----------:|--------|:-----------:|-------|:-----------:|--------|
+| Bibliotheken (z.B. AJAX, Authentifizierung, Authorisation, Caching, Datenvalidierung, etc.)  |            |        |             |       |             |        |
+| Codeausführungsumgebung                                                                      |            |        |             |       |             |        |
+| konsistente Entwicklungsumgebung                                                             |            |        |             |       |             |        |
+| Verbindung zu verschiedenen Datenbanken                                                      |            |        |             |       |             |        |
+| Logging, Recovery, Inter-System Messaging                                                    |            |        |             |       |             |        |
+| Unterstützung von anpassbaren Konnektoren und Adaptern                                       |            |        |             |       |             |        |
+| Unterstützung von unterschiedlichen Plattformen und Dateiformaten                            |            |        |             |       |             |        |
+| Datenmapping                                                                                 |            |        |             |       |             |        |
+| Automatisches Handling von Ausnahmen und Fehlern                                             |            |        |             |       |             |        |
+| Intuitive Modellierungsumgebung und grafische Benutzeroberfläche                             |            |        |             |       |             |        |
+| Sicherheitsfunktionen                                                                        |            |        |             |       |             |        |
+| Verschlüsselungstools                                                                        |            |        |             |       |             |        |
+| Online Performance Monitoring                                                                |            |        |             |       |             |        |
+| Alerts                                                                                       |            |        |             |       |             |        |
+| Unterstützung von Routing Diensten                                                           |            |        |             |       |             |        |
+| Unterstützung von Simulationswerkzeugen                                                      |            |        |             |       |             |        |

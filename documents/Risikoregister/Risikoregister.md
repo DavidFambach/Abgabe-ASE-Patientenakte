@@ -828,3 +828,291 @@
     </tbody>
 </table>
 <p>&nbsp;</p>
+
+
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <p><strong>RisikoID</strong></p>
+        </td>
+        <td>
+            <p><strong>Bedrohung</strong></p>
+        </td>
+        <td>
+            <p><strong>Eintrittswahrscheinlichkeit</strong></p>
+        </td>
+        <td>
+            <p><strong>Auswirkungen</strong></p>
+        </td>
+        <td>
+            <p><strong>Risiko</strong></p>
+        </td>
+        <td>
+            <p><strong>Behandlung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>&nbsp;R10</p>
+        </td>
+        <td>
+            <p>Unbefugte sehen geheime Konfigurationsparameter ein</p>
+        </td>
+        <td>
+            <p>Niedrig</p>
+        </td>
+        <td>
+            <p>Hoch<br/></p>
+        </td>
+        <td>
+            <p>Niedrig</p>
+        </td>
+        <td>
+            <p>Reduzieren/Akzeptieren</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Beschreibung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>Unbefugte Prozesse oder Benutzer können geheime Konfigurationsparameter ein, insbesondere kryptografische Schlüssel, die von einer Anwendungskomponente benötigt, zum Beispiel zum Erbringen eines Identitätsnachweises.</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Anforderungen</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>
+				- Geheime Konfigurationsparameter werden vertraulich gespeichert<br>
+				- OWASP ASVS V1.6.2 wird explizit nicht eingesetzt (vgl. Konzept "Schützen von konfigurierten Geheimnissen produktiver Systeme")<br>
+				Betrifft: A4, A6
+			</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p><strong>Ma&szlig;nahmen</strong></p>
+        </td>
+        <td>
+            <p>&Uuml;berpr&uuml;fung</p>
+        </td>
+        <td>
+            <p>TestID</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p>- Ausgeben einer Warnung an den Administrator, falls für geheime Konfigurationsparameter im Dateisystem ungünstige Zugriffsrechte gesetzt sind. Diese Maßnahme ist sehr einfach umsetzbar, ermöglicht aber nur die Erkennung eines einzelnen, speziellen Szenarios und reduziert damit formell das bezeichnete Risiko. Weil dies aber die einzige Maßnahme ist, wäre es irreführend, die Risikobehandlung als kommentarlos als Reduzieren zu bezeichnen, weil das nur unerheblich unter dem Ursprungsrisiko liegende Restrisiko de facto akzeptiert wird.</p>
+        </td>
+        <td>
+            <p>- Manueller Test</p>
+        </td>
+        <td>
+            <p>[TId]</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>
+
+
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <p><strong>RisikoID</strong></p>
+        </td>
+        <td>
+            <p><strong>Bedrohung</strong></p>
+        </td>
+        <td>
+            <p><strong>Eintrittswahrscheinlichkeit</strong></p>
+        </td>
+        <td>
+            <p><strong>Auswirkungen</strong></p>
+        </td>
+        <td>
+            <p><strong>Risiko</strong></p>
+        </td>
+        <td>
+            <p><strong>Behandlung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>&nbsp;R11</p>
+        </td>
+        <td>
+            <p>Privilegierte Benutzer sehen Gesundheitsdaten anderer Benutzer ein</p>
+        </td>
+        <td>
+            <p>Mittel</p>
+        </td>
+        <td>
+            <p>Hoch<br/></p>
+        </td>
+        <td>
+            <p>Mittel</p>
+        </td>
+        <td>
+            <p>Reduzieren</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Beschreibung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>Privilegierte Benutzer können Gesundheitsdaten anderer Benutzer einsehen. Dieses Risiko unterscheidet sich von R1 dahingehend, dass der Benutzer, der unbefugt Daten einsehen kann, berechtigterweise erweiterte Rechte auf Systemen der Anwendung hat.</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Anforderungen</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>
+				- Maßnahmen, die die Möglichkeiten priveligierter Benutzer beschränken, Vertraulichkeit und Integrität gespeicherter Gesundheitsdaten zu verletzen, und deren Aufwand ihren Nutzen nicht unangemessen übersteigt, werden implementiert.<br>
+				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br>
+				Betrifft: A8<br>
+			</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p><strong>Ma&szlig;nahmen</strong></p>
+        </td>
+        <td>
+            <p>&Uuml;berpr&uuml;fung</p>
+        </td>
+        <td>
+            <p>TestID</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p>
+				- Einsatz von Ende-zu-Ende-Verschlüsselung für Benutzerdaten mittels asymmetrischer Kryptografie (vgl. Konzept "Schützen von Data-at-rest")<br>
+				- Maßnahmen gemäß R1
+            </p>
+        </td>
+        <td>
+            <p>
+				- Manueller Test<br>
+				- Design Review<br>
+				- Code Review
+			</p>
+        </td>
+        <td>
+            <p>[TId]</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>
+
+
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <p><strong>RisikoID</strong></p>
+        </td>
+        <td>
+            <p><strong>Bedrohung</strong></p>
+        </td>
+        <td>
+            <p><strong>Eintrittswahrscheinlichkeit</strong></p>
+        </td>
+        <td>
+            <p><strong>Auswirkungen</strong></p>
+        </td>
+        <td>
+            <p><strong>Risiko</strong></p>
+        </td>
+        <td>
+            <p><strong>Behandlung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>&nbsp;R12</p>
+        </td>
+        <td>
+            <p>Privilegierte Benutzer sehen Gesundheitsdaten anderer Benutzer ein</p>
+        </td>
+        <td>
+            <p>Mittel</p>
+        </td>
+        <td>
+            <p>Hoch<br/></p>
+        </td>
+        <td>
+            <p>Mittel</p>
+        </td>
+        <td>
+            <p>Akzeptieren</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Beschreibung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>
+				Privilegierte Benutzer können personenbezogenen Daten anderer Benutzer einsehen. Dieses Risiko unterscheidet sich von R1 dahingehend, dass der Benutzer, der unbefugt Daten einsehen kann, berechtigterweise erweiterte Rechte auf Systemen der Anwendung hat.<br>
+				Für priveligierte Benutzer, die aus geschäftlichen Gründen auf die oder eine Telmenge der gespeicherten personenbezogenen Daten zugreifen müssen, besteht die Möglichkeit, dass dieser Zugang missbraucht wird. Aufgrund der Datenminimierung nach DSGVO ist die Menge der vorhandenen und damit zugreifbaren Daten bereits minimal. Das Ergreifen weiterer technischer Maßnahmen gegen einen Missbrauch des Zugangs wäre risikobasiert nicht angemessen. Stattdessen sollten für den Betrieb der Anwendung gegebenenfalls geeignete organisatorische Maßnahmen implementiert werden, die dieses Risiko auf ein akzeptables Maß reduzieren (NDO).
+			</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Anforderungen</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>
+				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br>
+				Betrifft: A9
+			</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p><strong>Ma&szlig;nahmen</strong></p>
+        </td>
+        <td>
+            <p>&Uuml;berpr&uuml;fung</p>
+        </td>
+        <td>
+            <p>TestID</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p>n/a</p>
+        </td>
+        <td>
+            <p>n/a</p>
+        </td>
+        <td>
+            <p>n/a</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>

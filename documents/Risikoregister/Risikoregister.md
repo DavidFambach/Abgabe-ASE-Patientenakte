@@ -520,7 +520,7 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Das erraten des Kennworts per Bruteforce in Verbindung mit der Nutzung von Wörterbüchern und Rainbowtables soll verhindert werden.</p>
+            <p>Das erraten des Kennworts per Bruteforce in Verbindung mit der Nutzung von Wörterbüchern und Rainbowtables soll unwirtschaftlich sein.</p>
         </td>
     </tr>
     <tr>
@@ -536,7 +536,7 @@
     </tr>
     <tr>
         <td colspan="4">
-            <p>Single-Sign-On über einen externen IDP soll ermöglicht werden.</p>
+            <p>Single-Sign-On über einen externen IDP ermöglichen. (optional)</p>
             <p>Das Passwort muss gewisse Vorgaben erfüllen um verwendet werden zu können. (siehe "Schutzkonzept Data-At-Rest")</p>
         </td>
         <td>
@@ -594,7 +594,7 @@
             <p>Mittel</p>
         </td>
         <td>
-            <p>Akzeptieren</p>
+            <p>Reduzieren</p>
         </td>
     </tr>
     <tr>

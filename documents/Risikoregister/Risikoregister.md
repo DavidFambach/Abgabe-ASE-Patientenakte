@@ -735,3 +735,96 @@
     </tbody>
 </table>
 <p>&nbsp;</p>
+
+
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <p><strong>RisikoID</strong></p>
+        </td>
+        <td>
+            <p><strong>Bedrohung</strong></p>
+        </td>
+        <td>
+            <p><strong>Eintrittswahrscheinlichkeit</strong></p>
+        </td>
+        <td>
+            <p><strong>Auswirkungen</strong></p>
+        </td>
+        <td>
+            <p><strong>Risiko</strong></p>
+        </td>
+        <td>
+            <p><strong>Behandlung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>&nbsp;R9</p>
+        </td>
+        <td>
+            <p>Benutzer der Anwendung laden b&ouml;sartige Dateien hoch. </p>
+        </td>
+        <td>
+            <p>Niedrig</p>
+        </td>
+        <td>
+            <p>Hoch<br/></p>
+        </td>
+        <td>
+            <p>Mittel</p>
+        </td>
+        <td>
+            <p>Reduzieren</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Beschreibung</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>Benutzer der Anwendung laden b&ouml;sartige Dateien hoch.<br>
+            Diese  k&ouml;nnten dann von anderen Benutzern heruntergeladen und ge&ouml;ffnte werden und dadurch ihr System infizieren.</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p><strong>Anforderungen</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p>Das Hochladen einer solchen Datei soll erschwert und wenn m&ouml;glich verhindert werden. <br>
+            Benutzer sollten vor dem Ausführen/ beim Herunterladen einer Datei vor Risiken gewarnt werden</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p><strong>Ma&szlig;nahmen</strong></p>
+        </td>
+        <td>
+            <p>&Uuml;berpr&uuml;fung</p>
+        </td>
+        <td>
+            <p>TestID</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p>Nur Dateien mit freigegebenen Dateiendungen d&uuml;rfen hochgeladen werden.<br>
+                Benutzer werden beim Herunterladen vor m&ouml;gliche Risiken gewarnt
+            </p>
+        </td>
+        <td>
+            <p>Manueller Test<br/> Automatisierter Test</p>
+        </td>
+        <td>
+            <p>[TId]</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>

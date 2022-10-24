@@ -1,21 +1,22 @@
-# AD2: Architekturentscheidung Web Framework
+# Architekturentscheidung: Web Framework
 
-|                             |                                              |           |               |
-|-----------------------------|----------------------------------------------|-----------|---------------|
-| **Richtung**                | Eingesetzte externe <br> Komponenten         | **Thema** | Web Framework |
-| **Architekturentscheidung** | Verwendung von Django <br> als Web Framework | **ID**    | AD2           |   
+## Zusammenfassung
+**Bereich**: Eingesetzte externe Komponenten <br>
+**Thema**: Web Framework <br>
+**ID**: AD2 <br>
+**Architekturentscheidung**: Verwendung von Django als Web Framework
 
-|                                    |                                                                   |
-|------------------------------------|-------------------------------------------------------------------|
-| **Problemstellung**                |                                                                   |
-| **Annahmen**                       | - Webframework basierend auf der Programmiersprache Python <br>   |
-| **Motivation**                     |                                                                   |
-| **Alternativen**                   | - Option 1: Django <br> - Option 2: Flask <br> - Option 3: Bottle |
-| **Entscheidung**                   | Django                                                            |
-| **Begründung**                     |                                                                   |
-| **Implikation**                    |                                                                   |
-| **Abgeleitete <br> Anforderungen** |                                                                   |
-| **Zugehörige <br> Entscheidungen** | Architekturentscheidung Programmiersprache: **Python**            |
+|                                    |                                                                                                     |
+|------------------------------------|-----------------------------------------------------------------------------------------------------|
+| **Problemstellung**                |                                                                                                     |
+| **Annahmen**                       | - Webframework basierend auf der Programmiersprache Python <br>                                     |
+| **Motivation**                     |                                                                                                     |
+| **Alternativen**                   | - Option 1: Django (Makroframework) <br> - Option 2: Flask (Microframework) <br> - Option 3: Bottle |
+| **Entscheidung**                   | Verwende Django                                                                                     |
+| **Begründung**                     |                                                                                                     |
+| **Implikation**                    |                                                                                                     |
+| **Abgeleitete <br> Anforderungen** |                                                                                                     |
+| **Zugehörige <br> Entscheidungen** | Architekturentscheidung Programmiersprache: **Python**                                              |
 
 ## Entscheidungsmatrix
 | Kriterien                                                                                   | Gewichtung | Django |                                                                                                                                      Evaluierung                                                                                                                                      | Flask | Evaluierung | Bottle |
@@ -36,3 +37,11 @@
 | Alerts                                                                                      |            |        |                                                                                                                                                                                                                                                                                       |       |             |        |
 | Unterstützung von Routing Diensten                                                          |            |        |                                                                                                                                                                                                                                                                                       |       |             |        |
 | Unterstützung von Simulationswerkzeugen                                                     |            |        |                                                                                                                                                                                                                                                                                       |       |             |        |
+
+Legende zur Evaluierung:
+ - ++: Die Alternative ist bezüglich des Kriteriums sehr positiv zu bewerten. Diese Bewertung entspricht 3 Punkten.
+ - +: Die Alternative ist bezüglich des Kriteriums positiv zu bewerten. Diese Bewertung entspricht 1 Punkt.
+ - O: Die Alternative ist bezüglich des Kriteriums neutral zu bewerten, eine Bewertung der Alternative hinsichtlich dieses Kriteriums ist nicht sinnvoll oder nicht praktikabel oder wurde aus einem anderen Grund nicht vorgenommen. Diese Bewertung entspricht 0 Punkten.
+ - \-: Die Alternative ist bezüglich des Kriteriums negativ zu bewerten. Diese Bewertung entspricht -1 Punkt.
+ - \-\-: Die Alternative ist bezüglich des Kriteriums sehr negativ zu bewerten. Diese Bewertung entspricht -3 Punkten.
+Die Gesamtbewertung ist die Summe der gewichteten Evaluierungen über alle Kriterien, die keine Ausschlusskriterien sind. Alternativen, die bezüglich mindestens einem Ausschlusskriterium negativ bewertet wurden, erhalten keine Gesamtbewertung und werden nicht weiter betrachet.

@@ -509,8 +509,8 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Benutzer wählen aus Bequemlichkeit, Unwissenheit oder anderen, uns unbekannten Gründen, unsichere Passwörter für die Authentifizierung.
-                <br>Dadurch werden Sicherheitsmechanismen die auf die Integrität des Benutzerkontos aufbauen unwirksam.</p>
+            <p>Benutzer wählen aus Bequemlichkeit, Unwissenheit oder anderen Gründen unsichere Passwörter für die Authentifizierung.
+                <br>Dadurch werden Sicherheitsmechanismen, die auf der Integrität des Benutzerkontos aufbauen, unwirksam.</p>
         </td>
     </tr>
     <tr>
@@ -520,7 +520,7 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Das erraten des Kennworts per Bruteforce in Verbindung mit der Nutzung von Wörterbüchern und Rainbowtables soll unwirtschaftlich sein.</p>
+            <p>Das Erraten des Kennworts mittels Bruteforce oder durch Nutzung von Wörterbüchern und Rainbowtables soll unwirtschaftlich sein.</p>
         </td>
     </tr>
     <tr>
@@ -604,8 +604,8 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Die aus hohen Anforderungen (siehe R6) an das Passwort ist dieses nicht sehr einprägsam. Hinzu kommt, dass die Gesundheitsakte von den meisten Benutzern nicht regelmäßig und in größeren Zeitabständen verwendet wirt.</p>
-            <p>In folge dessen werden viele Benutzer ihr Zugangsdaten vergessen und infolgedessen ihre verschlüsselten Daten verlieren (siehe Schutzkonzept Data-At-Rest).</p>
+            <p>Die aus hohen Anforderungen (siehe R6) an das Passwort ist dieses nicht sehr einprägsam. Hinzu kommt, dass die Gesundheitsakte von den meisten Benutzern nicht regelmäßig sondern in größeren Zeitabständen verwendet wirt.</p>
+            <p>Infolgedessen werden viele Benutzer ihr Zugangsdaten vergessen und somit ihre verschlüsselten Daten verlieren (vgl. Konzept "Schützen von Data-at-rest").</p>
         </td>
     </tr>
     <tr>
@@ -615,7 +615,7 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Die Benutzer auf dieses Risiko aufmerksam machen und Möglichkeiten zur Vermeidung nahelegen.</p>
+            <p>Die Benutzer auf dieses Risiko aufmerksam machen und Möglichkeiten die Vermeidung nahelegen.</p>
         </td>
     </tr>
     <tr>
@@ -632,8 +632,8 @@
     <tr>
         <td colspan="4">
             <p>Bei der Erstellung des Kontos darauf hinweisen, dass es sich bei der Anwendung nicht um einen Onlinespeicher, sondern um eine Datenaustauschplattform handelt. Das hat zur Folge, dass die Verfügbarkeit der Daten der Vertraulichkeit und der Integrität der Daten untergeordnet ist.</p>
-            <p>Bei der Erstellung des Kontos darauf hinweisen, dass in der Anwendung zum Schutz der Vertraulichkeit die Daten End-zu-End verschlüsselt werden. Das hat zur Folge, dass beim Zurücksetzen des Anmeldekennworts sämtliche gespeicherte Daten gelöscht werden.</p>
-            <p>Bei der Erstellung des Kontos darauf hinweisen, dass zum Verwalten von komplexen Passwörtern ein Passwortmanager eine große hilfe ist.</p>
+            <p>Bei der Erstellung des Kontos darauf hinweisen, dass in der Anwendung zum Schutz der Vertraulichkeit die Daten Ende-zu-Ende verschlüsselt werden. Das hat zur Folge, dass beim Zurücksetzen des Anmeldekennworts sämtliche gespeicherte Daten gelöscht werden.</p>
+            <p>Bei der Erstellung des Kontos darauf hinweisen, dass zum Verwalten von komplexen Passwörtern ein Passwortmanager eine große Hilfe ist.</p>
         </td>
         <td>
             Manueller Test<br/> 
@@ -681,10 +681,10 @@
             <p>Hoch</p>
         </td>
         <td>
-            <p>Gering</p>
+            <p>Niedrig</p>
         </td>
         <td>
-            <p>Gering</p>
+            <p>Niedrig</p>
         </td>
         <td>
             <p>?</p>
@@ -764,7 +764,7 @@
             <p>&nbsp;R9</p>
         </td>
         <td>
-            <p>Benutzer der Anwendung laden b&ouml;sartige Dateien hoch. </p>
+            <p>Benutzer der Anwendung laden b&ouml;sartige Dateien hoch.</p>
         </td>
         <td>
             <p>Niedrig</p>
@@ -787,7 +787,7 @@
     <tr>
         <td colspan="6">
             <p>Benutzer der Anwendung laden b&ouml;sartige Dateien hoch.<br>
-            Diese  k&ouml;nnten dann von anderen Benutzern heruntergeladen und ge&ouml;ffnte werden und dadurch ihr System infizieren.</p>
+            Diese k&ouml;nnten dann von anderen Benutzern heruntergeladen und ge&ouml;ffnet werden und dadurch ihr System infizieren.</p>
         </td>
     </tr>
     <tr>
@@ -798,7 +798,7 @@
     <tr>
         <td colspan="6">
             <p>Das Hochladen einer solchen Datei soll erschwert und wenn m&ouml;glich verhindert werden. <br>
-            Benutzer sollten vor dem Ausführen/ beim Herunterladen einer Datei vor Risiken gewarnt werden</p>
+            Benutzer sollten vor dem Ausführen / beim Herunterladen einer Datei vor Risiken gewarnt werden.</p>
         </td>
     </tr>
     <tr>

@@ -537,7 +537,7 @@
     <tr>
         <td colspan="4">
             <p>Single-Sign-On über einen externen IDP ermöglichen. (optional)</p>
-            <p>Das Passwort muss gewisse Vorgaben erfüllen um verwendet werden zu können. (siehe "Schutzkonzept Data-At-Rest")</p>
+            <p>Das Passwort muss gewisse Vorgaben erfüllen um verwendet werden zu können.</p>
         </td>
         <td>
             Automatisierter Test<br/> 

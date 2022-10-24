@@ -1,4 +1,4 @@
-# Architekturentscheidung: Datenbank
+# Architekturentscheidung: Frontend Framework
 
 ## Zusammenfassung
 Bereich: Eingesetzte externe Komponenten

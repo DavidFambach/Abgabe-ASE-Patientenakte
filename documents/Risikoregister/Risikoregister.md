@@ -1116,3 +1116,77 @@
     </tbody>
 </table>
 <p>&nbsp;</p>
+
+<table width="945">
+<tbody>
+<tr>
+<td width="75">
+<p>&nbsp;R13</p>
+</td>
+<td width="274">
+<p><strong>Eine Person, die kein Arzt ist, gibt vor ein Arzt zu sein.</strong></p>
+</td>
+<td width="180">
+<p><strong>Mittel</strong></p>
+</td>
+<td width="123">
+<p><strong>Hoch</strong></p>
+</td>
+<td width="161">
+<p><strong>Mittel</strong></p>
+</td>
+<td width="132">
+<p><strong>Reduzieren</strong></p>
+</td>
+</tr>
+<tr>
+<td colspan="6" width="945">
+<p><strong>Beschreibung</strong></p>
+</td>
+</tr>
+<tr>
+<td colspan="6" width="945">
+<p>Eine Person kann sich als Arzt ausgeben, und sich so das Vertrauen von anderen Benutzern erschleichen und sie zum Austausch der Patientendaten animieren.</p>
+</td>
+</tr>
+<tr>
+<td colspan="6" width="945">
+<p><strong>Anforderungen</strong></p>
+</td>
+</tr>
+<tr>
+<td colspan="6" width="945">
+<p>Benutzer der Applikation sollen ihr gegen&uuml;ber zu jeder Zeit eindeutig identifizieren k&ouml;nnen.</p>
+</td>
+</tr>
+<tr>
+<td colspan="4" width="652">
+<p><strong>Ma&szlig;nahmen</strong></p>
+</td>
+<td width="161">
+<p>&Uuml;berpr&uuml;fung</p>
+</td>
+<td width="132">
+<p>TestID</p>
+</td>
+</tr>
+<tr>
+<td colspan="4" width="652">
+<p>Jeder Benutzer erh&auml;lt bei der Erstellung seines Kontos eine Eindeutige ID zugewiesen.</p>
+<p>Der Empf&auml;nger gibt sie an Personen weiter, von denen er Dokumente erhalten m&ouml;chte.</p>
+<p>Der Sender kann mit dieser Nummer sein gegen&uuml;ber eindeutig identifizieren.</p>
+</td>
+<td width="161">
+<p>
+Manueller Test<br />
+Design Review
+</p>
+</td>
+<td>
+<p>[TId]</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+

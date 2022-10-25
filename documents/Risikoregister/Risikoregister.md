@@ -1050,7 +1050,7 @@
             <p>&nbsp;R12</p>
         </td>
         <td>
-            <p>Privilegierte Benutzer sehen Gesundheitsdaten anderer Benutzer ein</p>
+            <p>Privilegierte Benutzer sehen personenbezogene Daten anderer Benutzer ein</p>
         </td>
         <td>
             <p>Mittel</p>

@@ -83,7 +83,6 @@
     <tr>
         <td colspan="4">
             <p>Benutzerverwaltung und Authentifizierung (Anmeldung) erzwingen vor Zugriff.</p>
-            <p>&hellip;</p>
         </td>
         <td>
             <p>Manueller Test<br/> Automatisierter Test<br/>Pentest<br>Code Review (Manuell)</p>
@@ -590,8 +589,6 @@
     </tbody>
 </table>
 <p>&nbsp;</p>
-
-[comment]: <> (TODO: Einfügung der Passwortrichtlinien?)
 
 
 <table>

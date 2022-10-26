@@ -26,7 +26,7 @@ Architekturentscheidung: Verwendung von Python als Programmiersprache
 | Performance                          | 2          |                             | +         |                             | ++          |                    | +          |
 | Memory Usage                         | 2          |                             | +          |                            | 0          |                    | ++         |
 | Entwicklungsaufwand                  | 3          |                             | + +            |                        | +           |                             | -           |
-| **Gesamt**                           |            |                             | 16 Pkt.     |                                       | 13 Pkt.     |                             | 3 Pkt.     |  
+| **Gesamt**                           |            |                             | 22 Pkt.     |                                       | 18 Pkt.     |                             | 5 Pkt.     |  
 
 Legende zur Evaluierung:
  - ++: Die Alternative ist bezüglich dem Kriterium sehr positiv zu bewerten. Diese Bewertung entspricht 3 Punkten.

@@ -379,9 +379,7 @@
             </p>
         </td>
         <td>
-            <p>Manueller Test<br/> [Automatisierter Test]<br/> [Pentest]<br/> [Design Review]</p>
-            <p>Code Review (SAST)</p>
-            <p>[&hellip;]</p>
+            <p>Manueller Test<br>Code Review (SAST)</p>
         </td>
         <td>
             <p>[TId]</p>
@@ -640,8 +638,10 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Wegen hoher Anforderungen (siehe R6) an das Passwort ist dieses nicht sehr einprägsam. Hinzu kommt, dass die Gesundheitsakte von den meisten Benutzern nicht regelmäßig verwendet wird.</p>
-            <p>Infolgedessen werden viele Benutzer ihr Zugangsdaten vergessen und somit ihre verschlüsselten Daten verlieren (vgl. Konzept "Schützen von Data-at-rest").</p>
+            <p>
+				Wegen hoher Anforderungen (siehe R6) an das Passwort ist dieses nicht sehr einprägsam. Hinzu kommt, dass die Gesundheitsakte von den meisten Benutzern nicht regelmäßig verwendet wird.<br>
+				Infolgedessen werden viele Benutzer ihr Zugangsdaten vergessen und somit ihre verschlüsselten Daten verlieren (vgl. Konzept "Schützen von Data-at-rest").
+			</p>
         </td>
     </tr>
     <tr>
@@ -726,7 +726,7 @@
             <p>Niedrig</p>
         </td>
         <td>
-            <p>?</p>
+            <p>Reduzieren</p>
         </td>
     </tr>
     <tr>
@@ -773,7 +773,7 @@
 			</p>
         </td>
         <td>
-            <p></p>
+            <p>Manueller Test</p>
         </td>
         <td>
             <p></p>
@@ -1322,7 +1322,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Die Integrität der Webanwendung, also von HTML-, CSS-, JavaScript- und anderen Ressourcen, muss sicherheitgestellt werden
+				- Die Integrität der Webanwendung, also von HTML-, CSS-, JavaScript- und anderen Ressourcen, muss sichergestellt werden
 			</p>
         </td>
     </tr>

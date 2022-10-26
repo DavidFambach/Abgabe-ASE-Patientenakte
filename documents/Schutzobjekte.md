@@ -3,12 +3,12 @@
 | ID  | Bezeichnung                                | Bemerkung |
 | --- | ------------------------------------------ | --------- |
 | A1  | Webserver                                  |           |
-| A2  | Webanwendung                               |           |
+| A2  | Dateiablagedienst                          |           |
 | A3  | Datenbankserver                            |           |
 | A4  | Konfigurationsdaten Webserver              |           |
 | A5  | Logdaten Webserver                         |           |
-| A6  | Konfigurationsdaten Webanwendung           |           |
-| A7  | Logdaten Webanwendung                      |           |
+| A6  | Konfigurationsdaten Dateiablagedienst      |           |
+| A7  | Logdaten Dateiablagedienst                 |           |
 | A8  | Gesundheitsdaten                           |           |
 | A9  | Persönliche Daten                          |           |
 | A10 | Anmeldedaten für Benutzer                  |           |
@@ -20,3 +20,5 @@
 | A16 | Anmeldedaten für Datenbankadministratoren  |           |
 | A17 | Sitzungsdaten für Benutzer                 |           |
 | A18 | Sitzungskennzeichen für Benutzer           |           |
+| A19 | Logserver                                  |           |
+| A20 | Konfigurationsdaten Logserver              |           |

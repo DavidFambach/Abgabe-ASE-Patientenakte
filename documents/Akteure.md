@@ -36,14 +36,14 @@ Patienten laden über das Internet Dateien hoch und verwalten diese über die An
 ## 3 Plattformadministrator
 
 ### 1.1 Kurzbeschreibung
-Plattformadministratoren sind privilegierte Benutzer, die den Webserver konfigurieren und warten und/oder die Gesamtanwendung verwalten, indem ie Statistiken über die Anwendung, insbesondere Benutzerzahl und Speicherverbrauch einsehen. Im zweiteren Fall sind sie in der Lage, beliebige Benutzer und Dateien zu löschen. Sie sind allerdings nicht in der Lage, die über die Anwendung geteilten Dateien einzusehen oder herunterzuladen.
+Plattformadministratoren sind privilegierte Benutzer, die die Gesamtanwendung verwalten, indem sie Statistiken über die Anwendung, insbesondere Benutzerzahl und Speicherverbrauch einsehen. Sie sind in der Lage, beliebige Benutzer und Dateien zu löschen. Sie sind allerdings nicht in der Lage, die über die Anwendung geteilten Dateien einzusehen oder herunterzuladen.
 
 ### 1.2 Eigenschaften
-|                                |                                                                |
-| ------------------------------ | -------------------------------------------------------------- |
-| Zugriffstyp                    | Webzugriff über HTTP, Systemzugriff auf den Webserver über SSH |
-| Anzahl gleichzeitiger Benutzer | 1                                                              |
-| Datendurchsatz                 | vernachlässigbar                                               |
+|                                |                      |
+| ------------------------------ | -------------------- |
+| Zugriffstyp                    | Webzugriff über HTTP |
+| Anzahl gleichzeitiger Benutzer | 1                    |
+| Datendurchsatz                 | vernachlässigbar     |
 
 ### 1.3 Beziehungen
 keine
@@ -64,6 +64,7 @@ Anwendungsadministratoren sind privilegierte Benutzer, die den Dateiablagedienst
 ### 1.3 Beziehungen
 keine
 
+
 ## 5 Datenbankadministrator
 
 ### 1.1 Kurzbeschreibung
@@ -75,6 +76,22 @@ Datenbankadministratoren sind privilegierte Benutzer, die den Datenbankserver ko
 | Zugriffstyp                    | Systemzugriff auf den Datenbankserver über SSH |
 | Anzahl gleichzeitiger Benutzer | 1                                              |
 | Datendurchsatz                 | vernachlässigbar                               |
+
+### 1.3 Beziehungen
+keine
+
+
+## 6 Webserveradministrator
+
+### 1.1 Kurzbeschreibung
+Webserveradministrator sind privilegierte Benutzer, die den Webserver konfigurieren und warten.
+
+### 1.2 Eigenschaften
+|                                |                                          |
+| ------------------------------ | ---------------------------------------- |
+| Zugriffstyp                    | Systemzugriff auf den Webserver über SSH |
+| Anzahl gleichzeitiger Benutzer | 1                                        |
+| Datendurchsatz                 | vernachlässigbar                         |
 
 ### 1.3 Beziehungen
 keine

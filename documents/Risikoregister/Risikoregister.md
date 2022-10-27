@@ -451,7 +451,7 @@
             <p>
 				- Die Webanwendung ist resistent gegen XSS<br>
 				- Die Webanwendung, Webserver und Dateiablagedienst sind resistent gegen Session Hijacking<br>
-				- Der Webserver und Dateiablagedienst sind resitent gegen Session Prediction<br>
+				- Der Webserver und Dateiablagedienst sind resistent gegen Session Prediction<br>
 				- Der Webserver ist resistent gegen Path Traversal<br>
 				- Der Webserver und Dateiablagedienst ist resistent gegen CSRF
 			</p>
@@ -476,7 +476,7 @@
 				Der Webserver setzt den HTTP-Header X-Content-Type-Options (OWASP ASVS V14.4.4)<br>
 				Die Webanwendung verwendet keine Benutzereingaben zur DOM-Modifikation<br>
 				Die Webanwendung zeigt Sitzungsgeheimnisse nicht in der URL an<br>
-				Der Webserver prüft auf auffällge Änderungen des UserAgent Headers im Laufe einer Sitzung.<br>
+				Der Webserver prüft auf auffällige Änderungen des UserAgent Headers im Laufe einer Sitzung.<br>
 				Der Webserver stellt sicher, dass Sitzungen nicht unbegrenzt gültig.<br>
 				Alle Sitzungsgeheimnisse werden zufällig durch einen CSRNG gezogen.<br>
 				Der Webserver prüft nachdem eine angefragte Ressource im Dateisystem gefunden wurde, ob die Datei im freigegebenen Bereich liegt.<br>
@@ -1030,7 +1030,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Maßnahmen, die die Möglichkeiten priveligierter Benutzer beschränken, Vertraulichkeit und Integrität gespeicherter Gesundheitsdaten zu verletzen, und deren Aufwand ihren Nutzen nicht unangemessen übersteigt, werden implementiert.<br>
+				- Maßnahmen, die die Möglichkeiten privilegierter Benutzer beschränken, Vertraulichkeit und Integrität gespeicherter Gesundheitsdaten zu verletzen, und deren Aufwand ihren Nutzen nicht unangemessen übersteigt, werden implementiert.<br>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br>
 				Betrifft: A8<br>
 			</p>
@@ -1117,7 +1117,7 @@
         <td colspan="6">
             <p>
 				Privilegierte Benutzer können personenbezogenen Daten anderer Benutzer einsehen. Dieses Risiko unterscheidet sich von R1 dahingehend, dass der Benutzer, der unbefugt Daten einsehen kann, berechtigterweise erweiterte Rechte auf Systemen der Anwendung hat.<br>
-				Für priveligierte Benutzer, die aus geschäftlichen Gründen auf die oder eine Telmenge der gespeicherten personenbezogenen Daten zugreifen müssen, besteht die Möglichkeit, dass dieser Zugang missbraucht wird. Aufgrund der Datenminimierung nach DSGVO ist die Menge der vorhandenen und damit zugreifbaren Daten bereits minimal. Das Ergreifen weiterer technischer Maßnahmen gegen einen Missbrauch des Zugangs wäre risikobasiert nicht angemessen. Stattdessen sollten für den Betrieb der Anwendung gegebenenfalls geeignete organisatorische Maßnahmen implementiert werden, die dieses Risiko auf ein akzeptables Maß reduzieren (NDO).
+				Für privilegierte Benutzer, die aus geschäftlichen Gründen auf die oder eine Teilmenge der gespeicherten personenbezogenen Daten zugreifen müssen, besteht die Möglichkeit, dass dieser Zugang missbraucht wird. Aufgrund der Datenminimierung nach DSGVO ist die Menge der vorhandenen und damit zugreifbaren Daten bereits minimal. Das Ergreifen weiterer technischer Maßnahmen gegen einen Missbrauch des Zugangs wäre risikobasiert nicht angemessen. Stattdessen sollten für den Betrieb der Anwendung gegebenenfalls geeignete organisatorische Maßnahmen implementiert werden, die dieses Risiko auf ein akzeptables Maß reduzieren (NDO).
 			</p>
         </td>
     </tr>

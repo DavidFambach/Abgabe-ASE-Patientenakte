@@ -21,9 +21,9 @@ Dieser Anwendungsfall beschreibt das Hinzufügen eines Arztes durch einen Patien
 7. Die Webanwendung fragt nach der Identifikationsnummer des Arztes.
 8. Der Patient gibt die Identifikationsnummer des Arztes ein.
 9. Die Webanwendung sendet die Identifikationsnummer an den Webserver zur Informationsabfrage. Der Webserver gibt zurück, ob die Identifikationsnummer vergeben ist sowie gegebenenfalls Profilinformationen über diesen Arzt, insbesondere Namen, Berufsbezeichnung und Praxisbezeichnung. In diesem Anwendungsfall existiert der Arzt und er ist dem Profil des Benutzers noch nicht hinzugefügt.
-10. Die Webanwendung zeigt die empfangenen Informationen über den Arzt an und fragt den Benutzer, ob er diesen Artzt hinzufügen möchte.
+10. Die Webanwendung zeigt die empfangenen Informationen über den Arzt an und fragt den Benutzer, ob er diesen Arzt hinzufügen möchte.
 11. Der Patient bestätigt dies.
-12. Die Webanwendung weise den Webserver an, den Artzt zum Profil des Patienten hinzuzufügen. In diesem Anwendungsfall gelingt dies.
+12. Die Webanwendung weise den Webserver an, den Arzt zum Profil des Patienten hinzuzufügen. In diesem Anwendungsfall gelingt dies.
 13. Die Webanwendung teilt dem Patienten mit, dass die Aktion erfolgreich ausgeführt wurde.
 14. Die Webanwendung wechselt zur vorherigen Ansicht "Profileinstellungen" in der Kategorie "Ärzte verwalten".
 15. Der Anwendungsfall endet als Erfolg.

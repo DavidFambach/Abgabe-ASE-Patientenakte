@@ -18,7 +18,7 @@ Dieser Anwendungsfall beschreibt das Hochladen einer Datei durch einen Patienten
 4. Der Patient wählt "Datei hochladen"
 5. Die Webanwendung fragt nach einer Datei zum Hochladen
 6. Der Patient wählt die hochzuladende Datei aus
-7. Die Webanwendung überprüft, ob durch die Datei eine maximal zulässige Größe überschritten wird (vgl. R1, R2). In diesem Anwendungsfall ist das nicht der Fall.
+7. Die Webanwendung überprüft, ob durch die Datei eine maximal zulässige Größe überschritten wird (vgl. RL1, RL2). In diesem Anwendungsfall ist das nicht der Fall.
 8. Die Webanwendung erzeugt einen neuen Dateischlüssel, mit dem sie die Datei verschlüsselt. Die verschlüsselte Datei wird gemeinsam mit dem durch den öffentlichen Schlüssel des Benutzers verschlüsselten Dateischlüssel an den Webserver übermittelt. In diesem Anwendungsfall gelingt das.
 9. Die Webanwendung teilt dem Patienten mit, dass die Aktion erfolgreich ausgeführt wurde.
 10. Die Webanwendung wechselt zur vorherigen Ansicht "Dateiliste" und reflektiert dabei den neuen Zustand.
@@ -26,17 +26,13 @@ Dieser Anwendungsfall beschreibt das Hochladen einer Datei durch einen Patienten
 
 ## 5 Alternativer Ablauf
 
-- ablehnen des speicherns (z. b. kein speicherplatz)
-- datei mit demselben namen ist bereits vorhanden
-- abbruch durch benutzer
-
 ### 5.1 Webanwendung stellt zu große Datei fest
-Stellt die Webanwendung in Schritt 7 fest, dass durch das Hochladen der Datei eine maximal zulässige Größe überschritten wird (vgl. R1, R2), dann läuft der Anwendungsfall wie folgt weiter ab:
+Stellt die Webanwendung in Schritt 7 fest, dass durch das Hochladen der Datei eine maximal zulässige Größe überschritten wird (vgl. RL1, RL2), dann läuft der Anwendungsfall wie folgt weiter ab:
 1. Die Webanwendung teilt dem Patienten mit, dass die gewählte Datei zu groß ist beziehungsweise dass dem Benutzerprofil keine ausreichende Menge Speicherplatz zur Verfügung steht.
 2. Der Standardablauf wird beginnend mit Schritt 5 fortgesetzt.
 
 ### 5.2 Webserver stellt zu große Datei fest
-Stellt der Webserver in Schritt 8 fest, dass durch das Hochladen der Datei eine maximal zulässige Größe überschritten wird (vgl. R1, R2), dann läuft der Anwendungsfall wie folgt weiter ab:
+Stellt der Webserver in Schritt 8 fest, dass durch das Hochladen der Datei eine maximal zulässige Größe überschritten wird (vgl. RL1, RL2), dann läuft der Anwendungsfall wie folgt weiter ab:
 1. Die Webanwendung teilt dem Patienten mit, dass die gewählte Datei zu groß ist beziehungsweise dass dem Benutzerprofil keine ausreichende Menge Speicherplatz zur Verfügung steht.
 2. Der Standardablauf wird beginnend mit Schritt 5 fortgesetzt.
 
@@ -67,5 +63,5 @@ Die Datei wurde hochgeladen und wird in der Dateiliste des Verzeichnisses, in da
 Die Logdaten wurden entsprechend aktualisiert.
 
 ## 8 Spezielle Voraussetzungen
-- Maximale Dateigröße (vgl. R2)
-- Maximale Größe aller Dateien eines Patienten (vgl. R1)
+- Maximale Dateigröße (vgl. RL2)
+- Maximale Größe aller Dateien eines Patienten (vgl. RL1)

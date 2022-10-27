@@ -9,8 +9,8 @@ Dieser Anwendungsfall beschreibt den Authentifizierungsvorgang eines Benutzers a
 
 ## 3 Vorbedingung
 - Eine Netzwerkverbindung zu dem Applikationsserver ist vorhanden.
-- Eine verbindung mit dem Internet ist vorhanden.
-- Der Benutzer muss im besitz eines Google-Kontos sein.
+- Eine Verbindung mit dem Internet ist vorhanden.
+- Der Benutzer muss im Besitz eines Google-Kontos sein.
 - Der Browser unterstützt HTML5, CSS3 und JavaScript.
 
 ## 4 Standardablauf
@@ -19,7 +19,7 @@ Dieser Anwendungsfall beschreibt den Authentifizierungsvorgang eines Benutzers a
 3. In diesem Anwendungsfall wählt der Benutzer immer die Anmeldung über den Google IDP.
 4. Der Benutzer wird an den Google Sign-In weitergeleitet.
 5. Dort gibt der User seine Google-Anmeldedaten ein und übermittelt sie an Google.
-6. Googles IdP überprüft die eingegebenen Anmeldedaten.
+6. Googles IDP überprüft die eingegebenen Anmeldedaten.
 
 ## 5 Alternativer Ablauf
 ### 5.1 Der Benutzer ruft nicht direkt die Anmeldeseite auf

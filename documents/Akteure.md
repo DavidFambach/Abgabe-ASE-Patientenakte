@@ -10,7 +10,7 @@ Patienten laden über das Internet Dateien hoch und verwalten diese über die An
 | ------------------------------ | -------------------- |
 | Zugriffstyp                    | Webzugriff über HTTP |
 | Anzahl gleichzeitiger Benutzer | vgl. NF1             |
-| Datendurchsatz                 | vgl. NF1, R1         |
+| Datendurchsatz                 | vgl. NF1, RL1        |
 
 ### 1.3 Beziehungen
 - zu Patienten: Geben Dateien frei
@@ -27,7 +27,7 @@ Patienten laden über das Internet Dateien hoch und verwalten diese über die An
 | ------------------------------ | -------------------- |
 | Zugriffstyp                    | Webzugriff über HTTP |
 | Anzahl gleichzeitiger Benutzer | vgl. NF1             |
-| Datendurchsatz                 | vgl. NF1, R1         |
+| Datendurchsatz                 | vgl. NF1, RL1        |
 
 ### 1.3 Beziehungen
 - zu Patienten: Erhalten Zugriff auf Dateien

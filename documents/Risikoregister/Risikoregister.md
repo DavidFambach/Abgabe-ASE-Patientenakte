@@ -35,7 +35,7 @@
             <p>Sehr hoch </p>
         </td>
         <td>
-            <p>Hoch</p>
+            <p>Sehr hoch</p>
         </td>
         <td>
             <p>Reduzieren</p>
@@ -133,7 +133,7 @@
             <p>Sehr hoch<br/></p>
         </td>
         <td>
-            <p>Hoch</p>
+            <p>Sehr hoch</p>
         </td>
         <td>
             <p>Reduzieren</p>
@@ -231,7 +231,7 @@
             <p>Sehr hoch</p>
         </td>
         <td>
-            <p>Hoch</p>
+            <p>Sehr hoch</p>
         </td>
         <td>
             <p>Reduzieren</p>
@@ -327,7 +327,7 @@
             <p>Sehr hoch</p>
         </td>
         <td>
-            <p>Hoch</p>
+            <p>Sehr hoch</p>
         </td>
         <td>
             <p>Reduzieren</p>
@@ -529,7 +529,7 @@
             <p>Hoch</p>
         </td>
         <td>
-            <p>Hoch</p>
+            <p>Sehr hoch</p>
         </td>
         <td>
             <p>Reduzieren</p>
@@ -720,10 +720,10 @@
             <p>Hoch</p>
         </td>
         <td>
-            <p>Niedrig</p>
+            <p>Mittel</p>
         </td>
         <td>
-            <p>Niedrig</p>
+            <p>Mittel</p>
         </td>
         <td>
             <p>Reduzieren</p>
@@ -907,13 +907,13 @@
             <p>Unbefugte sehen geheime Konfigurationsparameter ein</p>
         </td>
         <td>
-            <p>Niedrig</p>
+            <p>Mittel</p>
         </td>
         <td>
             <p>Hoch<br/></p>
         </td>
         <td>
-            <p>Niedrig</p>
+            <p>Mittel</p>
         </td>
         <td>
             <p>Reduzieren/Akzeptieren</p>

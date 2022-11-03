@@ -1,28 +1,35 @@
 # Funktionale Anforderungen
 
-| ID  | Kategorie          | Anforderung                                                                                               | Bemerkung |
-| --- | ------------------ | --------------------------------------------------------------------------------------------------------- | --------- |
-|  F1 | Benutzerverwaltung | Das System muss fähig sein Benutzer des Typs Patient abzubilden.                                          |           |
-|  F2 | Benutzerverwaltung | Das System muss fähig sein Benutzer des Typs Arzt abzubilden.                                             |           |
-|  F3 | Benutzerverwaltung | Das System muss fähig sein Benutzer des Typs Administrator abzubilden.                                    |           |
-|  F4 | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien hochzuladen.                                                |           |
-|  F5 | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien herunterzuladen.                                            |           |
-|  F6 | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien zu löschen.                                                 |           |
-|  F7 | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien umzubenennen.                                               |           |
-|  F8 | Dateiverwaltung    | Das System muss es Benutzer ermöglichen Dateien des Typs .txt anzuzeigen.                                 |           |
-|  F9 | Dateiverwaltung    | Das System muss es Benutzer ermöglichen Dateien des Typs .pdf anzuzeigen.                                 |           |
-| F10 | Freigabe           | Das System muss Patienten das Freigeben von Dateien gegenüber Ärtzten ermöglichen.                        |           |
-| F11 | Freigabe           | Das System muss Patienten das Freigeben von Dateien gegenüber anderen Personen ermöglichen.               |           |
-| F12 | Freigabe           | Das System muss Ärzten den Zugriff auf freigegebene Dateien ermöglichen.                                  |           |
-| F13 | Authentifizierung  | Das System muss es Benutzern ermöglichen, sich über die Google IDP zu authentifizieren.                   |           |
-| F14 | Authentifizierung  | Das System muss es Benutzern ermöglichen, sich über einen Benutzernamen und Passwort zu authentifizieren. |           |
-| F15 | Registrierung      | Das System muss es Patienten ermöglichen, sich zu registrieren.                                           |           |
-| F16 | Registrierung      | Das System muss es Ärzten ermöglichen, sich zu registrieren.                                              |           |
-| F17 | Registrierung      | Das System muss fähig sein, den Benutzer eine einzigartige ID zuzuweisen.                                 |           |
-| F18 | Freigabe           | Das System muss Patienten erlauben, Benutzer anhand ihrer ID zu identifizieren.                           |           |
-| F19 | Benutzerverwaltung | Das System muss Benutzern erlauben, ihren Account und all ihre Daten zu löschen.                          |           |
-| F20 | Benutzerverwaltung | Das System muss es Administratoren ermöglichen, beliebige Dateien zu löschen.                             |           |
-| F21 | Benutzerverwaltung | Das System muss es Administratoren ermöglichen, beliebige Benutzer zu löschen.                            |           |
-| F22 | Datenbank          | Das System muss fähig sein, eine relationale Datenbank zu initialisieren.                                 |           |
-| F23 | Datenbank          | Das System muss fähig sein, Eingabedaten in eine relationale Struktur zu überführen.                      |           |
-| F24 | Datenbank          | Das System muss fähig sein, die Struktur von Eingabedaten auf Vollständigkeit zu prüfen.                  |           |
+| ID  | Kategorie          | Anforderung                                                                                                                                                                         | Bemerkung           |
+|-----|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| F1  | Benutzerverwaltung | Das System muss fähig sein Benutzer des Typs Patient abzubilden.                                                                                                                    |                     |
+| F2  | Benutzerverwaltung | Das System muss fähig sein Benutzer des Typs Arzt abzubilden.                                                                                                                       |                     |
+| F3  | Benutzerverwaltung | Das System muss fähig sein Benutzer des Typs Administrator abzubilden.                                                                                                              |                     |
+| F4  | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien hochzuladen.                                                                                                                          |                     |
+| F5  | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien herunterzuladen.                                                                                                                      |                     |
+| F6  | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien zu löschen.                                                                                                                           |                     |
+| F7  | Dateiverwaltung    | Das System muss Patienten ermöglichen Dateien umzubenennen.                                                                                                                         |                     |
+| F8  | Dateiverwaltung    | Das System muss es Benutzer ermöglichen Dateien des Typs .txt anzuzeigen.                                                                                                           |                     |
+| F9  | Dateiverwaltung    | Das System muss es Benutzer ermöglichen Dateien des Typs .pdf anzuzeigen.                                                                                                           |                     |
+| F10 | Freigabe           | Das System muss Patienten das Freigeben von Dateien gegenüber Ärtzten ermöglichen.                                                                                                  |                     |
+| F11 | Freigabe           | Das System muss Patienten das Freigeben von Dateien gegenüber anderen Personen ermöglichen.                                                                                         |                     |
+| F12 | Freigabe           | Das System muss Ärzten den Zugriff auf freigegebene Dateien ermöglichen.                                                                                                            |                     |
+| F13 | Authentifizierung  | Das System muss es Benutzern ermöglichen, sich über die Google IDP zu authentifizieren.                                                                                             |                     |
+| F14 | Authentifizierung  | Das System muss es Benutzern ermöglichen, sich über einen Benutzernamen und Passwort zu authentifizieren.                                                                           |                     |
+| F15 | Registrierung      | Das System muss es Patienten ermöglichen, sich zu registrieren.                                                                                                                     |                     |
+| F16 | Registrierung      | Das System muss es Ärzten ermöglichen, sich zu registrieren.                                                                                                                        |                     |
+| F17 | Registrierung      | Das System muss fähig sein, den Benutzer eine einzigartige ID zuzuweisen.                                                                                                           |                     |
+| F18 | Freigabe           | Das System muss Patienten erlauben, Benutzer anhand ihrer ID zu identifizieren.                                                                                                     |                     |
+| F19 | Benutzerverwaltung | Das System muss Benutzern erlauben, ihren Account und all ihre Daten zu löschen.                                                                                                    |                     |
+| F20 | Benutzerverwaltung | Das System muss es Administratoren ermöglichen, beliebige Dateien zu löschen.                                                                                                       |                     |
+| F21 | Benutzerverwaltung | Das System muss es Administratoren ermöglichen, beliebige Benutzer zu löschen.                                                                                                      |                     |
+| F22 | Datenbank          | Das System muss fähig sein, eine relationale Datenbank zu initialisieren.                                                                                                           |                     |
+| F23 | Datenbank          | Das System muss fähig sein, Eingabedaten in eine relationale Struktur zu überführen.                                                                                                |                     |
+| F24 | Datenbank          | Das System muss fähig sein, die Struktur von Eingabedaten auf Vollständigkeit zu prüfen.                                                                                            |                     |
+| F25 | Authentifizierung  | Das System muss es Administratoren ermöglichen, sich an den Systemen zu authentifizieren.                                                                                           |                     |
+| F26 | Authentifizierung  | Das System muss eine Authentifizierung an der Datenbank erlauben.                                                                                                                   |                     |
+| F27 | Dateiverwaltung    | Das System muss den Speicheraufwanden von Benutzern regulieren.                                                                                                                     | vergleiche RL1, RL2 |
+| F28 | Dateiverwaltung    | Das System muss es erlauben eine Wiederhestellungsdatei herunterzuladen, falls durch das Zurücksetzen des Passwortes ansonsten Daten verloren gehen.                                |                     |
+| F29 | Dateiverwaltung    | Das System muss den Benutzern vor dem Verlust von Daten durch das Zurücksetzen seines Passworts warnen, falls durch das Zurücksetzen des Passwortes ansonsten Daten verloren gehen. |                     |
+| F30 | Sicherheit         | Das System muss den Benutzern beim Herunterladen von Datein vor potenziell schädlichem Inhalt warnen.                                                                               |                     |
+| F31 | Authentifizierung  | Das System muss es Benutzern ermöglichen, andere Benutzer jeder Zeit eindeutig zu identifizieren.                                                                                   |                     |

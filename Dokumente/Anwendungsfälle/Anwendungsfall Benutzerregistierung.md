@@ -15,8 +15,8 @@ Dieser Anwendungsfall beschreibt das Registieren eines neuen Benutzers.
 3. Die Webanwendung zeigt die Ansicht "Benutzerregistrierung".
 4. Der Benutzer gibt die nötigen Angaben an. ( Vorname, Nachname, Anmeldename, Passwort)
 5. Die Webanwendung sendet die Informationen dem Webserver zur Überprüfung.
-6. Der Webserver sendet die Informationen an den Dateiablagedienst und dieser legt sie in der Datenbank ab.
-7. Die Webanwendung teilt dem Benutzer mit das er erfolgreich registriert wurde.
+6. Der Webserver sendet die Informationen an den Dateiverwaltungsdienst und dieser legt sie in der Datenbank ab.
+7. Die Webanwendung teilt dem Benutzer mit, dass er erfolgreich registriert wurde.
 8. Die Webanwendung loggt den User ein und wechselt auf die Startseite.
 9. Der Anwendungsfall endet als Erfolg.
 

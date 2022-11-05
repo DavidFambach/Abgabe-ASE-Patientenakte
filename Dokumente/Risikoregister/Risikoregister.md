@@ -160,7 +160,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Vor jedem Zugriff wird die Berechtigung des Benutzers durch den Dateiablagedienst überprüft und der Zugriff gegebenenfalls abgelehnt.[NF2]<br/>
+				- Vor jedem Zugriff wird die Berechtigung des Benutzers durch den Dateiverwaltungsdienst überprüft und der Zugriff gegebenenfalls abgelehnt.[NF2]<br/>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br/>
 				- CON.10.A2
 			</p>
@@ -244,7 +244,7 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Datenübertragungen zwischen Webbrowser und Webserver beziehungsweise zwischen Webserver und Dateiablagedienst beziehungsweise zwischen Dateiablagedienst und DB-Server können durch Dritte mitgelesen werden.</p>
+            <p>Datenübertragungen zwischen Webbrowser und Webserver beziehungsweise zwischen Webserver und Dateiverwaltungsdienst beziehungsweise zwischen Dateiverwaltungsdienst und Dateiverwaltungsdatenbankserver können durch Dritte mitgelesen werden.</p>
         </td>
     </tr>
     <tr>
@@ -276,7 +276,7 @@
     <tr>
         <td colspan="4">
             <p>
-				Für Verbindungen zwischen Webanwendung und Webserver, Webserver und Dateiablagedienst sowie Dateiablagedienst und Datenbank TLS einsetzen.<br>
+				Für Verbindungen zwischen Webanwendung und Webserver, Webserver und Dateiverwaltungsdienst sowie Dateiverwaltungsdienst und Dateiverwaltungsdatenbank TLS einsetzen.<br>
 				Der Webserver setzt den HTTP-Header Strict-Transport-Security (OWASP ASVS V14.4.5)
 			</p>
         </td>
@@ -352,7 +352,7 @@
         <td colspan="6">
             <p>
 				- Ein unbefugter Datenbankzugriff, ob lesend oder schreibend, muss verhindert werden.[NF2][F26]<br/>
-				- Der Dateiablagedienst muss resistent gegen SQL-Injection-Angriffe sein (BSI CON.10.A9)[NF10]<br/>
+				- Der Dateiverwaltungsdienst muss resistent gegen SQL-Injection-Angriffe sein (BSI CON.10.A9)[NF10]<br/>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.
             </p>
         </td>
@@ -373,8 +373,8 @@
             <p>
 				Datenübertragung schützen (vgl. R3)<br>
 				Eingabevalidierung in der Webanwendung<br>
-				Eingabevalidierung im Dateiablagedienst<br>
-				Verwendung von Prepared SQL Statements durch den Dateiablagedienst<br>
+				Eingabevalidierung im Dateiverwaltungsdienst<br>
+				Verwendung von Prepared SQL Statements durch den Dateiverwaltungsdienst<br>
 				Kryptografische Verschlüsselung mit Integritätsschutz anbringen (vgl. R11)
             </p>
         </td>
@@ -450,10 +450,10 @@
         <td colspan="6">
             <p>
 				- Die Webanwendung ist resistent gegen XSS<br>
-				- Die Webanwendung, Webserver und Dateiablagedienst sind resistent gegen Session Hijacking<br>
-				- Der Webserver und Dateiablagedienst sind resistent gegen Session Prediction<br>
+				- Die Webanwendung, Webserver und Dateiverwaltungsdienst sind resistent gegen Session Hijacking<br>
+				- Der Webserver, Dateiverwaltungsdienst und Authorisierungsdienst sind resistent gegen Session Prediction<br>
 				- Der Webserver ist resistent gegen Path Traversal<br>
-				- Der Webserver und Dateiablagedienst ist resistent gegen CSRF
+				- Der Webserver, Dateiverwaltungsdienst und Authorisierungsdienst ist resistent gegen CSRF
 			</p>
         </td>
     </tr>
@@ -471,7 +471,7 @@
     <tr>
         <td colspan="4">
             <p>
-				Der Webserver und der Dateiablagedienst reflektieren keine Benutzereingaben als HTML/CSS/JS<br>
+				Der Webserver und der Dateiverwaltungsdienst reflektieren keine Benutzereingaben als HTML/CSS/JS<br>
 				Der Webserver setzt den HTTP-Header Content-Security-Policy (OWASP ASVS V14.4.3)<br>
 				Der Webserver setzt den HTTP-Header X-Content-Type-Options (OWASP ASVS V14.4.4)<br>
 				Die Webanwendung verwendet keine Benutzereingaben zur DOM-Modifikation<br>

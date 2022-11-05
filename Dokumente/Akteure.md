@@ -52,14 +52,14 @@ keine
 ## 4 Anwendungsadministrator
 
 ### 1.1 Kurzbeschreibung
-Anwendungsadministratoren sind privilegierte Benutzer, die den Dateiablagedienst konfigurieren und warten.
+Anwendungsadministratoren sind privilegierte Benutzer, die den Dateiverwaltungsdienst und Authorisierungsdienst konfigurieren und warten.
 
 ### 1.2 Eigenschaften
-|                                |                                                  |
-| ------------------------------ | ------------------------------------------------ |
-| Zugriffstyp                    | Systemzugriff auf den Dateiablagedienst über SSH |
-| Anzahl gleichzeitiger Benutzer | 1                                                |
-| Datendurchsatz                 | vernachlässigbar                                 |
+|                                |                                                                                 |
+| ------------------------------ |---------------------------------------------------------------------------------|
+| Zugriffstyp                    | Systemzugriff auf den Dateiverwaltungsdienst und Authorisierungsdienst über SSH |
+| Anzahl gleichzeitiger Benutzer | 1                                                                               |
+| Datendurchsatz                 | vernachlässigbar                                                                |
 
 ### 1.3 Beziehungen
 keine

@@ -1,0 +1,118 @@
+[
+  {
+    "model": "app_file.storageuser",
+    "fields": {
+      "id": 1,
+      "display_name": "Testpatient"
+    }
+  },
+  {
+    "model": "app_file.storageuser",
+    "fields": {
+      "id": 2,
+      "display_name": "Testarzt"
+    }
+  },
+  {
+    "model": "app_file.directory",
+    "fields": {
+      "id": 1,
+      "name": "Testpatient Wurzelverzeichnis",
+      "owner": 1
+    }
+  },
+  {
+    "model": "app_file.directory",
+    "fields": {
+      "id": 2,
+      "name": "Unterverzeichnis",
+      "owner": 1,
+      "parent": 1
+    }
+  },
+  {
+    "model": "app_file.directory",
+    "fields": {
+      "id": 3,
+      "name": "Freigegebenes Unterverzeichnis",
+      "owner": 1,
+      "parent": 1
+    }
+  },
+  {
+    "model": "app_file.directory",
+    "fields": {
+      "id": 4,
+      "name": "Unterunterverzeichnis",
+      "owner": 1,
+      "parent": 2
+    }
+  },
+  {
+    "model": "app_file.directory",
+    "fields": {
+      "id": 5,
+      "name": "Testarzt Wurzelverzeichnis",
+      "owner": 2
+    }
+  },
+  {
+    "model": "app_file.file",
+    "fields": {
+      "id": 1,
+      "name": "Beispieldatei",
+      "owner": 1,
+      "parent_directory": 1,
+      "data": "SGVsbG8gV29ybGQ="
+    }
+  },
+  {
+    "model": "app_file.file",
+    "fields": {
+      "id": 2,
+      "name": "Zweite Beispieldatei",
+      "owner": 1,
+      "parent_directory": 1
+    }
+  },
+  {
+    "model": "app_file.file",
+    "fields": {
+      "id": 3,
+      "name": "Durch Elternverzeichnis freigegebene Datei",
+      "owner": 1,
+      "parent_directory": 3,
+      "data": "RGFzIGlzdCBlaW5lIMO8YmVyIGRhcyBFbHRlcm52ZXJ6ZWljaG5pcyBmcmVpZ2VnZWJlbmUgRGF0ZWkuDQpEZW0gQmVudXR6ZXIgbWl0IGRlciBJRCAyIHd1cmRlIHp3YXIga2VpbmUgTGVzZWJlcmVjaHRpZ3VuZyBmw7xyIGRpZSBEYXRlaSBzZWxic3QgZWluZ2Vyw6R1bXQsIGFiZXIgZWluZSBMZXNlYmVyZWNodGlndW5nIGbDvHIgZGFzIFZlcnplaWNobmlzIG1pdCBkZXIgSUQgMywgZGFzIGVpbiBFbHRlcm52ZXJ6ZWljaG5pcyBkaWVzZXIgRGF0ZWkgaXN0Lg=="
+    }
+  },
+  {
+    "model": "app_file.file",
+    "fields": {
+      "id": 4,
+      "name": "Direkt freigegebene Datei",
+      "owner": 1,
+      "parent_directory": 2,
+      "data": "RGFzIGlzdCBlaW5lIGZyZWlnZWdlYmVuZSBEYXRlaS4="
+    }
+  },
+  {
+    "model": "app_file.share",
+    "fields": {
+      "id": 1,
+      "issuer": 1,
+      "subject": 2,
+      "target_directory": 3,
+      "can_write": false
+    }
+  },
+  {
+    "model": "app_file.share",
+    "fields": {
+      "id": 2,
+      "issuer": 1,
+      "subject": 2,
+      "target_file": 4,
+      "can_write": true
+    }
+  }
+]

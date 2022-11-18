@@ -83,7 +83,7 @@ Antwortformat:
 Dabei ist Status einer der folgenden Werte:
  - `ok`: Die Aktion wurde erfolgreich beendet.
  - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
- - `not_found`: Der Benutzer hat keine Leseberechtigungen für die Datei oder die Datei existiert nicht. Die bestehende Datei wurde nicht verändert, falls sie existiert.
+ - `not_found`: Der Benutzer hat keine Leseberechtigungen für die Datei oder die Datei existiert nicht oder es wurde versucht, die Datei zu verschieben und der Benutzer hat keine Leseberechtigung für das Zielverzeichnis oder das Zielverzeichnis existiert nicht. Die bestehende Datei wurde nicht verändert, falls sie existiert.
  - `duplicate_name`: Es existiert bereits eine Datei oder ein Verzeichnis mit demselben Namen am Zielort. Die bestehende Datei wurde nicht verändert.
  - `permission_denied`: Es wird versucht, den Dateiinhalt zu verändern, und der Benutzer besitzt lediglich Leseberechtigungen für die Datei oder es wird versucht, die Datei umzubenenen und der Benutzer hat für die Datei oder das Verzeichnis, in dem sie sich befindet, keine Schreibberechtigungen, oder es wird versucht, die Datei zu verschieben und der Benutzer hat für das Quellverzeichnis, das Zielverzeichnis oder die Datei keine Schreibberechtigungen. Die bestehende Datei wurde nicht verändert.
  - `transferral_rejected`: Das Quellverzeichnis und das Zielverzeichnis gehören zu den Dateibäumen verschiedener Benutzer. Die bestehende Datei wurde nicht verändert.
@@ -243,7 +243,7 @@ Antwortformat:
 Dabei ist Status einer der folgenden Werte:
  - `ok`: Die Aktion wurde erfolgreich beendet.
  - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
- - `not_found`: Der Benutzer hat keine Leseberechtigungen für das Verzeichnis oder das Verzeichnis existiert nicht. Das bestehende Verzeichnis wurde nicht verändert, falls es existiert.
+ - `not_found`: Der Benutzer hat keine Leseberechtigungen für das Verzeichnis oder das Verzeichnis existiert nicht oder es wurde versucht, das Verzeichnis zu verschieben und der Benutzer hat keine Leseberechtigung für das Zielverzeichnis oder das Zielverzeichnis existiert nicht. Das bestehende Verzeichnis wurde nicht verändert, falls es existiert.
  - `duplicate_name`: Es existiert bereits eine Datei oder ein Verzeichnis mit demselben Namen am Zielort. Das bestehende Verzeichnis wurde nicht verändert.
  - `permission_denied`: Es wird versucht, das Verzeichnis umzubenenen und der Benutzer hat für das Verzeichnis oder Elternverzeichnis keine Schreibberechtigungen, oder es wird versucht, das Verzeichnis zu verschieben und der Benutzer hat für das Quellverzeichnis, das Zielverzeichnis oder das Verzeichnis selbst keine Schreibberechtigungen. Das bestehende Verzeichnis wurde nicht verändert.
  - `unmovable_directory`: Es wird versucht, ein Wurzelverzeichnis zu verschieben. Das bestehende Verzeichnis wurde nicht verändert.
@@ -312,6 +312,7 @@ Dabei ist Status einer der folgenden Werte:
  - `not_found`: Der Benutzer hat keine Leseberechtigungen für das Verzeichnis oder das Verzeichnis existiert nicht. Das bestehende Verzeichnis wurde nicht gelöscht, falls es existiert.
  - `not_empty`: Das Verzeichnis ist nicht leer und die Option `cascade` wurde nicht angegeben. Es wurden keine Dateien oder Verzeichnisse gelöscht.
  - `permission_denied`: Der Benutzer hat für mindestens eine Datei oder mindestens ein Verzeichnis, das gelöscht werden soll, oder für das Elternverzeichnis einer solchen Datei oder eines solchen Verzeichnisses keine Schreibberechtigungen. Es wurden keine Dateien oder Verzeichnisse gelöscht.
+ - `unmovable_directory`: Es wird versucht, ein Wurzelverzeichnis zu löschen. Es wurden keine Dateien oder Verzeichnisse gelöscht.
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Es wurden keine Dateien oder Verzeichnisse gelöscht.
 
 ## Operation GET /share/\<Freigabe-ID\>?user=\<Benutzer-ID\>
@@ -395,8 +396,8 @@ Antwortformat:
 Dabei ist Status einer der folgenden Werte:
  - `ok`: Die Aktion wurde erfolgreich beendet.
  - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
- - `invalid_subject`: Der Betroffene existiert nicht oder ist nicht gültig, zum Beispiel weil es der Freigabeersteller selbst ist. Es wurde keine Freigabe angelegt.
- - `target_not_found`: Der Benutzer hat keine Leseberechtigungen für Freigabeziel oder das Freigabeziel existiert nicht. Es wurde keine Freigabe angelegt.
+ - `invalid_subject`: Der Betroffene ist nicht gültig, zum Beispiel weil es der Freigabeersteller selbst ist. Es wurde keine Freigabe angelegt.
+ - `not_found`: Der Betroffene existiert nicht oder der Benutzer hat keine Leseberechtigungen für Freigabeziel oder das Freigabeziel existiert nicht. Es wurde keine Freigabe angelegt.
  - `permission_denied`: Der Benutzer ist nicht der Besitzer des Freigabeziels. Es wurde keine Freigabe angelegt.
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Es wurde keine Freigabe angelegt.
 

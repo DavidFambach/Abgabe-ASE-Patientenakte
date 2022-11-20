@@ -15,4 +15,4 @@ Mit der Annahme, dass ein Austausch von medizinischen Daten über Ländergrenzen
 In beiden Fällen hilft uns die Microservice Architektur, mit der wir unsere Anwendung Entwickeln. Sollte ein Microservice überlastet sein, kann dieser in der Regel sowohl vertikal als auch horizontal skalieren:
 
  - **vertikal:** Dem Dienst werden entsprechend mehr Ressourcen zugewiesen.
- - **horizontal:** Eine zweite instanz des Dienstes wird auf einem anderen System betrieben.
+ - **horizontal:** Eine zweite Instanz des Dienstes wird auf einem anderen System betrieben.

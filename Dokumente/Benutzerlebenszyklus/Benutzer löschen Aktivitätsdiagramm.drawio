@@ -1,1 +1,96 @@
-<mxfile host="app.diagrams.net" modified="2022-11-24T16:04:54.823Z" agent="5.0 (Windows)" etag="IVGHEMq3GOUSAe7D5yQI" version="20.5.3" type="device"><diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">7VtbU9s6EP41eYTxPckjIUBPKaVtONDzKGLFVuNYqSyThF9/VraEbezETknIpcx0GGuzlq3d/b7dldWWeT6ZXzE09W+oi4OWobnzltlvGYZuGUZL/NPcRSppG91U4DHiSqVMMCDPWAo1KY2Ji6OCIqc04GRaFA5pGOIhL8gQY3RWVBvRoPjUKfJwSTAYoqAsfSAu91Npx2hn8k+YeL56su7I9U2QUpYriXzk0llOZF60zHNGKU+vJvNzHAjjKbs8/LN4CL6MnavP36Pf6N/e9d3X+5N0sst1bnlZAsMh/+OpO8/93q0/JrfzOX/4Ontyb358OtFNuTa+UAbDLthPDinjPvVoiIKLTNpjNA5dLKbVYJTpfKF0CkIdhL8w5wsZDCjmFEQ+nwTyVzwn/Gfu+j8x1aktR/25nDkZLNQg5GzxMz/I3SWG2W3JSN3X0HbSxhGN2RCvMJiMBY6Yh/kKPSvVE8bMxaH0zBWmEwwvCQoMB4iTp2KwIhnz3ovey63fKIF1GJrEp2HKF1qo8NWKU6QLkndl0QEXudfIREnMrBE/8mlPKIjlEsrxFASAdRE3IxIE5zSgDH6IOKNjLEdrOukJM47nK82qfu0WzdO10+EsYwJTvrGfIwFTW+6HggXXNZfizveFW8HWfRePUBzwRI4YPxMcC+KQhljJLolYlgSTqzSGAYoiMkyFUkXfPMKshggzOpuG2Jtca5WQAGaK+TNmIA1a52ar50RDX2D3mobgoteBkLlZGHXmE44HU5SYagapuejSEUwh/a3Dmnue8I10WepuleySAFCZa31CbI41o20XsaaVsKarVJoHm7UtsFkVXLSfue2wAOo0BKjZ3iuAOhWpyknM7JInuPTE5VnMfbASGZFnglkcepFLcBgJ1CrtR6aUlQReJzdFxaxF+Ge80HTCI2MKx27XMoX1nkxh7KQKPizU652mednYK9ir9/5j3ANqGSaP4vIsHnnoEYfimeLPDVge+sffMYap/1Y0d3W92IIY5SK7Es62sa3Er5eMvKeJP2tqT41iW+sY7ZrGNhl9w4yA0TA7yEpCUUV9KbFftb567xyn9BHH8Fw2QwEv0Ecx9w+mmAx9zB6z3gDCLlcUuDBPeHQcoeslknBOG9KE1d2WF+2KzLB08yKfuH00Fb8DNgYc/LWbrQ3Trt/bqDDn1vY21MSHxLrrbSUeGLk2Ldic/eLWcr3WQ8MxTlhyRAVjXjJguFQAtEqGY8GsLg4gD578ENVYQrwoTCq2ZXXdkTGsZb1ig4qeynnPnsq0P3qqOoiqvef6+mfjnxPe5tty/bNmTwVmxeleCIyhQDqzOPFAJcFtUg8txfxHm1Uoi/IAt6u6rK1trx58vjfqEv4RtFhm088pe9ZimeXvKR8Us2WK0XVt3zjG2gnHHEN/UAt4feOArz6i0LGdQlDppnaq2YZj6na707XaVnHCJQcWwDhokVObCoVoxVM75uun5qer17f1V9GbvsFGT09YO6mRjyK86xNfu2ni2/j3io0EbHe9eJUw2mq4KpOu2jDLxZlcMYjtXsvuC0mulMoCN1dg7WAfrWMXc1673Djb5YzX2Vrb/HFCqB7ajT9F2vtV01Z9ijx0/EBi3RWAFtfuZzqc9MdXxl00uL2/x79o5YnEUt+QO5pF3nq4A4UenuAgaTYatQlgWL4KfhJneVcq6EE3QaCDMft2NrpLMH5iaEt6Dgq+HAUJPn3iujgsEcYSlzeNluWh0S7uSb583sn3E92KfuLlnNjGo0P/iI69iQ7z9dnlbYYHDLOT+mlBlP1/B/Pifw==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-11-25T12:00:00.980Z" agent="5.0 (Windows)" etag="LusIGLMbKMEtv62gsQWE" version="20.6.0" type="github">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1422" dy="772" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-0" target="8zDBOhkiOxxtWNwvdMRH-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="120" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-0" value="" style="ellipse;fillColor=strokeColor;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="190" y="105" width="32" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-4" target="8zDBOhkiOxxtWNwvdMRH-28" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-4" value="Benutzer erbittet die Löschung seines Kontos" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="95" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=default;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-6" target="8zDBOhkiOxxtWNwvdMRH-37" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-6" value="&lt;div&gt;Authentifizierungsdienst &lt;br&gt;&lt;/div&gt;&lt;div&gt;löscht Benutzer&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="640" y="100" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WJ8gDwtMw2kXNTCzBDPu-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-18" target="8zDBOhkiOxxtWNwvdMRH-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WJ8gDwtMw2kXNTCzBDPu-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;startArrow=classic;startFill=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-18" target="8zDBOhkiOxxtWNwvdMRH-37">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="205" />
+              <mxPoint x="850" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-18" value="&lt;div&gt;Authentifizierungsdienst schreibt Aufgaben in Massagequeue&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="880" y="179" width="140" height="51" as="geometry" />
+        </mxCell>
+        <mxCell id="WJ8gDwtMw2kXNTCzBDPu-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-22" target="WJ8gDwtMw2kXNTCzBDPu-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-22" value="Dateiverwaltungsdienst löscht Speicherbenutzer und Benutzerdaten" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1060" y="180" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-25" value="" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1280" y="69.5" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=default;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-28" target="8zDBOhkiOxxtWNwvdMRH-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-28" value="Backend for Frontend schickt delete-Request an Authentifizierungsdienst" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="440" y="100" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-32" target="8zDBOhkiOxxtWNwvdMRH-34" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-32" value="&lt;div&gt;Authentifizierungsdienst sendet Bestätigung an Backend for Frontend&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="880" y="60.5" width="150" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WJ8gDwtMw2kXNTCzBDPu-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-34" target="8zDBOhkiOxxtWNwvdMRH-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-34" value="Backend for Frontend gibt Bestätigung an Benutzer zurück" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1070" y="60.5" width="150" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8zDBOhkiOxxtWNwvdMRH-37" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="849" y="99.5" />
+              <mxPoint x="849" y="79.5" />
+              <mxPoint x="880" y="79.5" />
+            </Array>
+            <mxPoint x="879" y="79.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8zDBOhkiOxxtWNwvdMRH-37" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;fillColor=strokeColor;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="810" y="80" width="5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="yKdJocmDkG2TsSOVVejo-0" value="&lt;div&gt;Benutzer ist &lt;br&gt;&lt;/div&gt;&lt;div&gt;angemeldet&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="166" y="150" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="yKdJocmDkG2TsSOVVejo-1" value="Benutzer ist nicht mehr in der Anwendung registriert" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1228.75" y="115" width="132.5" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="WJ8gDwtMw2kXNTCzBDPu-3" value="" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1240" y="190" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WJ8gDwtMw2kXNTCzBDPu-4" value="Benutzedaten sind gelöscht " style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;align=center;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1207.5" y="235.5" width="95" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

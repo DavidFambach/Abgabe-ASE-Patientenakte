@@ -43,4 +43,4 @@ Legende zur Evaluierung:
  - O: Die Alternative ist bezüglich des Kriteriums neutral zu bewerten, eine Bewertung der Alternative hinsichtlich dieses Kriteriums ist nicht sinnvoll oder nicht praktikabel oder wurde aus einem anderen Grund nicht vorgenommen. Diese Bewertung entspricht 0 Punkten.
  - \-: Die Alternative ist bezüglich des Kriteriums negativ zu bewerten. Diese Bewertung entspricht -1 Punkt.
  - \-\-: Die Alternative ist bezüglich des Kriteriums sehr negativ zu bewerten. Diese Bewertung entspricht -3 Punkten.
-Die Gesamtbewertung ist die Summe der gewichteten Evaluierungen über alle Kriterien, die keine Ausschlusskriterien sind. Alternativen, die bezüglich mindestens einem Ausschlusskriterium negativ bewertet wurden, erhalten keine Gesamtbewertung und werden nicht weiter betrachet.
+Die Gesamtbewertung ist die Summe der gewichteten Evaluierungen über alle Kriterien, die keine Ausschlusskriterien sind. Alternativen, die bezüglich mindestens einem Ausschlusskriterium negativ bewertet wurden, erhalten keine Gesamtbewertung und werden nicht weiter betrachtet.

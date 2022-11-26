@@ -1,6 +1,10 @@
 import re
 
+from django.conf import settings
+from django.contrib.auth.password_validation import validate_password, get_password_validators, password_validators_help_texts
 from rest_framework import serializers
+
+from . import models
 from .models import User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
@@ -12,7 +16,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
-        max_length=68, min_length=6, write_only=True)
+        max_length=68, min_length=8, write_only=True)
 
     username_error_messages = {
         'username': 'The username should only contain alphanumeric characters.'}
@@ -25,9 +29,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email', 'username', 'password']
 
     def validate(self, attrs):
-        email = attrs.get('email', '')
+        email = attrs.get('email')
         email_regex = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$'
-        username = attrs.get('username', '')
+        username = attrs.get('username')
+        password = attrs.get('password')
 
         if not username.isalnum():
             raise serializers.ValidationError(
@@ -35,6 +40,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         if re.match(email_regex, email) is None:
             raise serializers.ValidationError(
                 self.email_error_massage)
+        validate_password(password=password, user=User.objects.create_user_object(username, email, password))
         return attrs
 
     def create(self, validated_data):
@@ -138,7 +144,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
 
-    default_error_message = {
+    default_error_messages = {
         'bad_token': ('Token is expired or invalid')
     }
 

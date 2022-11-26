@@ -5,6 +5,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import generics, status, views, permissions
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 import jwt
 
@@ -25,29 +26,34 @@ class CustomRedirect(HttpResponsePermanentRedirect):
 
 
 class RegisterView(generics.GenericAPIView):
-    """
-     1. Accepts a POST with username, email address and password
-     2. The individual elements are validated.
-     3. This user has already registered with the same email address:
-        YES:
-            3a. User is already verified:
-                If this is the case and the user will be informed
-            3b. User is not yet verified
-                The password in the database is adjusted and the validation email is sent again.
-        NO:
-            If the email address is not in the database, the new user will be created and a verification email will
-            be sent.
-    """
     serializer_class = RegisterSerializer
 
     def post(self, request):
-        # ToDo: Check the database daily and delete all accounts that are not validated and were created > 48h ago.
+        """
+             ToDo: Check the database daily and delete all accounts that are not validated and were created > 48h ago.
+
+             1. Accepts a POST with username, email address and password
+             2. The individual elements are validated.
+             3. This user has already registered with the same email address:
+                YES:
+                    3a. User is already verified:
+                        If this is the case and the user will be informed
+                    3b. User is not yet verified
+                        The password in the database is adjusted and the validation email is sent again.
+                NO:
+                    If the email address is not in the database, the new user will be created and a verification email will
+                    be sent.
+"""
+
         user = request.data
         serializer = self.serializer_class(data=user)
 
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
+
+        except ValidationError as e:
+            return Response(e.__str__(), status=status.HTTP_400_BAD_REQUEST)
         except Exception as serialize_exeption:
             # If an error occurs during serialization, this could be due to the fact that there is already an account
             # with the same email address. In this case, the password should be taken from this request and a validation
@@ -71,6 +77,8 @@ class RegisterView(generics.GenericAPIView):
                 # If it is not the case that a user registers with the same user name and the same email address, the
                 # exception from the serialization is raised here.
                 raise serialize_exeption
+            except Exception as e:
+                raise e
 
         # Prepare the verification mail
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
@@ -190,7 +198,6 @@ class SetNewPasswordAPIView(generics.GenericAPIView):
 
 class LogoutAPIView(generics.GenericAPIView):
     serializer_class = LogoutSerializer
-    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)

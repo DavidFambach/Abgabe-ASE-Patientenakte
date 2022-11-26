@@ -96,12 +96,12 @@ WSGI_APPLICATION = 'AuthService.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_NAME'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'auth_db',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.postgresql',
+        "HOST": os.environ["POSTGRES_HOST"],
+        "PORT": os.environ["POSTGRES_PORT"],
+        "NAME": os.environ["POSTGRES_DATABASE"],
+        "USER": os.environ["POSTGRES_USERNAME"],
+        "PASSWORD": os.environ["POSTGRES_PASSWORD"]
     }
 }
 

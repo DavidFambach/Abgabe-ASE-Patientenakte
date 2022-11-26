@@ -1,0 +1,48 @@
+services:
+  auth_db:
+    image: postgres
+    volumes:
+      - ./data/auth_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  auth_api:
+    build: ./Authentifizierungsdienst
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_CLIENT_ID=321799647155-2fn0mq2kubk5tba1g4pu5vo0hjb8vtv4.apps.googleusercontent.com
+      - SOCIAL_SECRET=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
+      - SECRET_KEY=@6p-h7#oy4unyb4+(@i&3eq(knbkvjkeyv&@*8+a%f45b@mfm1
+      - POSTGRES_HOST=auth_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - auth_db
+  file_db:
+    image: postgres
+    volumes:
+      - ./data/file_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  file_api:
+    build: ./Dateiverwaltungsdienst
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8001:8000"
+    environment:
+      - SECRET_KEY=@6p-h7#oy4unyb4+(@i&3eq(knbkvjkeyv&@*8+a%f45b@mfm1
+      - POSTGRES_HOST=file_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - file_db
+

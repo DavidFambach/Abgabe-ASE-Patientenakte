@@ -2,9 +2,9 @@
 Prerequisite: Docker is installed on your current computer and the source code of the authentication service is available.
 1. switch to the project path of the authentication service with the command line.
 2. run docker compose up (restart the _auth_api_ container after installation if necessary)
-3. switch to the _auth_api_ container with docker
+3. switch to the _auth_api_ container with
    ```bash 
-   exec -t -i <containerID> bash
+   docker exec -t -i <containerID> bash
    ```   
    (you can find out the _containerID_ with `docker ps`)
 4. From the _/code_ directory, run 

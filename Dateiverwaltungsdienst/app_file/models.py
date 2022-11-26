@@ -5,7 +5,6 @@ from django.db import models
 class StorageUser(models.Model):
     class Meta:
         db_table = "StorageUser"
-        db_tablespace = "file_service"
         constraints = []
     objects = models.Manager()
 
@@ -18,7 +17,6 @@ class StorageUser(models.Model):
 class Directory(models.Model):
     class Meta:
         db_table = "Directory"
-        db_tablespace = "file_service"
         constraints = []
     objects = models.Manager()
 
@@ -45,7 +43,6 @@ class Directory(models.Model):
 class File(models.Model):
     class Meta:
         db_table = "File"
-        db_tablespace = "file_service"
         constraints = []
     objects = models.Manager()
 
@@ -71,7 +68,6 @@ class File(models.Model):
 class Share(models.Model):
     class Meta:
         db_table = "Share"
-        db_tablespace = "file_service"
         constraints = []
     objects = models.Manager()
 

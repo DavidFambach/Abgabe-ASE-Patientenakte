@@ -9,7 +9,6 @@ services:
       - POSTGRES_PASSWORD=postgres
   auth_api:
     build: ./Authentifizierungsdienst
-    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     environment:
@@ -33,7 +32,6 @@ services:
       - POSTGRES_PASSWORD=postgres
   file_api:
     build: ./Dateiverwaltungsdienst
-    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8001:8000"
     environment:

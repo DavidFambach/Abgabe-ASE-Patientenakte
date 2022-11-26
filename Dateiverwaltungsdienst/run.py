@@ -9,7 +9,7 @@ def _read_all(process):
     status = process.poll()
     while status is None:
         line = process.stdout.readline()
-        if line is None:
+        if not line:
             break
         print(line.decode("utf-8"))
         status = process.poll()

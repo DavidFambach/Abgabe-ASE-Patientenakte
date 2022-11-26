@@ -6,11 +6,13 @@ import time
 APP_NAME = "authentication"
 
 def _read_all(process):
-    while True:
+    status = process.poll()
+    while status is None:
         line = process.stdout.readline()
-        if line is None:
+        if not line:
             break
-        print(line)
+        print(line.decode("utf-8"))
+        status = process.poll()
 
 if __name__ == "__main__":
     failures = 0
@@ -26,7 +28,7 @@ if __name__ == "__main__":
             time.sleep(1)
     print("Database is up")
 
-    _read_all(subprocess.Popen(["python", "manage.py", "makemigrations", APP_NAME], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    _read_all(subprocess.Popen(["python", "manage.py", "migrate"], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    _read_all(subprocess.Popen(["python", "manage.py", "migrate", APP_NAME], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    _read_all(subprocess.Popen(["python", "manage.py", "runserver", "0.0.0.0:8000"], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", "manage.py", "makemigrations", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", "manage.py", "migrate"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", "manage.py", "migrate", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", "manage.py", "runserver", "0.0.0.0:8000"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))

@@ -1,46 +1,89 @@
 services:
   auth_db:
     image: postgres
+    environment:
+      - POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${AUTH_SERVICE_POSTGRES_PASSWORD}
+    networks:
+      auth_db_net:
+    restart: on-failure
     volumes:
-      - ./data/auth_db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-  auth_api:
-    build: ./Authentifizierungsdienst
-    ports:
-      - "8000:8000"
-    environment:
-      - GOOGLE_CLIENT_ID=321799647155-2fn0mq2kubk5tba1g4pu5vo0hjb8vtv4.apps.googleusercontent.com
-      - SOCIAL_SECRET=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
-      - SECRET_KEY=@6p-h7#oy4unyb4+(@i&3eq(knbkvjkeyv&@*8+a%f45b@mfm1
-      - POSTGRES_HOST=auth_db
-      - POSTGRES_PORT=5432
-      - POSTGRES_DATABASE=postgres
-      - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=postgres
-    depends_on:
-      - auth_db
+      - auth_db_data:/var/lib/postgresql/data
   file_db:
     image: postgres
-    volumes:
-      - ./data/file_db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${FILE_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USER=${FILE_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${FILE_SERVICE_POSTGRES_PASSWORD}
+    networks:
+      file_db_net:
+    restart: on-failure
+    volumes:
+      - file_db_data:/var/lib/postgresql/data
+  
+  auth_api:
+    build: ./Authentifizierungsdienst
+    depends_on:
+      - auth_db
+    ports:
+      - mode: host
+        protocol: tcp
+        host_ip: 127.0.0.1
+        published: 8000
+        target: 8000
+    environment:
+      - GOOGLE_CLIENT_ID=${AUTH_SERVICE_GOOGLE_CLIENT_ID}
+      - SOCIAL_SECRET=${AUTH_SERVICE_SOCIAL_SECRET}
+      - SECRET_KEY=${DJANGO_SECRET}
+      - POSTGRES_HOST=auth_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=${AUTH_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USERNAME=${AUTH_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${AUTH_SERVICE_POSTGRES_PASSWORD}
+    networks:
+      default:
+      auth_db_net:
+    restart: on-failure
   file_api:
     build: ./Dateiverwaltungsdienst
-    ports:
-      - "8001:8000"
-    environment:
-      - SECRET_KEY=@6p-h7#oy4unyb4+(@i&3eq(knbkvjkeyv&@*8+a%f45b@mfm1
-      - POSTGRES_HOST=file_db
-      - POSTGRES_PORT=5432
-      - POSTGRES_DATABASE=postgres
-      - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=postgres
     depends_on:
       - file_db
+    ports:
+      - mode: host
+        protocol: tcp
+        host_ip: 127.0.0.1
+        published: 8001
+        target: 8000
+    environment:
+      - SECRET_KEY=${DJANGO_SECRET}
+      - POSTGRES_HOST=file_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=${FILE_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USERNAME=${FILE_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${FILE_SERVICE_POSTGRES_PASSWORD}
+    networks:
+      default:
+      file_db_net:
+    restart: on-failure
 
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.0/29"
+  auth_db_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.8/29"
+  file_db_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.16/29"
+
+volumes:
+  auth_db_data:
+  file_db_data:

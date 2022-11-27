@@ -1,6 +1,5 @@
 from .serializers import *
 from .models import User
-
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import generics, status, views, permissions
@@ -9,6 +8,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 import jwt
 
+
+from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -52,14 +53,13 @@ class RegisterView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
-        except ValidationError as e:
-            return Response(e.__str__(), status=status.HTTP_400_BAD_REQUEST)
-        except Exception as serialize_exeption:
-            # If an error occurs during serialization, this could be due to the fact that there is already an account
-            # with the same email address. In this case, the password should be taken from this request and a validation
-            # mail should be sent again.
-            try:
-                if serialize_exeption.args[0]["email"][0] == "user with this email already exists.":
+        except ValidationError as serialize_exeption:
+            if "email" in serialize_exeption.args[0] and \
+                    serialize_exeption.args[0]["email"][0] == "user with this email already exists.":
+                # If an error occurs during serialization, this could be due to the fact that there is already an account
+                # with the same email address. In this case, the password should be taken from this request and a validation
+                # mail should be sent again.
+                try:
                     user = User.objects.get(email=serializer.data["email"])
                     # If the user has already been verified, a notice is returned and the registration process is
                     # aborted.
@@ -73,12 +73,14 @@ class RegisterView(generics.GenericAPIView):
                                                                          'uidb64': uidb64, 'token': token})
                     password_serializer.is_valid(raise_exception=True)
                     pass
-            except KeyError:
-                # If it is not the case that a user registers with the same user name and the same email address, the
-                # exception from the serialization is raised here.
-                raise serialize_exeption
-            except Exception as e:
-                raise e
+                except KeyError:
+                    # If it is not the case that a user registers with the same user name and the same email address, the
+                    # exception from the serialization is raised here.
+                    raise serialize_exeption
+                except Exception as e:
+                    raise e
+            else:
+                return Response(serialize_exeption.__str__(), status=status.HTTP_400_BAD_REQUEST)
 
         # Prepare the verification mail
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
@@ -86,10 +88,13 @@ class RegisterView(generics.GenericAPIView):
         token = RefreshToken.for_user(user).access_token
         callbackurl = get_current_site(request).domain + reverse('email-verify')
         absurl = 'http://' + callbackurl + "?token=" + str(token)
-        # ToDo: Customize the email text
-        email_body = 'Hi ' + user.username + "\n" \
-                                             ' Use the link below to verify your email \n' + absurl
-        data = {'email_body': email_body, 'to_email': user.email,
+        text_body = "Hallo " + user.username + ",\n" + \
+                     "Sie haben ein Konto auf Patientenakte registriert, bevor Sie Ihr Konto verwenden können, müssen " +\
+                     "Sie bestätigen, dass dies Ihre E-Mail-Adresse ist, indem Sie hier klicken:\n" + \
+                     absurl + "\n\nMit freundlichen Grüßen, das Patientenaktenteam"
+
+        html_body = render_to_string('verification_email.html', {'user': user.username, 'absurl': absurl})
+        data = {'text_body': text_body, 'html_body': html_body, 'to_email': user.email,
                 'email_subject': 'Verify your email'}
 
         Util.send_email(data)

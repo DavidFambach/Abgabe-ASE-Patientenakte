@@ -75,7 +75,9 @@ ROOT_URLCONF = 'AuthService.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            '/authentication/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

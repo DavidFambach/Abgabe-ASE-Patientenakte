@@ -18,11 +18,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=68, min_length=8, write_only=True)
 
-    username_error_messages = {
+    invalid_credentials_error_message = {
+        'email': 'The email address you entered is not a valid address.',
         'username': 'The username should only contain alphanumeric characters.'}
-    email_error_massage = {
-        'email': 'The email address you entered is not a valid address.'
-    }
 
     class Meta:
         model = User
@@ -36,10 +34,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         if not username.isalnum():
             raise serializers.ValidationError(
-                self.username_error_messages)
+                self.invalid_credentials_error_message["username"])
         if re.match(email_regex, email) is None:
             raise serializers.ValidationError(
-                self.email_error_massage)
+                self.invalid_credentials_error_message["email"])
         validate_password(password=password, user=User.objects.create_user_object(username, email, password))
         return attrs
 

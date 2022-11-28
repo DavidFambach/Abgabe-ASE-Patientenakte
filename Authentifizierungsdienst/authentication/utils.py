@@ -1,7 +1,6 @@
 from django.core.mail import EmailMessage
 from django.core.mail import EmailMultiAlternatives
 
-
 import threading
 
 

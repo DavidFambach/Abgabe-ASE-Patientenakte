@@ -1,3 +1,6 @@
 /.idea/
 /data/
 /Authentifizierungsdienst/migrations/
+.env
+/Authentifizierungsdienst/venv/
+/Authentifizierungsdienst/readme.md

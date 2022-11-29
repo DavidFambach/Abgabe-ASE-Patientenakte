@@ -4,3 +4,5 @@
 .env
 /Authentifizierungsdienst/venv/
 /Authentifizierungsdienst/readme.md
+/Authentifizierungsdienst/setup_environment.cmd
+/Authentifizierungsdienst/authentication/migrations/

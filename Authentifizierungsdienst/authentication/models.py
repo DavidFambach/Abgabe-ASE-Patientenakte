@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
+
+from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 
@@ -10,7 +12,8 @@ class UserManager(BaseUserManager):
             raise TypeError('Users should have a username')
         if email is None:
             raise TypeError('Users should have a Email')
-        user = self.model(username=username, email=self.normalize_email(email))
+        user = self.model(username=username, email=self.normalize_email(email),
+                          created_at=timezone.now(), updated_at=timezone.now())
         user.set_password(password)
         return user
 
@@ -39,8 +42,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(editable=False)
+    updated_at = models.DateTimeField()
     auth_provider = models.CharField(
         max_length=255, blank=False,
         null=False, default=AUTH_PROVIDERS.get('email'))

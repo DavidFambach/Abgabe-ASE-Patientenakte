@@ -86,14 +86,14 @@ class RegisterView(generics.GenericAPIView):
         token = RefreshToken.for_user(user).access_token
         callbackurl = get_current_site(request).domain + reverse('email-verify')
         absurl = 'http://' + callbackurl + "?token=" + str(token)
-        text_body = "Hallo " + user.username + ",\n" + \
-                     "Sie haben ein Konto auf Patientenakte registriert, bevor Sie Ihr Konto verwenden können, müssen " +\
-                     "Sie bestätigen, dass dies Ihre E-Mail-Adresse ist, indem Sie hier klicken:\n" + \
-                     absurl + "\n\nMit freundlichen Grüßen, das Patientenaktenteam"
+        text_body = "Hi" + user.username + ",\n" + \
+                    "You have registered an account on Patientenakte, before you can use your account you must " + \
+                    "confirm that this is your email address by clicking here:\n" + \
+                    absurl + "\n\nSincerely, The Patientenakten Team"
 
         html_body = render_to_string('verification_email.html', {'user': user.username, 'absurl': absurl})
         data = {'text_body': text_body, 'html_body': html_body, 'to_email': user.email,
-                'email_subject': 'Verify your email'}
+                'email_subject': 'Confirm Your Email Address'}
 
         Util.send_email(data)
         return Response(user_data, status=status.HTTP_201_CREATED)

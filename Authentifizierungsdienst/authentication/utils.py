@@ -17,11 +17,8 @@ class EmailThread(threading.Thread):
 class Util:
     @staticmethod
     def send_email(data):
+        email = EmailMultiAlternatives(
+            subject=data['email_subject'], body=data['text_body'], to=[data['to_email']])
         if 'html_body' in data:
-            email = EmailMultiAlternatives(
-                subject=data['email_subject'], body=data['text_body'], to=[data['to_email']])
             email.attach_alternative(data['html_body'], "text/html")
-        else:
-            email = EmailMessage(
-                subject=data['email_subject'], body=data['text_body'], to=[data['to_email']])
         EmailThread(email).start()

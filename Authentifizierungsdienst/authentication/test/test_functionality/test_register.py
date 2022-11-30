@@ -12,7 +12,7 @@ class TestUserRegister(APITestCase):
     fixtures = ["TestUser.json"]
     endpoint = reverse('register')
     sample_register_data = {'username': "Max",
-                            # max@mustermann.de should not be used because this user is already initially loaded into
+                            # "max@mustermann.de" should not be used because this user is already initially loaded into
                             # the database by the "TestUser.json" fixture.
                             'email': "maxi@mustermann.de",
                             'password': "Mu5TerPassW0rt!"}
@@ -70,4 +70,4 @@ class TestUserRegister(APITestCase):
                                 'email': "max@mustermann.de",
                                 'password': "Mu5TerPassW0rt!"}
         response = self.client.post(self.endpoint, sample_register_data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

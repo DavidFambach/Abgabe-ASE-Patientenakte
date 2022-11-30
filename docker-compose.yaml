@@ -33,7 +33,7 @@ services:
         protocol: tcp
         host_ip: 127.0.0.1
         published: 8000
-        target: 8000
+        target: 80
     environment:
       - DEBUG=${DEBUG:-false}
       - GOOGLE_CLIENT_ID=${AUTH_SERVICE_GOOGLE_CLIENT_ID}
@@ -59,7 +59,7 @@ services:
         protocol: tcp
         host_ip: 127.0.0.1
         published: 8001
-        target: 8000
+        target: 80
     environment:
       - DEBUG=${DEBUG:-false}
       - SECRET_KEY=${DJANGO_SECRET}

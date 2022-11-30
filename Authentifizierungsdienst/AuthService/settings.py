@@ -90,7 +90,7 @@ DATABASES = {
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
         "OPTIONS": {
             "sslmode": "verify-full",
-            "sslrootcert": os.path.join("/", "etc", "patientenakte", "ssl", "db-ca-cert.pem")
+            "sslrootcert": "sslrootcert": os.environ["POSTGRES_SSL_CA_PATH"] if "POSTGRES_SSL_CA_PATH" in os.environ else os.path.join("/", "etc", "patientenakte", "ssl", "db-ca-cert.pem")
         }
     }
 }

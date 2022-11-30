@@ -34,6 +34,11 @@ services:
         host_ip: 127.0.0.1
         published: 8000
         target: 80
+      - mode: host
+        protocol: tcp
+        host_ip: 127.0.0.1
+        published: 8010
+        target: 443
     environment:
       - DEBUG=${DEBUG:-false}
       - GOOGLE_CLIENT_ID=${AUTH_SERVICE_GOOGLE_CLIENT_ID}
@@ -50,6 +55,9 @@ services:
       default:
       auth_db_net:
     restart: on-failure
+    volumes:
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem
   file_api:
     build: ./Dateiverwaltungsdienst
     depends_on:
@@ -60,6 +68,11 @@ services:
         host_ip: 127.0.0.1
         published: 8001
         target: 80
+      - mode: host
+        protocol: tcp
+        host_ip: 127.0.0.1
+        published: 8011
+        target: 443
     environment:
       - DEBUG=${DEBUG:-false}
       - SECRET_KEY=${DJANGO_SECRET}
@@ -72,6 +85,9 @@ services:
       default:
       file_db_net:
     restart: on-failure
+    volumes:
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem
 
 networks:
   default:

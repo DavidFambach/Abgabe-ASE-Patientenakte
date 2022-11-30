@@ -1,0 +1,21 @@
+# syntax=docker/dockerfile:1
+FROM postgres:15.1
+SHELL ["/bin/bash", "-c"]
+RUN pushd /usr/local/bin\
+    && mv docker-entrypoint.sh docker-entrypoint-2.sh \
+    && echo '#!/usr/bin/env bash' >> docker-entrypoint.sh \
+    && echo 'if [ "$(id -u)" = '\''0'\'' ]; then' >> docker-entrypoint.sh \
+    && echo '    cp /etc/postgresql/ssl/key.pem /etc/postgresql/ssl/key-private.pem \' >> docker-entrypoint.sh \
+    && echo '        && chmod 440 /etc/postgresql/ssl/key-private.pem \' >> docker-entrypoint.sh \
+    && echo '        && chown root:postgres /etc/postgresql/ssl/key-private.pem \' >> docker-entrypoint.sh \
+    && echo '	    || { exit 1; }' >> docker-entrypoint.sh \
+    && echo 'fi' >> docker-entrypoint.sh \
+	&& cat docker-entrypoint-2.sh >> docker-entrypoint.sh \
+	&& rm docker-entrypoint-2.sh \
+    && chown root:postgres docker-entrypoint.sh \
+    && chmod 550 docker-entrypoint.sh \
+    && popd \
+    && mkdir -p /etc/postgresql/ssl/ \
+    && chown root:postgres /etc/postgresql/ssl/ \
+    && chmod 770 /etc/postgresql/ssl/
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh", "postgres", "-c", "ssl_cert_file=/etc/postgresql/ssl/cert.pem", "-c", "ssl_key_file=/etc/postgresql/ssl/key-private.pem", "-c", "ssl=on"]

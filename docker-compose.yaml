@@ -2,7 +2,9 @@ version: "2.1"
 
 services:
   auth_db:
-    image: postgres
+    build:
+      context: ./Konfiguration/Dockerfiles
+      dockerfile: ssl-enabled-postgres.txt
     environment:
       - POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USERNAME}
@@ -12,8 +14,12 @@ services:
     restart: on-failure
     volumes:
       - auth_db_data:/var/lib/postgresql/data
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-db-cert.pem:/etc/postgresql/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-db-key.pem:/etc/postgresql/ssl/key.pem
   file_db:
-    image: postgres
+    build:
+      context: ./Konfiguration/Dockerfiles
+      dockerfile: ssl-enabled-postgres.txt
     environment:
       - POSTGRES_DB=${FILE_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${FILE_SERVICE_POSTGRES_USERNAME}
@@ -23,6 +29,8 @@ services:
     restart: on-failure
     volumes:
       - file_db_data:/var/lib/postgresql/data
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-db-cert.pem:/etc/postgresql/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-db-key.pem:/etc/postgresql/ssl/key.pem
   
   auth_api:
     build: ./Authentifizierungsdienst
@@ -56,6 +64,7 @@ services:
       auth_db_net:
     restart: on-failure
     volumes:
+      - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem
       - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem
       - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem
   file_api:
@@ -86,6 +95,7 @@ services:
       file_db_net:
     restart: on-failure
     volumes:
+      - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem
       - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem
       - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem
 

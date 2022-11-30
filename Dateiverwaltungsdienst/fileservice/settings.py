@@ -79,7 +79,11 @@ DATABASES = {
         "PORT": os.environ["POSTGRES_PORT"],
         "NAME": os.environ["POSTGRES_DATABASE"],
         "USER": os.environ["POSTGRES_USERNAME"],
-        "PASSWORD": os.environ["POSTGRES_PASSWORD"]
+        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
+        "OPTIONS": {
+            "sslmode": "verify-full",
+            "sslrootcert": os.path.join("/", "etc", "patientenakte", "ssl", "db-ca-cert.pem")
+        }
     }
 }
 

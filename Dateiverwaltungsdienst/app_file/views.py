@@ -1,7 +1,11 @@
 import json
+import jwt
 import logging
+import re
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import HttpRequest, HttpResponse
 from typing import Callable, List, Union
 
@@ -22,7 +26,11 @@ STATUS_INVALID_SHARE_SUBJECT = ("invalid_subject", 422)
 STATUS_QUOTA_EXCEEDED = ("quota_exceeded", 422)
 STAUTS_INTERNAL_ERROR = ("internal_error", 500)
 
-# TODO authentication
+AUTHORIZATION_HEADER_NAME = "Authorization"
+
+CLAIM_USER_ID = "user_id"
+CLAIM_USER_NAME = "user_name"
+
 # TODO use randomized UUIDs rather than serial numbers for ids, because incremental IDs allow guessing the number of objects crated
 
 class AbstractView:
@@ -78,8 +86,7 @@ class UserInfoView(AbstractView):
 
     def _handle_get(self, request: HttpRequest, **kwargs) -> HttpResponse:
         user_id = _get_kwarg(kwargs, "user_id", converter=int)
-        _verify_authenticated(request, user_id)
-        user = StorageUser.objects.get(id=user_id)
+        user, _ = _verify_authenticated(request, user_id)
         _verify_can_access(user_id, user, is_write=False)
         return _response_for_json(STATUS_OK, file=serialize_user_info(user))
 
@@ -377,14 +384,48 @@ def _get_converter_for_enum(accepted_values: List[str], converter: Callable[[str
         return converter(x)
     return res
 
-def _verify_authenticated(req: HttpRequest, user_id: int) -> None:
-    # TODO check if the user is authenticated
-    if False:
+def _verify_authenticated(req: HttpRequest, user_id: int) -> (StorageUser, dict[str, Any]):
+
+    token = req.headers.get(AUTHORIZATION_HEADER_NAME, None)
+    if token is None:
         raise _ErrorUnauthorized()
+    regex = re.compile("^Bearer ([^ ]+)$")
+    if regex.match(token) is None:
+        raise _ErrorUnauthorized()
+    token = regex.sub("\\1", token)
+
+    try:
+        token = jwt.decode(token, settings.SECRET_KEY, settings.SIMPLE_JWT["ALGORITHM"])
+    except Exception as e:
+        logging.info("An invalid token was supplied for user with ID %s" % user_id)
+        raise _ErrorUnauthorized()
+
+    claimed_user_id = token.get(CLAIM_USER_ID, None)
+    if claimed_user_id is None:
+        logging.info("Encountered a valid token with no user_id set")
+        raise _ErrorUnauthorized()
+    if claimed_user_id != user_id:
+        logging.info("User with ID %s attempted to authenticate as user with ID %s" % (claimed_user_id, user_id))
+        raise _ErrorUnauthorized()
+
+    for key in [CLAIM_USER_NAME]:
+        if key not in token:
+            logging.info("Encountered a valid token for user with ID %s which is missing the required claim \"%s\"" % (user_id, key))
+            raise _ErrorUnauthorized()
+
+    with transaction.atomic():
+        try:
+            user = StorageUser.objects.get(id=user_id)
+        except ObjectDoesNotExist:
+            user = StorageUser.objects.create(id=user_id, display_name=token[CLAIM_USER_NAME])
+            Directory.objects.create(name="root", owner=user, parent=None)
+            logging.info("Created new user with ID %s and display name \"%s\"" % (user_id, token[CLAIM_USER_NAME]))
+
+    return user, token
 
 def _verify_can_access(user_id: int, obj: Union[StorageUser, File, Directory, Share], is_write: bool) -> None:
     if obj is None:
-        return True
+        return
     if not obj.can_access(user_id, False):
         logging.info("User %d attempted to read %s, but is lacking the permission to do so" % (user_id, obj))
         raise _ErrorNotFound()

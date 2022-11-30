@@ -1,6 +1,10 @@
+version: "2.1"
+
 services:
   auth_db:
-    image: postgres
+    build:
+      context: ./Konfiguration/Dockerfiles
+      dockerfile: ssl-enabled-postgres.txt
     environment:
       - POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USERNAME}
@@ -10,8 +14,12 @@ services:
     restart: on-failure
     volumes:
       - auth_db_data:/var/lib/postgresql/data
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-db-cert.pem:/etc/postgresql/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-db-key.pem:/etc/postgresql/ssl/key.pem
   file_db:
-    image: postgres
+    build:
+      context: ./Konfiguration/Dockerfiles
+      dockerfile: ssl-enabled-postgres.txt
     environment:
       - POSTGRES_DB=${FILE_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${FILE_SERVICE_POSTGRES_USERNAME}
@@ -21,6 +29,8 @@ services:
     restart: on-failure
     volumes:
       - file_db_data:/var/lib/postgresql/data
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-db-cert.pem:/etc/postgresql/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-db-key.pem:/etc/postgresql/ssl/key.pem
   
   auth_api:
     build: ./Authentifizierungsdienst
@@ -31,8 +41,14 @@ services:
         protocol: tcp
         host_ip: 127.0.0.1
         published: 8000
-        target: 8000
+        target: 80
+      - mode: host
+        protocol: tcp
+        host_ip: 127.0.0.1
+        published: 8010
+        target: 443
     environment:
+      - DEBUG=${DEBUG:-false}
       - GOOGLE_CLIENT_ID=${AUTH_SERVICE_GOOGLE_CLIENT_ID}
       - SOCIAL_SECRET=${AUTH_SERVICE_SOCIAL_SECRET}
       - SECRET_KEY=${DJANGO_SECRET}
@@ -47,6 +63,10 @@ services:
       default:
       auth_db_net:
     restart: on-failure
+    volumes:
+      - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem
   file_api:
     build: ./Dateiverwaltungsdienst
     depends_on:
@@ -56,8 +76,14 @@ services:
         protocol: tcp
         host_ip: 127.0.0.1
         published: 8001
-        target: 8000
+        target: 80
+      - mode: host
+        protocol: tcp
+        host_ip: 127.0.0.1
+        published: 8011
+        target: 443
     environment:
+      - DEBUG=${DEBUG:-false}
       - SECRET_KEY=${DJANGO_SECRET}
       - POSTGRES_HOST=file_db
       - POSTGRES_PORT=5432
@@ -68,6 +94,10 @@ services:
       default:
       file_db_net:
     restart: on-failure
+    volumes:
+      - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem
+      - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem
 
 networks:
   default:

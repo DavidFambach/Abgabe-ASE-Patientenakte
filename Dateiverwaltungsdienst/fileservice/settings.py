@@ -22,10 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-#&-^fbspvu6lxm-4m2t=n5l1s-om!-@e#6ft5igpz4y(6$#zhc'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = "DEBUG" in os.environ and str(os.environ["DEBUG"]).lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -80,7 +79,11 @@ DATABASES = {
         "PORT": os.environ["POSTGRES_PORT"],
         "NAME": os.environ["POSTGRES_DATABASE"],
         "USER": os.environ["POSTGRES_USERNAME"],
-        "PASSWORD": os.environ["POSTGRES_PASSWORD"]
+        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
+        "OPTIONS": {
+            "sslmode": "verify-full",
+            "sslrootcert": os.path.join("/", "etc", "patientenakte", "ssl", "db-ca-cert.pem")
+        }
     }
 }
 
@@ -127,3 +130,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 APPEND_SLASH = False
+
+SIMPLE_JWT = {"ALGORITHM": "HS256"}

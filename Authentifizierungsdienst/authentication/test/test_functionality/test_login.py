@@ -7,8 +7,8 @@ from rest_framework.test import APITestCase
 from django.urls import reverse
 
 
-class TestUserRegister(APITestCase):
-    """ The class TestUserLogin contains all tests for the registration API /auth/register/. """
+class TestUserLogin(APITestCase):
+    """ The class TestUserLogin contains all tests for the login API /auth/login/. """
     fixtures = ["TestUser.json"]
     endpoint = reverse('login')
     sample_register_data = {'email': "max@mustermann.de",

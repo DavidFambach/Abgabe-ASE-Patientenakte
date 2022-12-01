@@ -1,3 +1,5 @@
+import urllib
+
 from .serializers import *
 from .models import User
 from rest_framework import generics, status, views
@@ -143,7 +145,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             relativeLink = reverse(
                 'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
 
-            redirect_url = request.data.get('redirect_url', '')
+            redirect_url = urllib.parse.quote(request.data.get('redirect_url'))
             absurl = 'http://' + current_site + relativeLink
             email_body = 'Hello, \n Use link below to reset your password  \n' + \
                          absurl + "?redirect_url=" + redirect_url
@@ -158,7 +160,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
 
     def get(self, request, uidb64, token):
 
-        redirect_url = request.GET.get('redirect_url')
+        redirect_url = urllib.parse.quote(request.GET.get('redirect_url'))
 
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
@@ -178,7 +180,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
 
         except DjangoUnicodeDecodeError as identifier:
             try:
-                if not PasswordResetTokenGenerator().check_token(user):
+                if not PasswordResetTokenGenerator().check_token(user, token):
                     return CustomRedirect(redirect_url + '?token_valid=False')
 
             except UnboundLocalError as e:

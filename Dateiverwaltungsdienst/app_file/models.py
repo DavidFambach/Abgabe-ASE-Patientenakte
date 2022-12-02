@@ -1,3 +1,7 @@
+import logging
+
+from . import messaging
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 # TODO db constraints, e.g. for unique names, for ownership, for user-root-directory, unique issuer-subject-target-canwrite
@@ -84,3 +88,13 @@ class Share(models.Model):
         if not is_write and self.subject.id == user_id:
             return True
         return False
+
+
+def _delete_user(user_id: int) -> None:
+    try:
+        user = StorageUser.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        return
+    user.delete()
+    logging.info("Successfully deleted user with ID %s" % user_id)
+messaging.DELETE_USER_CALLBACK = _delete_user

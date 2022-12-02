@@ -35,7 +35,10 @@ services:
   auth_api:
     build: ./Authentifizierungsdienst
     depends_on:
-      - auth_db
+      auth_db:
+        condition: service_started
+      user_update_queue:
+        condition: service_started
     ports:
       - mode: host
         protocol: tcp
@@ -57,12 +60,18 @@ services:
       - POSTGRES_DATABASE=${AUTH_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USERNAME=${AUTH_SERVICE_POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${AUTH_SERVICE_POSTGRES_PASSWORD}
+      - USER_UPDATE_QUEUE_HOST=user_update_queue
+      - USER_UPDATE_QUEUE_PORT=5672
+      - USER_UPDATE_QUEUE_USERNAME=${USER_UPDATE_QUEUE_USERNAME}
+      - USER_UPDATE_QUEUE_PASSWORD=${USER_UPDATE_QUEUE_PASSWORD}
+      - USER_UPDATE_QUEUE_EXCHANGE_NAME=${USER_UPDATE_QUEUE_EXCHANGE_NAME}
       - EMAIL_HOST_USER=${AUTH_SERVICE_EMAIL_HOST_USER}
       - EMAIL_HOST_PASSWORD=${AUTH_SERVICE_EMAIL_HOST_PASSWORD}
     networks:
       default:
       auth_db_net:
       auth_api_net:
+      user_update_queue_net:
     restart: on-failure
     volumes:
       - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
@@ -71,7 +80,10 @@ services:
   file_api:
     build: ./Dateiverwaltungsdienst
     depends_on:
-      - file_db
+      file_db:
+        condition: service_started
+      user_update_queue:
+        condition: service_started
     ports:
       - mode: host
         protocol: tcp
@@ -91,10 +103,16 @@ services:
       - POSTGRES_DATABASE=${FILE_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USERNAME=${FILE_SERVICE_POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${FILE_SERVICE_POSTGRES_PASSWORD}
+      - USER_UPDATE_QUEUE_HOST=user_update_queue
+      - USER_UPDATE_QUEUE_PORT=5672
+      - USER_UPDATE_QUEUE_USERNAME=${USER_UPDATE_QUEUE_USERNAME}
+      - USER_UPDATE_QUEUE_PASSWORD=${USER_UPDATE_QUEUE_PASSWORD}
+      - USER_UPDATE_QUEUE_EXCHANGE_NAME=${USER_UPDATE_QUEUE_EXCHANGE_NAME}
     networks:
       default:
       file_db_net:
       file_api_net:
+      user_update_queue_net:
     restart: on-failure
     volumes:
       - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
@@ -125,9 +143,18 @@ services:
       file_api_net:
     restart: on-failure
     volumes:
-      - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
       - ${PWD}/Konfiguration/TLS Zertifikate/bff-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
       - ${PWD}/Konfiguration/TLS Zertifikate/bff-https-key.pem:/etc/nginx/ssl/key.pem:ro
+  
+  user_update_queue:
+    image: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${USER_UPDATE_QUEUE_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${USER_UPDATE_QUEUE_PASSWORD}
+    hostname: user_update_queue
+    networks:
+      user_update_queue_net:
+    restart: on-failure
 
 networks:
   default:
@@ -155,6 +182,11 @@ networks:
       driver: default
       config:
         - subnet: "192.168.184.32/29"
+  user_update_queue_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.40/29"
 
 volumes:
   auth_db_data:

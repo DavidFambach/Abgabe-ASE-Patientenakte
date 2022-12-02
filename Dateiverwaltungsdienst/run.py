@@ -1,4 +1,5 @@
 import os
+import pika
 import psycopg2
 import subprocess
 import time
@@ -27,18 +28,33 @@ def _run_nginx():
     _read_all(subprocess.Popen(["nginx", "-g", "daemon off;"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
 
 if __name__ == "__main__":
+
     failures = 0
     while True:
         try:
             con = psycopg2.connect(host=os.environ["POSTGRES_HOST"], port=os.environ["POSTGRES_PORT"], dbname=os.environ["POSTGRES_DATABASE"], user=os.environ["POSTGRES_USERNAME"], password=os.environ["POSTGRES_PASSWORD"])
             con.close()
             break
-        except:
+        except Exception:
             failures += 1
             if failures % 15 == 0:
                 print("Database is not reachable")
             time.sleep(1)
     print("Database is up")
+
+    failures = 0
+    while True:
+        try:
+            credentials = pika.PlainCredentials(username=os.environ["USER_UPDATE_QUEUE_USERNAME"], password=os.environ["USER_UPDATE_QUEUE_PASSWORD"])
+            con = pika.BlockingConnection(pika.ConnectionParameters(host=os.environ["USER_UPDATE_QUEUE_HOST"], port=int(os.environ["USER_UPDATE_QUEUE_PORT"]), credentials=credentials))
+            con.close()
+            break
+        except Exception:
+            failures += 1
+            if failures % 15 == 0:
+                print("Message queue not reachable")
+            time.sleep(1)
+    print("Message queue is up")
 
     nginx_thread = RunnableThread(_run_nginx)
     nginx_thread.daemon = True

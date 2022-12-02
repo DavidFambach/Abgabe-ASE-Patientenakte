@@ -7,6 +7,7 @@ import time
 from threading import Thread
 
 APP_NAME = "app_file"
+WSGI_APP_NAME = "fileservice.wsgi:application"
 
 class RunnableThread(Thread):
     def __init__(self, r):
@@ -63,4 +64,4 @@ if __name__ == "__main__":
     _read_all(subprocess.Popen(["python", "manage.py", "makemigrations", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
     _read_all(subprocess.Popen(["python", "manage.py", "migrate"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
     _read_all(subprocess.Popen(["python", "manage.py", "migrate", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    _read_all(subprocess.Popen(["python", "-m", "waitress", "--listen=*:8000", "fileservice.wsgi:application"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", "-m", "waitress", "--listen=*:8000", WSGI_APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))

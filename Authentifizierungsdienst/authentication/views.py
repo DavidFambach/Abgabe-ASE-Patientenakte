@@ -1,5 +1,7 @@
 import urllib
 
+import pika
+
 from .serializers import *
 from .models import User
 from rest_framework import generics, status, views
@@ -214,6 +216,20 @@ class DeleteAccount(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        user_id = serializer.validated_data.get('user_id')
         serializer.save()
 
+        queue_settings = settings.MESSAGE_QUEUES["user_update"]
+        credentials = pika.PlainCredentials(username=queue_settings["username"],
+                                            password=queue_settings["password"])
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=queue_settings["host"], port=int(queue_settings["port"]),
+                                      credentials=credentials))
+        channel = connection.channel()
+
+        channel.exchange_declare(exchange=queue_settings["exchange_name"], exchange_type="fanout")
+
+        message = user_id.to_bytes(4, byteorder="big")
+        channel.basic_publish(exchange=queue_settings["exchange_name"], routing_key="", body=message)
+        connection.close()
         return Response({"result": "User was successfully deleted"})

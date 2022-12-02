@@ -95,6 +95,16 @@ DATABASES = {
     }
 }
 
+MESSAGE_QUEUES = {
+    "user_update": {
+        "host": os.environ["USER_UPDATE_QUEUE_HOST"],
+        "port": os.environ["USER_UPDATE_QUEUE_PORT"],
+        "username": os.environ["USER_UPDATE_QUEUE_USERNAME"],
+        "password": os.environ["USER_UPDATE_QUEUE_PASSWORD"],
+        "exchange_name": os.environ["USER_UPDATE_QUEUE_EXCHANGE_NAME"]
+    }
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -152,7 +162,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

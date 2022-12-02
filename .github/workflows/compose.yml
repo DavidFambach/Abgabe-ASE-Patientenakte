@@ -8,7 +8,15 @@ on:
 
 jobs:
   docker:
-    defaults:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Start containers
+      run: docker-compose -f "docker-compose.yml" up -d --build
       env:
         AUTH_SERVICE_POSTGRES_DATABASE: ${{ env_compose.AUTH_SERVICE_POSTGRES_DATABASE }}
         AUTH_SERVICE_POSTGRES_USERNAME: ${{ env_compose.AUTH_SERVICE_POSTGRES_USERNAME }}
@@ -21,27 +29,6 @@ jobs:
         FILE_SERVICE_POSTGRES_USERNAME: ${{ env_compose.FILE_SERVICE_POSTGRES_USERNAME }}
         FILE_SERVICE_POSTGRES_PASSWORD: ${{ env_compose.FILE_SERVICE_POSTGRES_PASSWORD }}
         DJANGO_SECRET: ${{ env_compose.DJANGO_SECRET }}
-
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-
-    - name: Start containers
-      run: docker-compose -f "docker-compose.yml" up -d --build
-
-    - name: Install node
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Run tests
-      run: npm run test
 
     - name: Stop containers
       if: always()

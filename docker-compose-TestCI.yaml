@@ -1,0 +1,159 @@
+version: "3.1"
+
+services:
+  auth_db:
+    build:
+      context: ./Konfiguration/Dockerfiles
+      dockerfile: ssl-enabled-postgres.txt
+    environment:
+      - POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${AUTH_SERVICE_POSTGRES_PASSWORD}
+    networks:
+      auth_db_net:
+    restart: on-failure
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+      - ./Konfiguration/TLS Zertifikate/authentication-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/authentication-db-key.pem:/etc/postgresql/ssl/key.pem:ro
+  file_db:
+    build:
+      context: ./Konfiguration/Dockerfiles
+      dockerfile: ssl-enabled-postgres.txt
+    environment:
+      - POSTGRES_DB=${FILE_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USER=${FILE_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${FILE_SERVICE_POSTGRES_PASSWORD}
+    networks:
+      file_db_net:
+    restart: on-failure
+    volumes:
+      - file_db_data:/var/lib/postgresql/data
+      - ./Konfiguration/TLS Zertifikate/file-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/file-db-key.pem:/etc/postgresql/ssl/key.pem:ro
+  
+  auth_api:
+    build: ./Authentifizierungsdienst
+    depends_on:
+      - auth_db
+      - user_update_queue
+    environment:
+      - DEBUG=${DEBUG:-false}
+      - GOOGLE_CLIENT_ID=${AUTH_SERVICE_GOOGLE_CLIENT_ID}
+      - SOCIAL_SECRET=${AUTH_SERVICE_SOCIAL_SECRET}
+      - SECRET_KEY=${DJANGO_SECRET}
+      - POSTGRES_HOST=auth_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=${AUTH_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USERNAME=${AUTH_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${AUTH_SERVICE_POSTGRES_PASSWORD}
+      - USER_UPDATE_QUEUE_HOST=user_update_queue
+      - USER_UPDATE_QUEUE_PORT=5672
+      - USER_UPDATE_QUEUE_USERNAME=${USER_UPDATE_QUEUE_USERNAME}
+      - USER_UPDATE_QUEUE_PASSWORD=${USER_UPDATE_QUEUE_PASSWORD}
+      - USER_UPDATE_QUEUE_EXCHANGE_NAME=${USER_UPDATE_QUEUE_EXCHANGE_NAME}
+      - EMAIL_HOST_USER=${AUTH_SERVICE_EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${AUTH_SERVICE_EMAIL_HOST_PASSWORD}
+    networks:
+      default:
+      auth_db_net:
+      auth_api_net:
+      user_update_queue_net:
+    restart: on-failure
+    volumes:
+      - ./Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
+  file_api:
+    build: ./Dateiverwaltungsdienst
+    depends_on:
+      - file_db
+      - user_update_queue
+    environment:
+      - DEBUG=${DEBUG:-false}
+      - SECRET_KEY=${DJANGO_SECRET}
+      - POSTGRES_HOST=file_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=${FILE_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_USERNAME=${FILE_SERVICE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${FILE_SERVICE_POSTGRES_PASSWORD}
+      - USER_UPDATE_QUEUE_HOST=user_update_queue
+      - USER_UPDATE_QUEUE_PORT=5672
+      - USER_UPDATE_QUEUE_USERNAME=${USER_UPDATE_QUEUE_USERNAME}
+      - USER_UPDATE_QUEUE_PASSWORD=${USER_UPDATE_QUEUE_PASSWORD}
+      - USER_UPDATE_QUEUE_EXCHANGE_NAME=${USER_UPDATE_QUEUE_EXCHANGE_NAME}
+    networks:
+      default:
+      file_db_net:
+      file_api_net:
+      user_update_queue_net:
+    restart: on-failure
+    volumes:
+      - ./Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
+  bff:
+    build: ./Webserver
+    depends_on:
+      - auth_api
+      - file_api
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DEBUG=${DEBUG:-false}
+      - SECRET_KEY=${DJANGO_SECRET}
+    networks:
+      default:
+      auth_api_net:
+      file_api_net:
+    restart: on-failure
+    volumes:
+      - ./Konfiguration/TLS Zertifikate/bff-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/bff-https-key.pem:/etc/nginx/ssl/key.pem:ro
+  
+  user_update_queue:
+    image: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${USER_UPDATE_QUEUE_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${USER_UPDATE_QUEUE_PASSWORD}
+    hostname: user_update_queue
+    networks:
+      user_update_queue_net:
+    restart: on-failure
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.0/29"
+  auth_db_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.8/29"
+  file_db_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.16/29"
+  auth_api_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.24/29"
+  file_api_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.32/29"
+  user_update_queue_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.184.40/29"
+
+volumes:
+  auth_db_data:
+  file_db_data:

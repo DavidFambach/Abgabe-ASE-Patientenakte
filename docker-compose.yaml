@@ -14,8 +14,8 @@ services:
     restart: on-failure
     volumes:
       - auth_db_data:/var/lib/postgresql/data
-      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
-      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-db-key.pem:/etc/postgresql/ssl/key.pem:ro
+      - ./Konfiguration/TLS Zertifikate/authentication-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/authentication-db-key.pem:/etc/postgresql/ssl/key.pem:ro
   file_db:
     build:
       context: ./Konfiguration/Dockerfiles
@@ -29,16 +29,14 @@ services:
     restart: on-failure
     volumes:
       - file_db_data:/var/lib/postgresql/data
-      - ${PWD}/Konfiguration/TLS Zertifikate/file-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
-      - ${PWD}/Konfiguration/TLS Zertifikate/file-db-key.pem:/etc/postgresql/ssl/key.pem:ro
+      - ./Konfiguration/TLS Zertifikate/file-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/file-db-key.pem:/etc/postgresql/ssl/key.pem:ro
   
   auth_api:
     build: ./Authentifizierungsdienst
     depends_on:
-      auth_db:
-        condition: service_started
-      user_update_queue:
-        condition: service_started
+      - auth_db
+      - user_update_queue
     ports:
       - mode: host
         protocol: tcp
@@ -74,16 +72,14 @@ services:
       user_update_queue_net:
     restart: on-failure
     volumes:
-      - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
-      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
-      - ${PWD}/Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
+      - ./Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
   file_api:
     build: ./Dateiverwaltungsdienst
     depends_on:
-      file_db:
-        condition: service_started
-      user_update_queue:
-        condition: service_started
+      - file_db
+      - user_update_queue
     ports:
       - mode: host
         protocol: tcp
@@ -115,9 +111,9 @@ services:
       user_update_queue_net:
     restart: on-failure
     volumes:
-      - ${PWD}/Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
-      - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
-      - ${PWD}/Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
+      - ./Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
   bff:
     build: ./Webserver
     depends_on:
@@ -143,8 +139,8 @@ services:
       file_api_net:
     restart: on-failure
     volumes:
-      - ${PWD}/Konfiguration/TLS Zertifikate/bff-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
-      - ${PWD}/Konfiguration/TLS Zertifikate/bff-https-key.pem:/etc/nginx/ssl/key.pem:ro
+      - ./Konfiguration/TLS Zertifikate/bff-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
+      - ./Konfiguration/TLS Zertifikate/bff-https-key.pem:/etc/nginx/ssl/key.pem:ro
   
   user_update_queue:
     image: rabbitmq

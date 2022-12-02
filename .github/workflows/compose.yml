@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Start containers
-      run: docker-compose -f "docker-compose.yaml" up -d --build
+      run: docker-compose -f "docker-compose.yaml" up
       env:
         AUTH_SERVICE_POSTGRES_DATABASE: ${{ secrets.AUTH_SERVICE_POSTGRES_DATABASE }}
         AUTH_SERVICE_POSTGRES_USERNAME: ${{ secrets.AUTH_SERVICE_POSTGRES_USERNAME }}

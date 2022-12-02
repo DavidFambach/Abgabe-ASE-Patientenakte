@@ -15,6 +15,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
+    - name: Build Certificates
+      run: |
+        echo "${{ secrets.AUTHENTICATION_DB_CERT }}" >> ./Konfiguration/TLS Zertifikate/authentication-db-cert.pem
+        echo "${{ secrets.AUTHENTICATION_DB_KEY }}" >> ./Konfiguration/TLS Zertifikate/authentication-db-key.pem
+        echo "${{ secrets.AUTHENTICATION_SERVICE_HTTPS_CERT }}" >> ./Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem
+        echo "${{ secrets.AUTHENTICATION_SERVICE_HTTPS_KEY }}" >> ./Konfiguration/TLS Zertifikate/authentication-service-https-key.pem
+        echo "${{ secrets.CA_CERT }}" >> ./Konfiguration/TLS Zertifikate/ca-cert.pem
+
     - name: Start containers
       run: docker-compose -f "docker-compose-TestCI.yaml" up
       env:

@@ -8,7 +8,9 @@ on:
 
 jobs:
   django-test-auth:
-
+    defaults:
+      run:
+        working-directory: Authentifizierungsdienst
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -25,13 +27,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-      working-directory: Authentifizierungsdienst
     - name: Run Tests
       run: |
         python manage.py test
-      working-directory: Authentifizierungsdienst
 
   django-test-file:
+    defaults:
+      run:
+        working-directory: Dateiverwaltungsdienst
 
     runs-on: ubuntu-latest
     strategy:
@@ -49,8 +52,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-      working-directory: Dateiverwaltungsdienst
     - name: Run Tests
       run: |
         python manage.py test
-      working-directory: Dateiverwaltungsdienst

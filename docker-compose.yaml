@@ -37,17 +37,6 @@ services:
     depends_on:
       - auth_db
       - user_update_queue
-    ports:
-      - mode: host
-        protocol: tcp
-        host_ip: 127.0.0.1
-        published: 8000
-        target: 80
-      - mode: host
-        protocol: tcp
-        host_ip: 127.0.0.1
-        published: 8010
-        target: 443
     environment:
       - DEBUG=${DEBUG:-false}
       - GOOGLE_CLIENT_ID=${AUTH_SERVICE_GOOGLE_CLIENT_ID}
@@ -80,17 +69,6 @@ services:
     depends_on:
       - file_db
       - user_update_queue
-    ports:
-      - mode: host
-        protocol: tcp
-        host_ip: 127.0.0.1
-        published: 8001
-        target: 80
-      - mode: host
-        protocol: tcp
-        host_ip: 127.0.0.1
-        published: 8011
-        target: 443
     environment:
       - DEBUG=${DEBUG:-false}
       - SECRET_KEY=${DJANGO_SECRET}
@@ -123,22 +101,33 @@ services:
       - mode: host
         protocol: tcp
         host_ip: 127.0.0.1
-        published: 8002
+        published: 80
         target: 80
       - mode: host
         protocol: tcp
         host_ip: 127.0.0.1
-        published: 8012
+        published: 443
         target: 443
     environment:
       - DEBUG=${DEBUG:-false}
       - SECRET_KEY=${DJANGO_SECRET}
+      - AUTHENTICATION_SERVICE_SCHEME=https
+      - AUTHENTICATION_SERVICE_HOST=auth_api
+      - AUTHENTICATION_SERVICE_PORT=443
+      - AUTHENTICATION_SERVICE_PATH=/
+      - AUTHENTICATION_SERVICE_CERTIFICATE=/etc/patientenakte/ssl/api-ca-cert.pem
+      - FILE_SERVICE_SCHEME=https
+      - FILE_SERVICE_HOST=file_api
+      - FILE_SERVICE_PORT=443
+      - FILE_SERVICE_PATH=/
+      - FILE_SERVICE_CERTIFICATE=/etc/patientenakte/ssl/api-ca-cert.pem
     networks:
       default:
       auth_api_net:
       file_api_net:
     restart: on-failure
     volumes:
+      - ./Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/api-ca-cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/bff-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/bff-https-key.pem:/etc/nginx/ssl/key.pem:ro
   

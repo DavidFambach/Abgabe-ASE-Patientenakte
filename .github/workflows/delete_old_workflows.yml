@@ -1,8 +1,10 @@
 name: Delete old workflow runs
 on:
   schedule:
+  # Runs every day, at 00:00 on the 1st day of month.
     - cron: '0 0 * * *'
-# Run monthly, at 00:00 on the 1st day of month.
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   del_runs:

@@ -64,4 +64,4 @@ jobs:
         run: docker compose down
 
   perform-codeql-analysis:
-    uses: DavidFambach/SbD-5-TINF20CS1/.github/workflows/codeql.yml@main
+    uses: DavidFambach/SbD-5-TINF20CS1/.github/workflows/codeql.yml@master

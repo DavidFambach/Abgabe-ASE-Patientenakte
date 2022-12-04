@@ -1,0 +1,67 @@
+name: "ContinuousTesting"
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  perform-api-tests:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    environment: env_compose
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build Certificates
+        run: |
+          mkdir Konfiguration/"TLS Zertifikate"
+          cd Konfiguration/"TLS Zertifikate"/
+          echo "${{ secrets.AUTHENTICATION_DB_CERT }}" >> authentication-db-cert.pem
+          echo "${{ secrets.AUTHENTICATION_DB_KEY }}" >> authentication-db-key.pem
+          echo "${{ secrets.AUTHENTICATION_SERVICE_HTTPS_CERT }}" >> authentication-service-https-cert.pem
+          echo "${{ secrets.AUTHENTICATION_SERVICE_HTTPS_KEY }}" >> authentication-service-https-key.pem
+          echo "${{ secrets.BFF_HTTPS_CERT }}" >> bff-https-cert.pem
+          echo "${{ secrets.BFF_HTTPS_KEY }}" >> bff-https-key.pem
+          echo "${{ secrets.CA_CERT }}" >> ca-cert.pem
+          echo "${{ secrets.FILE_DB_CERT }}" >> file-db-cert.pem
+          echo "${{ secrets.FILE_DB_KEY }}" >> file-db-key.pem
+          echo "${{ secrets.FILE_SERVICE_HTTPS_CERT }}" >> file-service-https-cert.pem
+          echo "${{ secrets.FILE_SERVICE_HTTPS_KEY }}" >> file-service-https-key.pem
+
+      - name: Start Containers
+        run: |
+          docker compose up -d
+          docker exec sbd-5-tinf20cs1-auth_api-1 python run.py
+          docker exec sbd-5-tinf20cs1-file_api-1 python run.py
+        env:
+          AUTH_SERVICE_POSTGRES_DATABASE: ${{ secrets.AUTH_SERVICE_POSTGRES_DATABASE }}
+          AUTH_SERVICE_POSTGRES_USERNAME: ${{ secrets.AUTH_SERVICE_POSTGRES_USERNAME }}
+          AUTH_SERVICE_POSTGRES_PASSWORD: ${{ secrets.AUTH_SERVICE_POSTGRES_PASSWORD }}
+          AUTH_SERVICE_GOOGLE_CLIENT_ID: ${{ secrets.AUTH_SERVICE_GOOGLE_CLIENT_ID }}
+          AUTH_SERVICE_SOCIAL_SECRET: ${{ secrets.AUTH_SERVICE_SOCIAL_SECRET }}
+          AUTH_SERVICE_EMAIL_HOST_USER: ${{ secrets.AUTH_SERVICE_EMAIL_HOST_USER }}
+          AUTH_SERVICE_EMAIL_HOST_PASSWORD: ${{ secrets.AUTH_SERVICE_EMAIL_HOST_PASSWORD }}
+          FILE_SERVICE_POSTGRES_DATABASE: ${{ secrets.FILE_SERVICE_POSTGRES_DATABASE }}
+          FILE_SERVICE_POSTGRES_USERNAME: ${{ secrets.FILE_SERVICE_POSTGRES_USERNAME }}
+          FILE_SERVICE_POSTGRES_PASSWORD: ${{ secrets.FILE_SERVICE_POSTGRES_PASSWORD }}
+          DJANGO_SECRET: ${{ secrets.DJANGO_SECRET }}
+          USER_UPDATE_QUEUE_USERNAME: ${{ secrets.USER_UPDATE_QUEUE_USERNAME }}
+          USER_UPDATE_QUEUE_PASSWORD: ${{ secrets.USER_UPDATE_QUEUE_PASSWORD }}
+          USER_UPDATE_QUEUE_EXCHANGE_NAME: ${{ secrets.USER_UPDATE_QUEUE_EXCHANGE_NAME }}
+
+      - name: Test Auth API
+        if: always()
+        run: docker exec sbd-5-tinf20cs1-auth_api-1 python manage.py test
+
+      - name: Test File API
+        if: always()
+        run: docker exec sbd-5-tinf20cs1-file_api-1 python manage.py test
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down
+
+  perform-codeql-analysis:
+    uses: DavidFambach/SbD-5-TINF20CS1/.github/workflows/codeql.yml@main

@@ -3,7 +3,10 @@ FROM python:3
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /code
-COPY . /code/
+COPY ./bff /code/bff
+COPY ./app_bff /code/app_bff
+COPY ./static /code/static
+COPY ./manage.py ./requirements.txt ./run.py /code/
 RUN pip install -r requirements.txt
 RUN set -x \
     && addgroup --system --gid 105 nginx \

@@ -88,7 +88,7 @@ class UserInfoView(AbstractView):
         user_id = _get_kwarg(kwargs, "user_id", converter=int)
         user, _ = _verify_authenticated(request, user_id)
         _verify_can_access(user_id, user, is_write=False)
-        return _response_for_json(STATUS_OK, file=serialize_user_info(user))
+        return _response_for_json(STATUS_OK, userinfo=serialize_user_info(user))
 
 class FileView(AbstractView):
 

@@ -94,12 +94,16 @@
 </template>
 
 <script>
-import CustomAppBar from '@/components/CustomAppBar.vue'
+  import CustomAppBar from '@/components/CustomAppBar.vue'
+  import { setOwnUserID, getUserInfo, getDirectory } from "@/fileservice"
 
   export default {
     name: 'AboutView',
     components: {
       CustomAppBar,
+    },
+    created() {
+      this.requestFiles();
     },
     data: () => ({
       isGeteilt:false,
@@ -133,6 +137,21 @@ import CustomAppBar from '@/components/CustomAppBar.vue'
       ClickEigene(){
         if(this.isGeteilt){
           this.isGeteilt = false;}
+      },
+      requestFiles() {
+        setOwnUserID(1);
+        getUserInfo()
+          .then(userinfo => getDirectory(userinfo.userinfo.personalRootDirectory))
+          .then(directoryResponse => {
+            const children = directoryResponse.directory.children
+            this.EigeneDateien = children.map(c => {
+              if(c.type === "directory")
+                return {name: c.directory.name, datum: "01.01.1970"}
+              else
+                return {name: c.file.name, datum: "01.01.1970"}
+            });
+          })
+          .catch(console.log);
       }
     }
   }

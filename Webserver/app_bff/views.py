@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 from urllib3.util import Url
 
 ALLOWED_PROXY_METHODS = ["OPTIONS", "HEAD", "GET", "POST", "PUT", "DELETE"]
-CLIENT_TO_PROXY_HEADERS = ["authorization"]
+CLIENT_TO_PROXY_HEADERS = ["authorization", "content-type"]
 PROXY_TO_CLIENT_HEADERS = ["content-type"]
 
 class _ProxyConfiguration:

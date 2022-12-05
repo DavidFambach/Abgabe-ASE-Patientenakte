@@ -1,3 +1,4 @@
-/venv/
-/Dockerfile
-/readme.md
+/authentication/fixtures
+/authentication/templates
+/authentication/test
+**/__pycache__

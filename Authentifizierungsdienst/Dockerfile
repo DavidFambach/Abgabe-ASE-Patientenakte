@@ -3,7 +3,9 @@ FROM python:3
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /code
-COPY . /code/
+COPY ./AuthService /code/AuthService
+COPY ./authentication /code/authentication
+COPY ./manage.py ./requirements.txt ./run.py /code/
 RUN pip install -r requirements.txt
 RUN set -x \
     && addgroup --system --gid 105 nginx \

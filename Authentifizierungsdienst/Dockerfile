@@ -5,6 +5,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /code
 COPY ./AuthService /code/AuthService
 COPY ./authentication /code/authentication
+COPY ./social_auth /code/social_auth
 COPY ./manage.py ./requirements.txt ./run.py /code/
 RUN pip install -r requirements.txt
 RUN set -x \

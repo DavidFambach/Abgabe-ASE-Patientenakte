@@ -57,8 +57,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def tokens(self):
+        extra_data = {
+            "user_name": self.username
+        }
+
         refresh = RefreshToken.for_user(self)
+        refresh.payload.update(extra_data)
+
         access = AccessToken.for_user(self)
+        access.payload.update(extra_data)
         return {
             'refresh': str(refresh),
             'access': str(access)

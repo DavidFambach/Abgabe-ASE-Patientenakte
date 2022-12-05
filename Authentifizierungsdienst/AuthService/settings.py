@@ -28,6 +28,7 @@ DEBUG = "DEBUG" in os.environ and str(os.environ["DEBUG"]).lower() == "true"
 ALLOWED_HOSTS = ["127.0.0.1"]
 
 AUTH_USER_MODEL = 'authentication.User'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -114,13 +115,14 @@ REST_FRAMEWORK = {
     )
 }
 
-
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=1),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=float(os.environ.get("ACCESS_TOKEN_LIFETIME", "1"))),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
     'ALGORITHM': 'HS256',
 }
 
+if not DEBUG and SIMPLE_JWT.get("ACCESS_TOKEN_LIFETIME") > datetime.timedelta(minutes=3):
+    raise ValueError("The ACCESS_TOKEN_LIFETIME should not be greater than 3 minutes in the production environment.")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

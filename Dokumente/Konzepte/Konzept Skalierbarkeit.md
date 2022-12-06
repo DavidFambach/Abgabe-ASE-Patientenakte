@@ -42,7 +42,7 @@ Speicherbedarf pro Jahr = Benutzerzahl * Arztkontake_im_Jahr * Durchschnittsgrö
 [3]:https://aerztestellen.aerzteblatt.de/de/redaktion/arzt-patienten-kontakte-im-internationalen-vergleich
 
 ### Skalierung
-Für die Ausfallsicherheit werden 3 Serverinstanzen mit jeweils 50 % der benötigten Rechenleistung pro Rechenzentrum betrieben. Zudem werden die Server, für eine erhöhte Ausfallsicherheit in zwei örtlich getrennten Rechenzentren untergebracht.
+Für die Ausfallsicherheit werden 3 Serverinstanzen mit jeweils 50 % der benötigten Rechenleistung betrieben. Zudem werden die Server in drei örtlich getrennten Rechenzentren untergebracht.
 
 Ein Server:
  - Kerne: 50 Cores (theoretisch 100 Kerne, da diese allerdings nur zum Peak benötigt werden ist eine Reduzierung auf 50 vertretbar)

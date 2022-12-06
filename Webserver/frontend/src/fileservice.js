@@ -33,3 +33,11 @@ export async function getDirectory(directoryID) {
         getDefaultHeaders()
     )
 }
+
+export async function getShare(shareID) {
+    return await requestAsync(
+        "GET",
+        config.ENDPOINTS.FILE + "share/" + shareID + "?user=" + USER_ID,
+        getDefaultHeaders()
+    )
+}

@@ -13,24 +13,27 @@ class TestUserDelete(APITestCase):
 
     def get_tokens(self):
         login_endpoint = reverse('login')
-        auth_token = self.client.post(login_endpoint, self.sample_register_data).data['tokens']
-        return auth_token
+        tokens = self.client.post(login_endpoint, self.sample_register_data).data['tokens']
+        return tokens
 
-    def test_delete_with_refresh_token(self):
-        auth_token = {"token": self.get_tokens()['refresh']}
-        print(auth_token)
-        response = self.client.post(self.endpoint, auth_token)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    def test_delete_with_access_token(self):
+        response = self.client.post(self.endpoint, {"token": self.get_tokens()['access']})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {"error": "Token has wrong type"})
 
     def test_delete_with_expired_token(self):
-        auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY5OTMyODUwLCJp" + \
-                     "YXQiOjE2Njk5MzI3OTAsImp0aSI6IjhmMzUxODNjZWIzMzQ5NWQ4M2I1ZDhiOTA4NzYxMWY3IiwidXNlcl9pZCI6MX0.c" + \
-                     "y9xWgs59aIR_6Yn79FqDYbTleLHpJiJbBx3IISO-Ms"
-        response = self.client.post(self.endpoint, auth_token)
+        refresh_token = {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNj" +
+                                  "Y5OTMyODUwLCJpYXQiOjE2Njk5MzI3OTAsImp0aSI6IjhmMzUxODNjZWIzMzQ5NWQ4M2I1ZDhiOTA4N" +
+                                  "zYxMWY3IiwidXNlcl9pZCI6MX0.cy9xWgs59aIR_6Yn79FqDYbTleLHpJiJbBx3IISO-Ms"}
+        response = self.client.post(self.endpoint, refresh_token)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data, {"error": "Token is invalid or expired"})
 
     def test_valid_delete_attempt(self):
-        auth_token = {"token": self.get_tokens()['access']}
-        print(auth_token)
-        response = self.client.post(self.endpoint, auth_token)
+        access_token = {"token": self.get_tokens()['refresh']}
+        response = self.client.post(self.endpoint, access_token)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        login_endpoint = reverse('login')
+        response = self.client.post(login_endpoint, self.sample_register_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

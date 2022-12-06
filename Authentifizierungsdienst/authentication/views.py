@@ -88,7 +88,7 @@ class RegisterView(generics.GenericAPIView):
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
         user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
-        callbackurl = get_current_site(request).domain + reverse('email-verify')
+        callbackurl = get_current_site(request).domain + reverse('email-verify').removeprefix("/auth")
         absurl = 'http://' + callbackurl + "?token=" + str(token)
         text_body = "Hi" + user.username + ",\n" + \
                     "You have registered an account on Patientenakte, before you can use your account you must " + \
@@ -215,7 +215,13 @@ class DeleteAccount(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            if e.__str__() == "Token has wrong type":
+                return Response({"error": e.__str__()}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"error": e.__str__()}, status=status.HTTP_401_UNAUTHORIZED)
         user_id = serializer.validated_data.get('user_id')
         serializer.save()
 

@@ -165,11 +165,8 @@ class DeleteSerializer(serializers.Serializer):
         fields = ['token']
 
     def validate(self, attrs):
-        try:
-            token = AccessToken(token=attrs.get('token'))
-            return token
-        except Exception as e:
-            raise e
+        self.token = RefreshToken(token=attrs.get('token'))
+        return self.token
 
     def save(self):
         try:

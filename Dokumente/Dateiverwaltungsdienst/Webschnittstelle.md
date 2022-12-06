@@ -342,7 +342,15 @@ Antwortformat im Fehlerfall:
 		},
 		"target": {
 			"type": "<Zieltyp>",
-			"id": <Ziel-ID>
+			"id": <Ziel-ID>,
+			"<Zieltyp>": {
+				"id": <Ziel-ID>,
+				"name": <Ziel-Name>,
+				"owner": {
+					"id": <Ziel-Besitzer-ID>,
+					"displayName": "<Ziel-Besitzer-Anzeigename>"
+				}
+			}
 		},
 		"canWrite": <Schreibberechtigung>
 	}
@@ -355,7 +363,7 @@ Dabei ist Status einer der folgenden Werte:
  - `not_found`: Der Benutzer hat keine Berechtigung, die Freigabe einzusehen, oder die Freigabe existiert nicht.
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten.
 
-Dabei ist Ersteller-ID die ID des Freigabeerstellers, Ersteller-Anzeigename der Anzeigename des Freigabeerstellers, Betroffener-ID die ID des Betroffenen, Betroffener-Anzeigename der Anzeigename des Betroffenen, Zieltyp der Typ des Freigabeziels und Ziel-ID die ID des Freigabeziels. Der Zieltyp ist entweder `file`, falls es sich um eine Dateifreigabe handelt, oder `directory`, falls es sich um eine Verzeichnisfreigabe handelt. Im ersten Fall ist die Ziel-ID eine Datei-ID. Im zweiten Fall sit die Ziel-ID eine Verzeichnis-ID. Der Schlüssel `share` ist nur vorhanden, wenn die Aktion erfolgreich war.
+Dabei ist Ersteller-ID die ID des Freigabeerstellers, Ersteller-Anzeigename der Anzeigename des Freigabeerstellers, Betroffener-ID die ID des Betroffenen, Betroffener-Anzeigename der Anzeigename des Betroffenen, Zieltyp der Typ des Freigabeziels, Ziel-ID die ID des Freigabeziels, Ziel-Name der Name des Ziels, Ziel-Besitzer-ID die ID des Besitzers des Ziels und Ziel-Besitzer-Anzeigename der Anzeigename des Besitzers des Ziels. Der Zieltyp ist entweder `file`, falls es sich um eine Dateifreigabe handelt, oder `directory`, falls es sich um eine Verzeichnisfreigabe handelt. Im ersten Fall ist die Ziel-ID eine Datei-ID. Im zweiten Fall sit die Ziel-ID eine Verzeichnis-ID. Der Schlüssel `share` ist nur vorhanden, wenn die Aktion erfolgreich war.
 Schreibberechtigung hat den Wert `true`, falls die Freigabe Leseberechtigungen und Schreibberechtigungen einräumt, oder `false`, falls die Freigabe nur Leseberechtigungen einräumt.
 
 ## Operation POST /share/?user=\<Benutzer-ID\>&subject=\<Betroffener-ID\>&targetType=\<Zieltyp\>&targetID=\<Ziel-ID\>&canWrite

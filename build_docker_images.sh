@@ -18,7 +18,14 @@ docker build -t patientenakte-build-frontend -f ./Konfiguration/Dockerfiles/fron
 docker create -it --name patientenakte-build-frontend patientenakte-build-frontend
 
 # copy the frontend project into the container
-docker cp ./Webserver/frontend patientenakte-build-frontend:/frontend-project/
+# Cannot exclude from docker cp; need to include explicitly
+docker cp ./Webserver/frontend/public patientenakte-build-frontend:/frontend-project/frontend/
+docker cp ./Webserver/frontend/src patientenakte-build-frontend:/frontend-project/frontend/
+docker cp ./Webserver/frontend/babel.config.js patientenakte-build-frontend:/frontend-project/frontend/
+docker cp ./Webserver/frontend/jsconfig.json patientenakte-build-frontend:/frontend-project/frontend/
+docker cp ./Webserver/frontend/package.json patientenakte-build-frontend:/frontend-project/frontend/
+docker cp ./Webserver/frontend/package-lock.json patientenakte-build-frontend:/frontend-project/frontend/
+docker cp ./Webserver/frontend/vue.config.js patientenakte-build-frontend:/frontend-project/frontend/
 
 docker start patientenakte-build-frontend
 docker attach patientenakte-build-frontend

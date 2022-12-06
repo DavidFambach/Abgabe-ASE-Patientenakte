@@ -49,15 +49,24 @@ def serialize_directory(d: Directory, include_children=False) -> dict[str, Any]:
         "parentDirectory": None if d.parent is None else d.parent.id
     }
 
-def serialize_share(s: Share) -> dict[str, Any]:
-    targets_file = s.target_file is not None
+def serialize_share(s: Share, include_target=False) -> dict[str, Any]:
+    target_file = s.target_file is not None
+    if include_target:
+        included_target = {
+            "file": serialize_file(s.target_file)
+        } if target_file else {
+            "directory": serialize_directory(s.target_directory)
+        }
+    else:
+        included_target = {}
     return {
         "id": s.id,
         "issuer": serialize_storage_user(s.issuer),
         "subject": serialize_storage_user(s.subject),
         "target": {
-            "type": "file" if targets_file else "directory",
-            "id": s.target_file.id if targets_file else s.target_directory.id
+            "type": "file" if target_file else "directory",
+            "id": s.target_file.id if target_file else s.target_directory.id,
+            **included_target
         },
         "canWrite": s.can_write
     }

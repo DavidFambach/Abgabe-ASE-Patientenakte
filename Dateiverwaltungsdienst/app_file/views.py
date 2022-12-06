@@ -279,7 +279,7 @@ class ShareView(AbstractView):
         share = Share.objects.get(id=share_id)
         _verify_can_access(user_id, share, is_write=False)
 
-        return _response_for_json(STATUS_OK, share=serialize_share(share))
+        return _response_for_json(STATUS_OK, share=serialize_share(share, include_target=True))
 
     def _handle_post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         _verify_kwargs(kwargs, [])

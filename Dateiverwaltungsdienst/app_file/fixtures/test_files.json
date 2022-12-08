@@ -3,7 +3,8 @@
     "model": "app_file.storageuser",
     "fields": {
       "id": 1,
-      "display_name": "Testpatient"
+      "display_name": "Testpatient",
+      "contacts": [2]
     }
   },
   {

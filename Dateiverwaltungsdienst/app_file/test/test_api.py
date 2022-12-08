@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 
-from app_file.models import File, Directory, Share
+from app_file.models import StorageUser, File, Directory, Share
 from django.test import Client, TestCase
 from django.utils.http import urlencode
 
@@ -18,6 +18,7 @@ ROUTE_USERINFO = "/userinfo/"
 ROUTE_FILE = "/file/"
 ROUTE_DIRECTORY = "/dir/"
 ROUTE_SHARE = "/share/"
+ROUTE_CONTACT = "/contact/"
 
 class TestAuthentication(TestCase):
 
@@ -65,6 +66,17 @@ class TestAuthentication(TestCase):
             self.assertEqual(response_body["status"], "ok")
             self.assertTrue("share" in response_body)
             self.assertEqual(self._dict_from_model(Share.objects.get(id=3)), {"id": 3, "issuer_id": 1, "subject_id": 2, "target_file_id": 1, "target_directory_id": None, "can_write": False})
+
+    def test_create_new_contact(self):
+        with self.settings(**SETTINGS):
+            client = Client(HTTP_AUTHORIZATION=AUTHORIZATION_HEADER_USER_2)
+            response = client.post(ROUTE_CONTACT + "1?" + urlencode({"user": 2}))
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers["Content-Type"], CONTENT_TYPE_JSON)
+            response_body = response.json()
+            self.assertEqual(response_body["status"], "ok")
+            self.assertTrue("contact" in response_body)
+            self.assertEqual(self._dict_from_model(StorageUser.objects.get(id=2).contacts.get(id=1)), {"id": 1, "display_name": "Testpatient"})
 
     def test_update_file(self):
         with self.settings(**SETTINGS):
@@ -118,6 +130,16 @@ class TestAuthentication(TestCase):
             self.assertEqual(response_body, {"status": "ok"})
             self.assertRaises(ObjectDoesNotExist, lambda: Share.objects.get(id=1))
 
+    def test_delete_contact(self):
+        with self.settings(**SETTINGS):
+            client = Client(HTTP_AUTHORIZATION=AUTHORIZATION_HEADER_USER_1)
+            response = client.delete(ROUTE_CONTACT + "2?" + urlencode({"user": 1}))
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers["Content-Type"], CONTENT_TYPE_JSON)
+            response_body = response.json()
+            self.assertEqual(response_body, {"status": "ok"})
+            self.assertRaises(ObjectDoesNotExist, lambda: StorageUser.objects.get(id=1).contacts.get(id=2))
+
     def test_authenticated_with_no_token(self):
         with self.settings(**SETTINGS):
             client = Client()
@@ -168,7 +190,10 @@ class TestAuthentication(TestCase):
                 lambda c: c.delete(ROUTE_DIRECTORY + "1?" + urlencode({"user": 1})),
                 lambda c: c.get(ROUTE_SHARE + "1?" + urlencode({"user": 1})),
                 lambda c: c.post(ROUTE_SHARE + "?" + urlencode({"user": 1, "subject": 2, "targetType": "file", "targetID": 1})),
-                lambda c: c.delete(ROUTE_SHARE + "1?" + urlencode({"user": 1}))
+                lambda c: c.delete(ROUTE_SHARE + "1?" + urlencode({"user": 1})),
+                lambda c: c.get(ROUTE_CONTACT + "2?" + urlencode({"user": 1})),
+                lambda c: c.post(ROUTE_CONTACT + "2?" + urlencode({"user": 1})),
+                lambda c: c.delete(ROUTE_CONTACT + "2?" + urlencode({"user": 1}))
             ]:
                 client = Client()
                 response = get_response(client)
@@ -248,6 +273,15 @@ class TestAuthentication(TestCase):
             self.assertEqual(response.headers["Content-Type"], CONTENT_TYPE_JSON)
             response_body = response.json()
             self.assertEqual(response_body, {"status": "invalid_subject"})
+
+    def test_create_self_contact(self):
+        with self.settings(**SETTINGS):
+            client = Client(HTTP_AUTHORIZATION=AUTHORIZATION_HEADER_USER_1)
+            response = client.post(ROUTE_CONTACT + "1?" + urlencode({"user": 1}))
+            self.assertEqual(response.status_code, 422)
+            self.assertEqual(response.headers["Content-Type"], CONTENT_TYPE_JSON)
+            response_body = response.json()
+            self.assertEqual(response_body, {"status": "invalid_contact"})
 
     @staticmethod
     def _dict_from_model(obj, extra_removed_keys=None):

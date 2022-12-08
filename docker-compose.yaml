@@ -33,7 +33,7 @@ services:
       - ./Konfiguration/TLS Zertifikate/file-db-key.pem:/etc/postgresql/ssl/key.pem:ro
   
   auth_api:
-    build: ./Authentifizierungsdienst
+    image: patientenakte-auth_api
     depends_on:
       - auth_db
       - user_update_queue
@@ -66,7 +66,7 @@ services:
       - ./Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
   file_api:
-    build: ./Dateiverwaltungsdienst
+    image: patientenakte-file_api
     depends_on:
       - file_db
       - user_update_queue
@@ -94,7 +94,7 @@ services:
       - ./Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
   bff:
-    build: ./Webserver
+    image: patientenakte-bff
     depends_on:
       - auth_api
       - file_api

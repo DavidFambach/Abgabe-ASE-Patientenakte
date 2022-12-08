@@ -30,14 +30,10 @@ jobs:
           echo "${{ secrets.FILE_SERVICE_HTTPS_CERT }}" >> file-service-https-cert.pem
           echo "${{ secrets.FILE_SERVICE_HTTPS_KEY }}" >> file-service-https-key.pem
 
-      - name: Build Containers
+      - name: Build Container Images
         run: |
           chmod 700 ./build_docker_images.sh
           ./build_docker_images.sh
-          docker cp ./Authentifizierungsdienst/authentication/test patientenakte-auth_api-1:/code/authentication/test/
-          docker cp ./Authentifizierungsdienst/authentication/fixtures patientenakte-auth_api-1:/code/authentication/fixtures/
-          docker cp ./Dateiverwaltungsdienst/app_file/test patientenakte-auth_api-1:/code/app_file/test/
-          docker cp ./Dateiverwaltungsdienst/app_file/fixtures patientenakte-auth_api-1:/code/app_file/fixtures/
 
       - name: Start Containers
         run: |
@@ -63,11 +59,17 @@ jobs:
 
       - name: Test Auth API
         if: always()
-        run: docker exec sbd-5-tinf20cs1-auth_api-1 python manage.py test
+        run: |
+          docker cp ./Authentifizierungsdienst/authentication/test patientenakte-auth_api-1:/code/authentication/test/
+          docker cp ./Authentifizierungsdienst/authentication/fixtures patientenakte-auth_api-1:/code/authentication/fixtures/
+          docker exec sbd-5-tinf20cs1-auth_api-1 python manage.py test
 
       - name: Test File API
         if: always()
-        run: docker exec sbd-5-tinf20cs1-file_api-1 python manage.py test
+        run: |
+          docker cp ./Dateiverwaltungsdienst/app_file/test patientenakte-auth_api-1:/code/app_file/test/
+          docker cp ./Dateiverwaltungsdienst/app_file/fixtures patientenakte-auth_api-1:/code/app_file/fixtures/
+          docker exec sbd-5-tinf20cs1-file_api-1 python manage.py test
 
       - name: Stop containers
         if: always()

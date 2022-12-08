@@ -83,7 +83,6 @@ class RegisterView(generics.GenericAPIView):
                     logging.exception("Error while reregister user.")
                     raise e
             else:
-                print(type(serialize_exeption.args[0]))
                 return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
 
         # Prepare the verification mail

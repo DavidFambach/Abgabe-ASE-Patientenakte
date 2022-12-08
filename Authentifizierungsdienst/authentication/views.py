@@ -1,4 +1,4 @@
-import json
+import logging
 import urllib
 
 import pika
@@ -10,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 import jwt
-
 
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -81,16 +80,18 @@ class RegisterView(generics.GenericAPIView):
                 except ValidationError as serialize_exeption:
                     return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
                 except Exception as e:
-                     raise e
+                    logging.exception("Error while reregister user.")
+                    raise e
             else:
+                print(type(serialize_exeption.args[0]))
                 return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
 
         # Prepare the verification mail
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
         user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
-        callbackurl = (get_current_site(request).domain).removesuffix(":8000") + "/auth" + reverse('email-verify')
-        absurl = 'http://' + callbackurl + "?token=" + str(token)
+        callbackurl = get_current_site(request).domain.removesuffix(":8000") + "/auth" + reverse('email-verify')
+        absurl = 'https://' + callbackurl + "?token=" + str(token)
         text_body = "Hi" + user.username + ",\n" + \
                     "You have registered an account on Patientenakte, before you can use your account you must " + \
                     "confirm that this is your email address by clicking here:\n" + \

@@ -1,44 +1,34 @@
-import re
-
-from django.contrib.auth.password_validation import validate_password, get_password_validators, \
-    password_validators_help_texts
+from django.contrib.auth.password_validation import validate_password as password_validation
 from rest_framework import serializers
 
 from .models import User
 from django.contrib import auth
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework_simplejwt.tokens import RefreshToken, TokenError, AccessToken, Token
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        max_length=68, min_length=8, write_only=True)
-
-    invalid_credentials_error_message = {
-        'email': 'The email address you entered is not a valid address.',
-        'username': 'The username should only contain alphanumeric characters.'}
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(max_length=255)
+    username = serializers.CharField(max_length=255)
 
     class Meta:
         model = User
         fields = ['email', 'username', 'password']
 
-    def validate(self, attrs):
-        email = attrs.get('email')
-        email_regex = r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$'
-        username = attrs.get('username')
-        password = attrs.get('password')
+    def validate_password(self, password):
+        try:
+            password_validation(password=password,
+                                user=User.objects.create_user_object(self.username, self.email, password))
+        except Exception:
+            raise serializers.ValidationError("The password does not meet the guidelines.")
 
+    def validate_username(self, username):
         if not username.isalnum():
-            raise serializers.ValidationError(
-                self.invalid_credentials_error_message["username"])
-        if re.match(email_regex, email) is None:
-            raise serializers.ValidationError(
-                self.invalid_credentials_error_message["email"])
-        validate_password(password=password, user=User.objects.create_user_object(username, email, password))
-        return attrs
+            raise serializers.ValidationError("The username should only contain alphanumeric characters.")
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -123,7 +113,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
             user = User.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
                 raise AuthenticationFailed('The reset link is invalid', 401)
-            validate_password(password=password, user=user)
+            password_validation(password=password, user=user)
 
             user.set_password(password)
             user.save()

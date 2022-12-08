@@ -18,7 +18,7 @@ docker build -t patientenakte-build-frontend -f ./Konfiguration/Dockerfiles/fron
 
 # start a new Docker container from patientenakte-file_ap
 # docker create -it --name patientenakte-build-frontend ubuntu sh -c "apt-get update && apt-get install npm -y && cd frontend-project && npm install && npm run build"
-docker create -it --name patientenakte-build-frontend patientenakte-build-frontend
+docker create -i --name patientenakte-build-frontend patientenakte-build-frontend
 
 # copy the frontend project into the container
 # Cannot exclude from docker cp; need to include explicitly

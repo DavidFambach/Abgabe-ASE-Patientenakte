@@ -2,9 +2,7 @@ version: "3.1"
 
 services:
   auth_db:
-    build:
-      context: ./Konfiguration/Dockerfiles
-      dockerfile: ssl-enabled-postgres.txt
+    image: ssl-enabled-postgres
     environment:
       - POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USERNAME}
@@ -17,9 +15,7 @@ services:
       - ./Konfiguration/TLS Zertifikate/authentication-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/authentication-db-key.pem:/etc/postgresql/ssl/key.pem:ro
   file_db:
-    build:
-      context: ./Konfiguration/Dockerfiles
-      dockerfile: ssl-enabled-postgres.txt
+    image: ssl-enabled-postgres
     environment:
       - POSTGRES_DB=${FILE_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${FILE_SERVICE_POSTGRES_USERNAME}

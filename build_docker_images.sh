@@ -10,6 +10,9 @@ cd Dateiverwaltungsdienst
 docker build -t patientenakte-file_api .
 cd ..
 
+# build the Docker image for the ssl enabled postgres database
+docker build -t ssl-enabled-postgres -f ./Konfiguration/Dockerfiles/ssl-enabled-postgres.txt ./Konfiguration/Dockerfiles
+
 # build the Docker image for the frontend build
 docker build -t patientenakte-build-frontend -f ./Konfiguration/Dockerfiles/frontend-build-environment.txt ./Konfiguration/Dockerfiles
 

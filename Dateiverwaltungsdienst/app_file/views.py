@@ -23,6 +23,7 @@ STATUS_CYCLIC_DIRECTORY_TREE = ("cycle_detected", 409)
 STATUS_UNMOVABLE_DIRECTORY = ("unmovable_directory", 422)
 STATUS_DIRECTORY_NOT_EMPTY = ("not_empty", 422)
 STATUS_INVALID_SHARE_SUBJECT = ("invalid_subject", 422)
+STATUS_INVALID_CONTACT = ("invalid_contact", 422)
 STATUS_QUOTA_EXCEEDED = ("quota_exceeded", 422)
 STAUTS_INTERNAL_ERROR = ("internal_error", 500)
 
@@ -65,6 +66,8 @@ class AbstractView:
             return _response_for_json(STATUS_DIRECTORY_NOT_EMPTY)
         except _ErrorInvalidShareSubject:
             return _response_for_json(STATUS_INVALID_SHARE_SUBJECT)
+        except _ErrorInvalidContact:
+            return _response_for_json(STATUS_INVALID_CONTACT)
         except _ErrorNotFound:
             return _response_for_json(STATUS_NOT_FOUND)
         except ObjectDoesNotExist:
@@ -320,6 +323,52 @@ class ShareView(AbstractView):
 
         return _response_for_json(STATUS_OK)
 
+class ContactView(AbstractView):
+
+    def _handle_get(self, request: HttpRequest, **kwargs) -> HttpResponse:
+        _verify_kwargs(kwargs, ["contact_id"])
+
+        user_id = _get_query_param(request, "user", converter=int)
+        _verify_authenticated(request, user_id)
+
+        contact_id = _get_kwarg(kwargs, "contact_id", converter=int)
+        contact = StorageUser.objects.get(id=contact_id)
+
+        return _response_for_json(STATUS_OK, contact=serialize_storage_user(contact))
+
+    def _handle_post(self, request: HttpRequest, **kwargs) -> HttpResponse:
+        _verify_kwargs(kwargs, ["contact_id"])
+
+        user_id = _get_query_param(request, "user", converter=int)
+        _verify_authenticated(request, user_id)
+
+        user = StorageUser.objects.get(id=user_id)
+        contact_id = _get_kwarg(kwargs, "contact_id", converter=int)
+        if contact_id == user_id:
+            raise _ErrorInvalidContact()
+        contact = StorageUser.objects.get(id=contact_id)
+
+        if contact not in user.contacts.all():
+            user.contacts.add(contact)
+            user.save()
+
+        return _response_for_json(STATUS_OK, contact=serialize_storage_user(contact))
+
+    def _handle_delete(self, request: HttpRequest, **kwargs):
+        _verify_kwargs(kwargs, ["contact_id"])
+
+        user_id = _get_query_param(request, "user", converter=int)
+        _verify_authenticated(request, user_id)
+
+        user = StorageUser.objects.get(id=user_id)
+        contact_id = _get_kwarg(kwargs, "contact_id", converter=int)
+        user.contacts.get(id=contact_id)
+
+        user.contacts.remove(contact_id)
+        user.save()
+
+        return _response_for_json(STATUS_OK)
+
 class _ErrorBadRequest(Exception):
     def __init__(self, msg: str):
         self.msg = msg
@@ -349,6 +398,9 @@ class _ErrorDirectoryNotEmpty(Exception):
     pass
 
 class _ErrorInvalidShareSubject(Exception):
+    pass
+
+class _ErrorInvalidContact(Exception):
     pass
 
 def _get_kwarg(kwargs: dict[str, Any], name: str, required=True, default=None, converter: Callable[[str], Any]=lambda x: x) -> Any:

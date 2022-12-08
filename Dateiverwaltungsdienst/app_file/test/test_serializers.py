@@ -15,6 +15,12 @@ UNORDERED_LISTS_DIRECTORY_WITH_CHILDREN = [
 SERIALIZED_USER_INFO_1 = json.loads("""
 {
     "personalRootDirectory": 1,
+    "contacts": [
+        {
+            "id": 2,
+            "displayName": "Testarzt"
+        }
+    ],
     "ownShares": [
         {
             "id": 1,
@@ -54,6 +60,7 @@ SERIALIZED_USER_INFO_1 = json.loads("""
 SERIALIZED_USER_INFO_2 = json.loads("""
 {
     "personalRootDirectory": 5,
+    "contacts": [],
     "ownShares": [],
     "receivedShares": [
         {

@@ -8,6 +8,9 @@ def serialize_user_info(u: StorageUser) -> dict[str, Any]:
     root = _any(u.directory_set.filter(parent_id=None))
     return {
         "personalRootDirectory": None if root is None else root.id,
+        "contacts": [
+            serialize_storage_user(c) for c in u.contacts.all()
+        ],
         "ownShares": [
             serialize_share(s) for s in u.shares_issued.all()
         ],

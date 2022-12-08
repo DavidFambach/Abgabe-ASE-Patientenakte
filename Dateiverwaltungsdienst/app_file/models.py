@@ -14,6 +14,7 @@ class StorageUser(models.Model):
 
     id = models.AutoField(primary_key=True)
     display_name = models.CharField(max_length=256)
+    contacts = models.ManyToManyField("StorageUser")
 
     def can_access(self, user_id: int, is_write: bool) -> bool:
         return not is_write and user_id == self.id

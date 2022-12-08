@@ -60,15 +60,15 @@ jobs:
       - name: Test Auth API
         if: always()
         run: |
-          docker cp ./Authentifizierungsdienst/authentication/test patientenakte-auth_api-1:/code/authentication/test/
-          docker cp ./Authentifizierungsdienst/authentication/fixtures patientenakte-auth_api-1:/code/authentication/fixtures/
+          docker cp ./Authentifizierungsdienst/authentication/test sbd-5-tinf20cs1-auth_api-1:/code/authentication/test/
+          docker cp ./Authentifizierungsdienst/authentication/fixtures sbd-5-tinf20cs1-auth_api-1:/code/authentication/fixtures/
           docker exec sbd-5-tinf20cs1-auth_api-1 python manage.py test
 
       - name: Test File API
         if: always()
         run: |
-          docker cp ./Dateiverwaltungsdienst/app_file/test patientenakte-auth_api-1:/code/app_file/test/
-          docker cp ./Dateiverwaltungsdienst/app_file/fixtures patientenakte-auth_api-1:/code/app_file/fixtures/
+          docker cp ./Dateiverwaltungsdienst/app_file/test sbd-5-tinf20cs1-auth_api-1:/code/app_file/test/
+          docker cp ./Dateiverwaltungsdienst/app_file/fixtures sbd-5-tinf20cs1-auth_api-1:/code/app_file/fixtures/
           docker exec sbd-5-tinf20cs1-file_api-1 python manage.py test
 
       - name: Stop containers

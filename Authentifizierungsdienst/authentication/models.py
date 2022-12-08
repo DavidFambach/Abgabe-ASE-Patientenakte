@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 
@@ -37,6 +39,7 @@ AUTH_PROVIDERS = {'google': 'google', 'email': 'email'}
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    uuid4 = models.UUIDField(default=uuid.uuid4(), editable=False)
     username = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True, db_index=True)
     is_verified = models.BooleanField(default=False)
@@ -58,7 +61,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def tokens(self):
         extra_data = {
-            "user_name": self.username
+            "user_name": self.username,
+            "uuid4": self.uuid4.__str__()
         }
 
         refresh = RefreshToken.for_user(self)

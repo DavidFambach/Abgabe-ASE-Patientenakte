@@ -29,7 +29,6 @@ def _read_all(process):
 
 def _run_nginx():
     _read_all(subprocess.Popen(["nginx", "-g", "daemon off;"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    Request("http://localhost:80")
 
 if __name__ == "__main__":
 

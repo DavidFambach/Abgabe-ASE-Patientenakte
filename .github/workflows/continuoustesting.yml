@@ -34,6 +34,10 @@ jobs:
         run: |
           chmod 700 ./build_docker_images.sh
           ./build_docker_images.sh
+          docker cp ./Authentifizierungsdienst/authentication/test patientenakte-auth_api:/authentication/test/
+          docker cp ./Authentifizierungsdienst/authentication/fixtures patientenakte-auth_api:/authentication/fixtures/
+          docker cp ./Dateiverwaltungsdienst/app_file/test patientenakte-auth_api:/authentication/test/
+          docker cp ./Dateiverwaltungsdienst/app_file/fixtures patientenakte-auth_api:/authentication/fixtures/
 
       - name: Start Containers
         run: |

@@ -323,12 +323,6 @@
             "UserLoginResponse": {
                 "type": "object",
                 "properties": {
-                    "email": {
-                        "type": "string"
-                    },
-                    "username": {
-                        "type": "string"
-                    },
                     "tokens": {
                         "type": "object",
                         "properties": {

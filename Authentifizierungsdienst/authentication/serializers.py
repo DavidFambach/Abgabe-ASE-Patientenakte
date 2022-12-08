@@ -1,6 +1,7 @@
 import re
 
-from django.contrib.auth.password_validation import validate_password, get_password_validators, password_validators_help_texts
+from django.contrib.auth.password_validation import validate_password, get_password_validators, \
+    password_validators_help_texts
 from rest_framework import serializers
 
 from .models import User
@@ -89,12 +90,6 @@ class LoginSerializer(serializers.ModelSerializer):
         if not user.is_verified:
             raise AuthenticationFailed('Email is not verified')
 
-        return {
-            'email': user.email,
-            'username': user.username,
-            'tokens': user.tokens
-        }
-
         return super().validate(attrs)
 
 
@@ -138,23 +133,25 @@ class SetNewPasswordSerializer(serializers.Serializer):
 
 
 class LogoutSerializer(serializers.Serializer):
-    refresh = serializers.CharField()
+    token = serializers.CharField()
 
     default_error_messages = {
         'bad_token': ('Token is expired or invalid')
     }
 
+    class Meta:
+        fields = ['token']
+
     def validate(self, attrs):
-        self.token = attrs['refresh']
+        try:
+            self.token = RefreshToken(token=attrs.get('token'))
+            self.token.verify()
+        except TokenError:
+            self.fail('bad_token')
         return attrs
 
     def save(self, **kwargs):
-
-        try:
-            RefreshToken(self.token).blacklist()
-
-        except TokenError:
-            self.fail('bad_token')
+        self.token.blacklist()
 
 
 class DeleteSerializer(serializers.Serializer):

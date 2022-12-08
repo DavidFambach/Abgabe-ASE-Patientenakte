@@ -88,7 +88,7 @@ class RegisterView(generics.GenericAPIView):
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
         user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
-        callbackurl = get_current_site(request).domain + reverse('email-verify').removeprefix("/auth")
+        callbackurl = (get_current_site(request).domain).removesuffix(":8000") + "/auth" + reverse('email-verify')
         absurl = 'http://' + callbackurl + "?token=" + str(token)
         text_body = "Hi" + user.username + ",\n" + \
                     "You have registered an account on Patientenakte, before you can use your account you must " + \
@@ -114,7 +114,7 @@ class VerifyEmail(views.APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+            return Response({'success': 'Account is activated'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError as identifier:
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
@@ -207,7 +207,7 @@ class LogoutAPIView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'success': True, 'message': 'Loged out successfully'}, status=status.HTTP_200_OK)
 
 
 class DeleteAccount(generics.GenericAPIView):

@@ -1,3 +1,4 @@
+import json
 import urllib
 
 import pika
@@ -68,21 +69,21 @@ class RegisterView(generics.GenericAPIView):
                     if user.is_verified:
                         return Response("user is already verified", status=status.HTTP_200_OK)
 
-                    # Write the new password to the database
-                    uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
-                    token = PasswordResetTokenGenerator().make_token(user)
-                    password_serializer = SetNewPasswordSerializer(data={'password': serializer.data["password"],
-                                                                         'uidb64': uidb64, 'token': token})
-                    password_serializer.is_valid(raise_exception=True)
-                    pass
+                    # delete user and try again
+                    user.delete()
+
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save()
                 except KeyError:
                     # If it is not the case that a user registers with the same user name and the same email address, the
                     # exception from the serialization is raised here.
-                    raise serialize_exeption
+                    return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
+                except ValidationError as serialize_exeption:
+                    return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
                 except Exception as e:
-                    raise e
+                     raise e
             else:
-                return Response(serialize_exeption.__str__(), status=status.HTTP_400_BAD_REQUEST)
+                return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
 
         # Prepare the verification mail
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))

@@ -1,0 +1,391 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "authentication API",
+        "description": "The entire user authorization is handled via this API"
+    },
+    "servers": [
+                    {
+                    "url": "https://127.0.0.1/auth",
+                    "description": "Development authorization API"
+                    }
+                ],
+    "paths": {
+        "/register/": {
+            "post": {
+                "summary": "Creates a new application user",
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserRegistrationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRegistration"
+                            },
+                            "examples": {
+                                "valid request": {
+                                    "$ref": "#/components/examples/UserRegistration"
+                                },
+                                "incomplete request": {
+                                    "$ref": "#/components/examples/incompleteUserRegistration"
+                                },
+                                "invalid request": {
+                                    "$ref": "#/components/examples/invalidUserRegistration"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login/": {
+            "post": {
+                "summary": "Returns access and refresh token for a user",
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserLoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials OR Email is not verified "
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLogin"
+                            },
+                            "examples": {
+                                "valid request": {
+                                    "$ref": "#/components/examples/UserLogin"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/logout/": {
+            "post": {
+                "summary": "Invalidates the refresh token",
+                "responses": {
+                    "200": {
+                        "description": "Loged out successfully"
+                    },
+                    "400": {
+                        "description": "Token is expired or invalid"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLogout"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/email-verify/": {
+            "get": {
+                "summary": "Verifies a user's email address",
+                "responses": {
+                    "200": {
+                        "description": "Account is activated"
+                    },
+                    "400": {
+                        "description": "Invalid token"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "validation token",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "jwt"
+                        }
+                    }
+                ]
+            }
+        },
+        "/token/refresh/": {
+            "post": {
+                "summary": "Returns new access token",
+                "responses": {
+                    "200": {
+                        "description": "Returns access token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "access": {
+                                            "type": "string",
+                                            "format": "jwt"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token is invalid or expired"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLogout"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/request-reset-email/": {
+            "post": {
+                "summary": "Creates a new application user",
+                "responses": {
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/password-reset/{uidb64}/{token}/": {
+            "post": {
+                "summary": "Creates a new application user",
+                "responses": {
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                    "name": "uidb64",
+                    "in": "path",
+                    "description": "userid encoded in base64",
+                    "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                    "name": "token",
+                    "in": "path",
+                    "description": "verification token",
+                    "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/password-reset-complete/": {
+            "post": {
+                "summary": "Creates a new application user",
+                "responses": {
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/delete/": {
+            "post": {
+                "summary": "Creates a new application user",
+                "responses": {
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/social_auth/google/": {
+
+        }
+    },
+    "components": {
+        "schemas": {
+            "UserRegistration": {
+                "type": "object",
+                "required": [
+                    "username",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                }
+            },
+            "UserRegistrationResponse": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserLogin": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserLoginResponse": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "tokens": {
+                        "type": "object",
+                        "properties": {
+                            "refresh": {
+                                "type": "string",
+                                "format": "jwt"
+                            },
+                            "access": {
+                                "type": "string",
+                                "format": "jwt"
+                            }
+                        }
+                    }
+                }
+            },
+            "UserLogout": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "format": "jwt"
+                    }
+                }
+            }
+        },
+        "examples": {
+            "UserRegistration": {
+                "summary": "Registration of Maxi Mustermann",
+                "value": {
+                    "username": "Max",
+                    "email": "maxi@mustermann.de",
+                    "password": "Mu5TerPassW0rt!"
+                }
+            },
+            "incompleteUserRegistration": {
+                "summary": "Registration of Maxi Mustermann",
+                "value": {
+                    "username": "Max",
+                    "email": "maxi@mustermann.de"
+                }
+            },
+            "invalidUserRegistration": {
+                "summary": "Registration of Maxi Mustermann",
+                "value": {
+                    "username": "Max",
+                    "email": "maxi@mustermann.de",
+                    "password": "MusterPasswort"
+                }
+            },
+            "UserLogin": {
+                "summary": "Max Mustermann logs on",
+                "value": {
+                    "email": "maxi@mustermann.de",
+                    "password": "Mu5TerPassW0rt!"
+                }
+            }
+
+        }
+    }
+}

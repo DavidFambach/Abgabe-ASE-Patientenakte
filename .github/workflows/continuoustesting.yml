@@ -30,6 +30,9 @@ jobs:
           echo "${{ secrets.FILE_SERVICE_HTTPS_CERT }}" >> file-service-https-cert.pem
           echo "${{ secrets.FILE_SERVICE_HTTPS_KEY }}" >> file-service-https-key.pem
 
+      - name: Build Containers
+        run: ./build_docker_images.sh
+
       - name: Start Containers
         run: |
           docker compose up -d

@@ -31,7 +31,9 @@ jobs:
           echo "${{ secrets.FILE_SERVICE_HTTPS_KEY }}" >> file-service-https-key.pem
 
       - name: Build Containers
-        run: ./build_docker_images.sh
+        run: |
+          chmod 700 ./build_docker_images.sh
+          ./build_docker_images.sh
 
       - name: Start Containers
         run: |

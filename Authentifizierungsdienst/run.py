@@ -6,6 +6,8 @@ import time
 
 from threading import Thread
 
+from requests import Request
+
 APP_NAME = "authentication"
 WSGI_APP_NAME = "AuthService.wsgi:application"
 
@@ -27,6 +29,7 @@ def _read_all(process):
 
 def _run_nginx():
     _read_all(subprocess.Popen(["nginx", "-g", "daemon off;"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    Request("http://localhost:80")
 
 if __name__ == "__main__":
 

@@ -64,8 +64,8 @@ if __name__ == "__main__":
     nginx_thread.start()
 
     _read_all(subprocess.Popen(["python", "manage.py", "makemigrations", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    _read_all(subprocess.Popen(["python", "manage.py", "makemigrations"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
     _read_all(subprocess.Popen(["python", "manage.py", "migrate", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", "manage.py", "makemigrations"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
     _read_all(subprocess.Popen(["python", "manage.py", "migrate"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
     _read_all(subprocess.Popen(["python", "manage.py", "migrate", "--run-syncdb"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
     _read_all(subprocess.Popen(["python", "-m", "waitress", "--listen=*:8000", WSGI_APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))

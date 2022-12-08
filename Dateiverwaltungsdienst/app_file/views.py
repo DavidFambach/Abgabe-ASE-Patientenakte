@@ -301,7 +301,7 @@ class ShareView(AbstractView):
         if user_id == subject_id:
             raise _ErrorInvalidShareSubject()
 
-        target_dict = {"target_directory" if target_type == "directory" else "target_directory": target}
+        target_dict = {"target_directory" if target_type == "directory" else "target_file": target}
         share = Share.objects.create(issuer=user, subject=subject, **target_dict, can_write=can_write)
 
         return _response_for_json(STATUS_OK, share=serialize_share(share))
@@ -388,9 +388,11 @@ def _verify_authenticated(req: HttpRequest, user_id: int) -> (StorageUser, dict[
 
     token = req.headers.get(AUTHORIZATION_HEADER_NAME, None)
     if token is None:
+        logging.info("No token was supplied for user with ID %s" % user_id)
         raise _ErrorUnauthorized()
     regex = re.compile("^Bearer ([^ ]+)$")
     if regex.match(token) is None:
+        logging.info("An malformed token was supplied for user with ID %s" % user_id)
         raise _ErrorUnauthorized()
     token = regex.sub("\\1", token)
 

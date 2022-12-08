@@ -54,12 +54,12 @@ jobs:
           USER_UPDATE_QUEUE_PASSWORD: ${{ secrets.USER_UPDATE_QUEUE_PASSWORD }}
           USER_UPDATE_QUEUE_EXCHANGE_NAME: ${{ secrets.USER_UPDATE_QUEUE_EXCHANGE_NAME }}
 
-      - name: Test Auth API
-        if: always()
-        run: |
-          docker cp ./Authentifizierungsdienst/authentication/test sbd-5-tinf20cs1-auth_api-1:/code/authentication/test/
-          docker cp ./Authentifizierungsdienst/authentication/fixtures sbd-5-tinf20cs1-auth_api-1:/code/authentication/fixtures/
-          docker exec sbd-5-tinf20cs1-auth_api-1 python manage.py test
+#      - name: Test Auth API
+#        if: always()
+#        run: |
+#          docker cp ./Authentifizierungsdienst/authentication/test sbd-5-tinf20cs1-auth_api-1:/code/authentication/test/
+#          docker cp ./Authentifizierungsdienst/authentication/fixtures sbd-5-tinf20cs1-auth_api-1:/code/authentication/fixtures/
+#          docker exec sbd-5-tinf20cs1-auth_api-1 python manage.py test
 
       - name: Test File API
         if: always()

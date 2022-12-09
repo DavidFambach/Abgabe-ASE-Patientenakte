@@ -36,7 +36,9 @@ jobs:
           ./build_docker_images.sh
 
       - name: Start Containers
-        run: docker compose up -d
+        run: |
+          docker compose up -d
+          docker exec sbd-5-tinf20cs1-auth_api-1 python run.py
         env:
           AUTH_SERVICE_POSTGRES_DATABASE: ${{ secrets.AUTH_SERVICE_POSTGRES_DATABASE }}
           AUTH_SERVICE_POSTGRES_USERNAME: ${{ secrets.AUTH_SERVICE_POSTGRES_USERNAME }}

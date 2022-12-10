@@ -122,6 +122,14 @@ export async function getShare(shareID) {
     );
 }
 
+export async function createShare(targetType, targetID, subjectID, writePermission) {
+    return await requestAsync(
+        "POST",
+        config.ENDPOINTS.FILE + "share/?user=" + USER_ID + "&targetType=" + encodeURIComponent(targetType) + "&targetID=" + targetID + "&subject=" + subjectID + (writePermission ? "&canWrite" : ""),
+        getDefaultHeaders()
+    );
+}
+
 export async function deleteShare(shareID) {
     return await requestAsync(
         "DELETE",

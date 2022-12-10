@@ -63,7 +63,8 @@
                       v-on:click.stop="dialogs.renameDialog.dialog.open('Verzeichnis umbenennen', 'Geben Sie einen neuen Verzeichnisnamen ein:', [{text: 'Abbrechen'}, {text: 'Umbenennen', color: 'green', onclick: () => triggerAction(CONST.ACTION_RENAME_DIRECTORY, {targetNode: item})}])">
                       <v-icon>mdi-folder-edit</v-icon>
                     </v-btn>
-                    <v-btn icon v-if="'object' in item && item.object.permittedActions.includes(CONST.ACTION_SHARE_DIRECTORY)">
+                    <v-btn icon v-if="'object' in item && item.object.permittedActions.includes(CONST.ACTION_SHARE_DIRECTORY)"
+                      v-on:click.stop="dialogs.createShareDialog.targetsDirectory = true; dialogs.createShareDialog.dialog.open('Verzeichnis freigeben', 'Wählen Sie einen Kontakt, mit dem Sie das Verzeichnis &quot;' + item.name + '&quot; teilen möchten:', [{text: 'Abbrechen'}, {text: 'Freigeben', color: 'green', onclick: () => triggerAction(CONST.ACTION_SHARE_DIRECTORY, {targetNode: item})}])">
                       <v-icon>mdi-share-all</v-icon>
                     </v-btn>
                     <v-btn icon v-if="'object' in item && item.object.permittedActions.includes(CONST.ACTION_MOVE_DIRECTORY)"
@@ -83,7 +84,8 @@
                       v-on:click.stop="dialogs.renameDialog.dialog.open('Datei umbenennen', 'Geben Sie einen neuen Dateinamen ein:', [{text: 'Abbrechen'}, {text: 'Umbenennen', color: 'green', onclick: () => triggerAction(CONST.ACTION_RENAME_FILE, {targetNode: item})}])">
                       <v-icon>mdi-file-edit-outline</v-icon>
                     </v-btn>
-                    <v-btn icon v-if="'object' in item && item.object.permittedActions.includes(CONST.ACTION_SHARE_FILE)">
+                    <v-btn icon v-if="'object' in item && item.object.permittedActions.includes(CONST.ACTION_SHARE_FILE)"
+                      v-on:click.stop="dialogs.createShareDialog.targetsDirectory = false; dialogs.createShareDialog.dialog.open('Datei freigeben', 'Wählen Sie einen Kontakt, mit dem Sie die Datei &quot;' + item.name + '&quot; teilen möchten:', [{text: 'Abbrechen'}, {text: 'Freigeben', color: 'green', onclick: () => triggerAction(CONST.ACTION_SHARE_FILE, {targetNode: item})}])">
                       <v-icon>mdi-share</v-icon>
                     </v-btn>
                     <v-btn icon v-if="'object' in item && item.object.permittedActions.includes(CONST.ACTION_MOVE_FILE)"
@@ -133,6 +135,47 @@
           <template v-slot:extra>
             <v-text-field label="Name" placeholder="Verzeichnisname" color="secondary"
               v-model="dialogs.createDirectoryDialog.directoryName"/>
+          </template>
+        </action-dialog>
+        <action-dialog ref="createShareDialog"
+          :prepare="prepareShareDialog">
+          <template v-slot:extra>
+            <br />
+            <template v-if="dialogs.createShareDialog.contactsByName != null">
+              <template v-if="Object.keys(dialogs.createShareDialog.contactsByName).length > 0">
+                <v-select label="Kontakt" color="secondary" dense
+                  :items="Object.keys(dialogs.createShareDialog.contactsByName)"
+                  v-model="dialogs.createShareDialog.selectedContactName">
+                </v-select>
+                <v-checkbox v-model="dialogs.createShareDialog.writePermission" :label="'Schreibberechtigung erteilen'"
+                  color="secondary"/>
+                <p v-if="dialogs.createShareDialog.targetsDirectory">
+                  Wenn Sie dem Benutzer Schreibberechtigungen erteilen, kann er in diesem Verzeichnis
+                  neue Dateien und Verzeichnisse anlegen sowie Unterverzeichnisse und Dateien verändern
+                  oder löschen.
+                </p>
+                <p v-else>
+                  Wenn Sie dem Benutzer Schreibberechtigungen erteilen, kann er den Inhalt der Datei
+                  überschreiben. Er kann die Datei nur umbenennen oder löschen, wenn er auch eine
+                  Schreibberechtigung für das Verzeichnis hat, in dem sich die Datei befindet.
+                </p>
+              </template>
+              <template v-else>
+                Sie haben noch keine Kontakte.<br />
+                Wechseln Sie zum Reiter
+                <v-btn color="secondary" text x-small
+                  v-on:click.stop="() => {
+                    dialogs.createShareDialog.dialog.close();
+                    $refs.manageContactsDialog.show();
+                  }">
+                  Kontakte verwalten
+                </v-btn>
+                , um Kontakte hinzuzufügen.
+              </template>
+            </template>
+            <template v-else>
+              Kontakte werden geladen...
+            </template>
           </template>
         </action-dialog>
         <action-dialog ref="renameDialog"
@@ -239,7 +282,8 @@
   let snackbar = null;
   
   function displayMessage(data, extra=null) {
-    console.log(data.message);
+    if(data.message !== undefined)
+      console.log(data.message);
     if(extra != null) {
       if(typeof(extra) === "object" && extra instanceof Error) {
         console.log(extra);
@@ -275,9 +319,14 @@
       data.message = data.userMessage;
       suffix = null;
     }
-    if(suffix != null)
-      data.message += ": " + suffix;
-    snackbar.show(data);
+    if(suffix != null) {
+      if(data.message === undefined)
+        data.message = suffix;
+      else
+        data.message += ": " + suffix;
+    }
+    if(data.message !== undefined)
+      snackbar.show(data);
   }
 
   function getNextSpecialID(name) {
@@ -397,6 +446,7 @@
       this.dialogs.confirmDeleteDirectory.dialog = this.$refs.confirmationDialogDeleteDirectory;
       this.dialogs.uploadFileDialog.dialog = this.$refs.uploadFileDialog;
       this.dialogs.createDirectoryDialog.dialog = this.$refs.createDirectoryDialog;
+      this.dialogs.createShareDialog.dialog = this.$refs.createShareDialog;
       this.dialogs.renameDialog.dialog = this.$refs.renameDialog;
       this.dialogs.moveDialog.dialog = this.$refs.moveDialog;
     },
@@ -420,6 +470,13 @@
         createDirectoryDialog: {
           dialog: null,
           directoryName: ""
+        },
+        createShareDialog: {
+          dialog: null,
+          targetsDirectory: false,
+          contactsByName: null,
+          selectedContactName: null,
+          writePermission: false
         },
         renameDialog: {
           dialog: null,
@@ -537,11 +594,35 @@
           return;
         }
         case ACTION_SHARE_DIRECTORY: {
-          console.log("not implemented");
+          const selectedContactName = this.dialogs.createShareDialog.selectedContactName;
+          if(selectedContactName == null) {
+            displayMessage({userMessage: "Bitte wählen Sie einen Kontakt aus."});
+            return;
+          }
+          const subjectID = this.dialogs.createShareDialog.contactsByName[selectedContactName];
+          if(subjectID == null) {
+            displayMessage({userMessage: "Bitte wählen Sie einen Kontakt aus."});
+            return;
+          }
+          fileservice.createShare("directory", params.targetNode.object.id, subjectID, this.dialogs.createShareDialog.writePermission)
+            .then(() => displayMessage({userMessage: "Verzeichnis freigegeben.", icon: "mdi-information", color: "green"}))
+            .catch(err => displayMessage({message: "Failed to share directory \"" + params.targetNode.name + "\""}, err));
           return;
         }
         case ACTION_SHARE_FILE: {
-          console.log("not implemented");
+          const selectedContactName = this.dialogs.createShareDialog.selectedContactName;
+          if(selectedContactName == null) {
+            displayMessage({userMessage: "Bitte wählen Sie einen Kontakt aus."});
+            return;
+          }
+          const subjectID = this.dialogs.createShareDialog.contactsByName[selectedContactName];
+          if(subjectID == null) {
+            displayMessage({userMessage: "Bitte wählen Sie einen Kontakt aus."});
+            return;
+          }
+          fileservice.createShare("file", params.targetNode.object.id, subjectID, this.dialogs.createShareDialog.writePermission)
+            .then(() => displayMessage({userMessage: "Datei freigegeben.", icon: "mdi-information", color: "green"}))
+            .catch(err => displayMessage({message: "Failed to share file \"" + params.targetNode.name + "\""}, err));
           return;
         }
         case ACTION_UPLOAD_FILE: {
@@ -557,7 +638,7 @@
                   throw err;
                 });
             }))
-            .then(() => displayMessage({message: "File upload complete", userMessage: "Hochladen erfolgreich", icon: "mdi-information", color: "green"}))
+            .then(() => displayMessage({userMessage: "Hochladen erfolgreich", icon: "mdi-information", color: "green"}))
             .catch(err => displayMessage({message: "File upload failed", userMessage: "Das Hochladen konnte nicht erfolgreich abgeschlossen werden."}, err))
             .then((() => this.refreshNode(params.targetNode)).bind(this));
           return;
@@ -585,6 +666,21 @@
             stack.push(...[...next.children].reverse())
         }
         return options;
+      },
+      prepareShareDialog() {
+        (async () => {
+            const userinfo = (await fileservice.getUserInfo()).userinfo;
+            return userinfo.contacts.map(c => ({id: c.id, name: c.displayName}));
+          })()
+          .then((contacts => {
+            const contactsByName = {};
+            for(let c of contacts)
+              contactsByName[c.name] = c.id;
+            this.dialogs.createShareDialog.contactsByName = contactsByName;
+          }).bind(this))
+          .catch(err => displayMessage({message: 'Failed to load contacts'}, err));
+        this.dialogs.createDirectoryDialog.contactsByName = null;
+        this.dialogs.createShareDialog.selectedContactName = null;
       },
       ensureTreeOpenEntriesSync() {
         // Ensures that the array of opened nodes is up to date

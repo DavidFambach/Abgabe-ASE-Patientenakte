@@ -14,6 +14,13 @@ Antwortformat:
 	"status": "<Status>",
 	"userinfo": {
 		"personalRootDirectory": <Verzeichnis-ID>,
+		"contacts": [
+              {
+                  "id": "<Kontakt-ID>",
+                  "displayName": "<Kontakt-Anzeigename>"
+              },
+              ...
+		],
 		"ownShares": [<ID einer eigenen Freigabe>, ...],
 		"receivedShares": [<ID einer erhaltenen Freigabe>, ...]
 	}
@@ -25,7 +32,8 @@ Dabei ist Status einer der folgenden Werte:
  - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten.
 
-Dabei ist Verzeichnis-ID die ID des Wurzelverzeichnisses der persönlichen Dateiablage des Benutzers. Der Schlüssel `userinfo` ist nur vorhanden, wenn die Aktion erfolgreich war.
+Dabei ist Verzeichnis-ID die ID des Wurzelverzeichnisses der persönlichen Dateiablage des Benutzers, Kontakt-ID die Benutzer-ID eines Kontakts und Kontakt-Anzeigename der Anzeigename dieses Kontakts. Der Schlüssel `userinfo` ist nur vorhanden, wenn die Aktion erfolgreich war.
+DIe Liste `contacts` enthält einen Eintrag für jeden Kontakt des Benutzers. Die Reihenfolge der Einträge ist undefiniert.
 Die Liste `ownShares` enthält die IDs der vom Benutzer erstellten Freigaben. Die Reihenfolge der IDs ist undefiniert.
 DIe Liste `receivedShares` enthält die IDs der Freigaben, die andere Benutzer dem Benutzer gegenüber eingeräumt haben. Die Reihenfolge der IDs ist undefiniert.
 
@@ -316,17 +324,15 @@ Dabei ist Status einer der folgenden Werte:
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Es wurden keine Dateien oder Verzeichnisse gelöscht.
 
 ## Operation GET /share/\<Freigabe-ID\>?user=\<Benutzer-ID\>
-Gibt den gespeicherten Dateiinhalt zurück.
+Gibt Informationen über eine bestehende Freigabe zurück, sowie allgemeine Informationen über das Freigabeziel.
 Anfragetyp: leerer Anfragekörper
-Antworttyp: `application/octet-stream` oder `application/json`
+Antworttyp: `application/json`
 
 Parameter:
- - Benutzer-ID: Die ID des Benutzers, der die Datei anfragt. Das sollte der Dateibesitzer oder ein Benutzer, demgenüber Leseberechtigungen für die Datei eingeräumt wurden, sein.
- - Datei-ID: Die ID der angefragten Datei.
+ - Benutzer-ID: Die ID des Benutzers, der die Freigabe anfragt.
+ - Freigabe-ID: Die ID der angefragten Freigabe.
 
-Falls die Aktion erfolgreich ist, enthält die Antwort den Inhalt der angefragten Datei.
-
-Antwortformat im Fehlerfall:
+Antwortformat:
 ```  
 {
 	"status": "<Status>",
@@ -433,4 +439,83 @@ Dabei ist Status einer der folgenden Werte:
  - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
  - `not_found`: Der Benutzer hat keine Berechtigung, die Freigabe einzusehen, oder die Freigabe existiert nicht. Die bestehende Freigabe wurde nicht gelöscht, falls sie existiert.
  - `permission_denied`: Der Benutzer ist nicht der Ersteller der Freigabe. Die bestehende Freigabe wurde nicht gelöscht.
+ - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Die bestehende Freigabe wurde nicht gelöscht.
+
+## Operation GET /contact/\<Kontakt-ID\>?user=\<Benutzer-ID\>
+Gibt allgemeine Informationen über einen Benutzer zurück.
+Anfragetyp: leerer Anfragekörper
+Antworttyp: `application/json`
+
+Parameter:
+ - Benutzer-ID: Die ID des Benutzers, der die Abfrage tätigt.
+ - Kontakt-ID: Die ID eines Benutzers, für den allgemeine Informationen abgefragt werden sollen. Es ist nicht erforderlich, dass zwischen dem anfragenden Benutzer und diesem Benutzer ein Kontaktverhältnis besteht. Dieser Benutzer kann der anfragende Benutzer selbst sein.
+
+Antwortformat:
+```  
+{
+	"status": "<Status>",
+	"contact": {
+		"id": <Kontakt-ID>,
+		"displayName": "<Kontakt-Anzeigename>"
+	}
+}
+```
+
+Dabei ist Status einer der folgenden Werte:
+ - `ok`: Die Aktion wurde erfolgreich beendet.
+ - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
+ - `not_found`: Der Benutzer hat keine Berechtigung, allgemeine Informationen über den angefragten Benutzer einzusehen, oder der angefragte Benutzer existiert nicht.
+ - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten.
+
+Dabei ist Kontakt-ID die Benutzer-ID des angefragten Benutzers und Kontakt-Anzeigename der Anzeigename des angefragten Benutzers. Der Schlüssel `contact` ist nur vorhanden, wenn die Aktion erfolgreich war.
+
+## Operation POST /contact/\<Kontakt-ID\>?user=\<Benutzer-ID\>
+Fügt den angegebenen Benutzer dem ausführenden Benutzer als Kontakt hinzu. Falls der angegebene Benutzer bereits Kontakt des ausführenden Benutzer ist, bleibt der Kontakt bestehen und es werden allgemeine Informationen über den Kontakt zurückgegeben, sofern dem keine der Fehlerbedingungen entgegensteht.
+Anfragetyp: leerer Anfragekörper
+Antworttyp: `application/json`
+
+Parameter:
+ - Benutzer-ID: Die ID des Benutzers, der die Abfrage tätigt.
+ - Kontakt-ID: Die ID eines Benutzers, der als Kontakt hinzugefügt werden soll.
+
+Antwortformat:
+```  
+{
+	"status": "<Status>",
+	"contact": {
+		"id": <Kontakt-ID>,
+		"displayName": "<Kontakt-Anzeigename>"
+	}
+}
+```
+
+Dabei ist Status einer der folgenden Werte:
+ - `ok`: Die Aktion wurde erfolgreich beendet.
+ - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
+ - `invalid_contact`: Der Kontakt ist nicht gültig, zum Beispiel weil es der anfragende Benutzer selbst ist. Es wurde kein Kontaktverhältnis angelegt.
+ - `not_found`: Der angefragte Benutzer existiert nicht oder der anfragende Benutzer hat keine Berechtigung, allgemeine Informationen über den angefragten Benutzer abzurufen, oder der angefragte Benutzer existiert nicht. Es wurde kein Kontaktverhältnis angelegt.
+ - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Es wurde keine Freigabe angelegt.
+
+Dabei ist Kontakt-ID die Benutzer-ID des angefragten Benutzers und Kontakt-Anzeigename der Anzeigename des angefragten Benutzers. Der Schlüssel `contact` ist nur vorhanden, wenn die Aktion erfolgreich war.
+
+## Operation DELETE /contact/\<Kontakt-ID\>?user=\<Benutzer-ID\>
+Löscht einen Kontakt.
+Anfragetyp: leerer Anfragekörper
+Antworttyp: `application/json`
+
+Parameter:
+ - Benutzer-ID: Die ID des Benutzers, der die Abfrage tätigt.
+ - Kontakt-ID: Die ID des Benutzers, der als Kontakt entfernt werden soll.
+
+Antwortformat:
+```  
+{
+	"status": "<Status>"
+}
+```
+
+Dabei ist Status einer der folgenden Werte:
+ - `ok`: Die Aktion wurde erfolgreich beendet.
+ - `unauthorized`: Die Sitzung ist nicht berechtigt, im Namen des angegebenen Benutzers zu agieren.
+ - `not_found`: Der Benutzer, der als Kontakt entfernt werden soll, ist nicht auf der Kontaktliste des Benutzers.
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Die bestehende Freigabe wurde nicht gelöscht.

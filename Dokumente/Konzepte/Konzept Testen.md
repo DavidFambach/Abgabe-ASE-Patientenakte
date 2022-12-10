@@ -1,6 +1,6 @@
 # Testkonzept
 
-## Statische Code Analyse
+## Statische Codeanalyse
 **Werkzeuge:**
 - SonarLint: Codesmell
 - CodeQL: Schwachstellen
@@ -9,10 +9,10 @@ In unserer Entwicklungsumgebung setzten wir ein SonarLint-Plugin ein, um die Ent
 
 Mithilfe von GitHub Actions wird der Code nach einem Push über eine Pipeline mithilfe von CodeQL auf Schwachstellen überprüft. CodeQL ist wie SonarLint ein statishes regelbasiertes (bei CodeQL heist es "querie") Analysetool.
 
-## Komponenten Tests
+## Komponententests
 **Werkzeuge:**
 - Django REST Framework Testing
 
 Die API Schnittstellen werden, wie in der Architekturentscheindung API Testwerkzeuge ermittelt, mithilfe des Django REST Frameworks getestet. Die dynamischen Tests werden mit einer Continuous Integration (CI) pipline in GitHub Actions ausgeführt.
 
-## Integration Tests \**hypothetisch**
+## Integrationtests (hypothetisch)

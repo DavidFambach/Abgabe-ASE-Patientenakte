@@ -861,8 +861,9 @@
     </tr>
     <tr>
         <td colspan="4">
-            <p>Nur Dateien mit freigegebenen Dateiendungen d&uuml;rfen hochgeladen werden.<br>
-                Benutzer werden beim Herunterladen vor m&ouml;glichen Risiken gewarnt
+            <p>
+                Benutzer werden beim Herunterladen vor möglichen Risiken gewarnt<br>
+				Nur Dateien mit freigegebenen Dateiendungen dürfen hochgeladen werden. Diese Maßnahme ist jedoch nur bedingt wirksam, weil Dateiendungen nicht auf allen Plattformen maßgeblich dafür sind, wie eine Datei interpretiert wird. Daher wird diese Maßnahme nicht umgesetzt und stattdessen eine Warnung an den Benutzer ausgegeben.
             </p>
         </td>
         <td>

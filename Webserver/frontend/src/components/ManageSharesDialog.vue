@@ -21,6 +21,7 @@
                             <tr>
                                 <th class="text-left">Freigegebene Datei / Ordner</th>
                                 <th class="text-left">Benutzer</th>
+                                <th style="width: min(4vw, 20px);">Schreibberechtigung</th>
                                 <th style="width: min(20vw, 160px);"></th>
                             </tr>
                         </thead>
@@ -28,6 +29,7 @@
                             <tr v-for="share in activeShares" :key="share.id">
                                 <td class="text-left">{{ share.path }}</td>
                                 <td class="text-left">{{ share.subjectName }}</td>
+                                <td class="text-left">{{ share.hasWritePermission ? "ja" : "nein" }}</td>
                                 <td>
                                     <v-btn color="red" v-on:click="deleteShare(share)">Entfernen</v-btn>
                                 </td>
@@ -58,6 +60,7 @@
             return {
                 id: share.id,
                 path: await getSharePath(share),
+                hasWritePermission: share.canWrite,
                 subjectName: share.subject.displayName
             }
         }));

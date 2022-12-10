@@ -11,16 +11,16 @@
                     hinzuzufügen, benötigen Sie einmalig die Benutzernummer, die Ihnen von Ihrem Kontakt
                     mitgeteilt wird.
                 </p>
-                <div v-if="errorMessage != null">
+                <p v-if="errorMessage != null">
                     Die Daten konnten nicht geladen werden.<br />
                     {{ errorMessage }}
-                </div>
-                <div v-else-if="contacts == null">
+                </p>
+                <p v-else-if="contacts == null">
                     Daten werden abgerufen...
-                </div>
-                <div v-else-if="contacts.length === 0">
+                </p>
+                <p v-else-if="contacts.length === 0">
                     Sie haben noch keine Kontakte.
-                </div>
+                </p>
                 <v-simple-table v-else>
                     <template v-slot:default>
                         <thead>
@@ -180,7 +180,7 @@
             },
             addContactID: function() {
                 this.addContactModCount++;
-                if(!this.addContactID.match(/[1-9][0-9]*/)) {
+                if(!this.addContactID.match(/^[1-9][0-9]*$/)) {
                     this.addContactPending = false;
                     this.addContactName = null;
                     return;

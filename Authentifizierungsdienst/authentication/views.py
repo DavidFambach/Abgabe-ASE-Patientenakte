@@ -1,27 +1,36 @@
+"""
+This module provides views related to user authentication.
+"""
+# Standard library imports
+import os
 import logging
 import urllib
-
-import pika
-
-from .serializers import *
-from .models import User
-from rest_framework import generics, status, views
-from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
-from rest_framework_simplejwt.tokens import RefreshToken
 import jwt
 
+# Third party library imports
+import pika
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+
+# Django imports
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 from django.http import HttpResponsePermanentRedirect
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import smart_str, smart_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from .utils import Util
 
-import os
+# Internal imports
+from .models import User
+from .utils import Util
+from .serializers import RegisterSerializer, EmailVerificationSerializer, LoginSerializer, \
+    ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer, LogoutSerializer, DeleteSerializer
+
+# Django REST Framework imports
+from rest_framework import generics, status, views
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 
 
 class CustomRedirect(HttpResponsePermanentRedirect):
@@ -29,6 +38,9 @@ class CustomRedirect(HttpResponsePermanentRedirect):
 
 
 class RegisterView(generics.GenericAPIView):
+    """
+    View for registering a user
+    """
     serializer_class = RegisterSerializer
 
     def post(self, request):
@@ -44,8 +56,8 @@ class RegisterView(generics.GenericAPIView):
                     3b. User is not yet verified
                         The password in the database is adjusted and the validation email is sent again.
                 NO:
-                    If the email address is not in the database, the new user will be created and a verification email will
-                    be sent.
+                    If the email address is not in the database, the new user will be created and a verification email
+                    will be sent.
 """
 
         user = request.data
@@ -58,9 +70,9 @@ class RegisterView(generics.GenericAPIView):
         except ValidationError as serialize_exeption:
             if "email" in serialize_exeption.args[0] and \
                     serialize_exeption.args[0]["email"][0] == "user with this email already exists.":
-                # If an error occurs during serialization, this could be due to the fact that there is already an account
-                # with the same email address. In this case, the password should be taken from this request and a validation
-                # mail should be sent again.
+                # If an error occurs during serialization, this could be due to the fact that there is already an
+                # account with the same email address. In this case, the password should be taken from this request and
+                # a validation mail should be sent again.
                 try:
                     user = User.objects.get(email=serializer.data["email"])
                     # If the user has already been verified, a notice is returned and the registration process is
@@ -74,8 +86,8 @@ class RegisterView(generics.GenericAPIView):
                     serializer.is_valid(raise_exception=True)
                     serializer.save()
                 except KeyError:
-                    # If it is not the case that a user registers with the same user name and the same email address, the
-                    # exception from the serialization is raised here.
+                    # If it is not the case that a user registers with the same username and the same email address,
+                    # the exception from the serialization is raised here.
                     return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
                 except ValidationError as serialize_exeption:
                     return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
@@ -105,9 +117,17 @@ class RegisterView(generics.GenericAPIView):
 
 
 class VerifyEmail(views.APIView):
+    """
+    View for verifying a user's email
+    """
     serializer_class = EmailVerificationSerializer
 
     def get(self, request):
+        """
+        Accepts a GET request with a token.
+        The token is decoded to get the user's id.
+        The user is then verified and a success message is returned.
+        """
         token = request.GET.get('token')
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.SIMPLE_JWT["ALGORITHM"])
@@ -116,27 +136,36 @@ class VerifyEmail(views.APIView):
                 user.is_verified = True
                 user.save()
             return Response({'success': 'Account is activated'}, status=status.HTTP_200_OK)
-        except jwt.ExpiredSignatureError as identifier:
+        except jwt.ExpiredSignatureError:
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
-        except jwt.exceptions.DecodeError as identifier:
+        except jwt.exceptions.DecodeError:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginAPIView(generics.GenericAPIView):
+    """
+    View for logging in a user
+    """
     serializer_class = LoginSerializer
 
     def post(self, request):
+        """
+        Accepts a POST request with username and password.
+        The user is then authenticated and the data is returned.
+        """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
+    """
+    This class handles requests for a password reset email. It takes in an email address and sends an email to the user
+    with a link to reset their password.
     serializer_class = ResetPasswordEmailRequestSerializer
+    """
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-
         email = request.data.get('email', '')
 
         if User.objects.filter(email=email).exists():
@@ -145,11 +174,12 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             token = PasswordResetTokenGenerator().make_token(user)
             current_site = get_current_site(
                 request=request).domain
-            relativeLink = reverse(
+            relative_link = reverse(
                 'password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
 
             redirect_url = urllib.parse.quote(request.data.get('redirect_url'))
-            absurl = 'http://' + current_site + relativeLink
+
+            absurl = 'https://' + current_site + relative_link
             email_body = 'Hello, \n Use link below to reset your password  \n' + \
                          absurl + "?redirect_url=" + redirect_url
             data = {'email_body': email_body, 'to_email': user.email,
@@ -159,15 +189,17 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
 
 class PasswordTokenCheckAPI(generics.GenericAPIView):
+    """
+    Checks the validity of a password token
+    """
     serializer_class = SetNewPasswordSerializer
 
     def get(self, request, uidb64, token):
-
         redirect_url = urllib.parse.quote(request.GET.get('redirect_url'))
+        user_id = smart_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(id=user_id)
 
         try:
-            id = smart_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(id=id)
 
             if not PasswordResetTokenGenerator().check_token(user, token):
                 if len(redirect_url) > 3:
@@ -181,17 +213,20 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
             else:
                 return CustomRedirect(os.environ.get('FRONTEND_URL', '') + '?token_valid=False')
 
-        except DjangoUnicodeDecodeError as identifier:
+        except DjangoUnicodeDecodeError:
             try:
                 if not PasswordResetTokenGenerator().check_token(user, token):
                     return CustomRedirect(redirect_url + '?token_valid=False')
 
-            except UnboundLocalError as e:
+            except UnboundLocalError:
                 return Response({'error': 'Token is not valid, please request a new one'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
 
 class SetNewPasswordAPIView(generics.GenericAPIView):
+    """
+    Sets a new password for a user
+    """
     serializer_class = SetNewPasswordSerializer
 
     def patch(self, request):
@@ -212,6 +247,9 @@ class LogoutAPIView(generics.GenericAPIView):
 
 
 class DeleteAccount(generics.GenericAPIView):
+    """
+    Deletes a user account
+    """
     serializer_class = DeleteSerializer
 
     def post(self, request):

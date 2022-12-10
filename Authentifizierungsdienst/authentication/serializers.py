@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from .models import User
 from django.contrib import auth
-from rest_framework.exceptions import AuthenticationFailed, ValidationError
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_str
@@ -19,16 +19,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email', 'username', 'password']
 
-    def validate_password(self, password):
+    def validate(self, attrs):
+        username = attrs.get('username', '')
+        email = attrs.get('email', '')
+        password = attrs.get('password', '')
         try:
             password_validation(password=password,
-                                user=User.objects.create_user_object(self.username, self.email, password))
-        except Exception:
+                                user=User.objects.create_user_object(username, email, password))
+        except Exception as e:
             raise serializers.ValidationError("The password does not meet the guidelines.")
+
 
     def validate_username(self, username):
         if not username.isalnum():
             raise serializers.ValidationError("The username should only contain alphanumeric characters.")
+
+
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -117,8 +123,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
 
             user.set_password(password)
             user.save()
-
-            return (user)
+            return user
         except Exception as e:
             raise e
 

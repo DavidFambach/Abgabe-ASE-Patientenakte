@@ -62,7 +62,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Alle Zugriffe auf die Anwendung m&uuml;ssen authentifiziert erfolgen. [F13][F14][F25]<br/>
+				- Alle Zugriffe auf die Anwendung m&uuml;ssen authentifiziert erfolgen. (vgl. F13, F14, F25)<br/>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br/>
 				- BSI CON.10.A1<br/>
 				- OWASP V1.2.3
@@ -160,7 +160,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Vor jedem Zugriff wird die Berechtigung des Benutzers durch den Dateiverwaltungsdienst überprüft und der Zugriff gegebenenfalls abgelehnt.[NF2]<br/>
+				- Vor jedem Zugriff wird die Berechtigung des Benutzers durch den Dateiverwaltungsdienst überprüft und der Zugriff gegebenenfalls abgelehnt (vgl. NF2).<br/>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br/>
 				- CON.10.A2
 			</p>
@@ -255,7 +255,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Alle Kommunikation/Datenübertragung muss sicher (vertraulich und integritätsgeschützt) erfolgen.[NF2][NF7][NF19][NF20]<br/>
+				- Alle Kommunikation/Datenübertragung muss sicher (vertraulich und integritätsgeschützt) erfolgen (vgl. NF2, NF7, NF19, NF20).<br/>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br/>
 				- CON.10.A14<br/>
                 Betrifft: A8, A9, A10, A13, A18
@@ -284,7 +284,7 @@
             <p>Manueller Test<br/>Automatisierter Test<br/>Pentest<br/>Code Review (SAST)</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -351,8 +351,8 @@
     <tr>
         <td colspan="6">
             <p>
-				- Ein unbefugter Datenbankzugriff, ob lesend oder schreibend, muss verhindert werden.[NF2][F26]<br/>
-				- Der Dateiverwaltungsdienst muss resistent gegen SQL-Injection-Angriffe sein (BSI CON.10.A9)[NF10]<br/>
+				- Ein unbefugter Datenbankzugriff, ob lesend oder schreibend, muss verhindert werden (vgl. NF2, F26).<br/>
+				- Der Dateiverwaltungsdienst muss resistent gegen SQL-Injection-Angriffe sein (vgl. BSI CON.10.A9, NF10).<br/>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.
             </p>
         </td>
@@ -382,7 +382,7 @@
             <p>Manueller Test<br>Code Review (SAST)</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -451,9 +451,9 @@
             <p>
 				- Die Webanwendung ist resistent gegen XSS<br>
 				- Die Webanwendung, Webserver und Dateiverwaltungsdienst sind resistent gegen Session Hijacking<br>
-				- Der Webserver, Dateiverwaltungsdienst und Authorisierungsdienst sind resistent gegen Session Prediction<br>
+				- Der Webserver, Dateiverwaltungsdienst und Authentifizierungsdienst sind resistent gegen Session Prediction<br>
 				- Der Webserver ist resistent gegen Path Traversal<br>
-				- Der Webserver, Dateiverwaltungsdienst und Authorisierungsdienst ist resistent gegen CSRF
+				- Der Webserver, Dateiverwaltungsdienst und Authentifizierungsdienst sind resistent gegen CSRF
 			</p>
         </td>
     </tr>
@@ -486,7 +486,7 @@
             <p>Manueller Test<br/>Automatisierter Test<br/>Code Review (SAST)</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -553,7 +553,7 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Das Erraten des Kennworts mittels Bruteforce oder durch Nutzung von Wörterbüchern und Rainbowtables soll unwirtschaftlich sein.[NF24]</p>
+            <p>Das Erraten des Kennworts mittels Bruteforce oder durch Nutzung von Wörterbüchern und Rainbowtables soll unwirtschaftlich sein (vgl. NF24)</p>
         </td>
     </tr>
     <tr>
@@ -581,7 +581,7 @@
             Design Review
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -651,7 +651,7 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Benutzer werden auf dieses Risiko aufmerksam gemacht und Möglichkeiten zur Vermeidung genannt.[F28][F29]</p>
+            <p>Benutzer werden auf dieses Risiko aufmerksam gemacht und Möglichkeiten zur Vermeidung genannt (vgl. F28, F29)</p>
         </td>
     </tr>
     <tr>
@@ -679,7 +679,7 @@
             Code Review
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -749,7 +749,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Das System ist resistent gegen einen DoS durch zu hohe Speicherbelegung durch einzelne Benutzer[F27][NF18]
+				- Das System ist resistent gegen einen DoS durch zu hohe Speicherbelegung durch einzelne Benutzer (vgl. F27, NF18)
 			</p>
         </td>
     </tr>
@@ -845,7 +845,7 @@
     <tr>
         <td colspan="6">
             <p>Das Hochladen einer solchen Datei soll erschwert und wenn m&ouml;glich verhindert werden. <br>
-            Benutzer sollten vor dem Ausführen / beim Herunterladen einer Datei vor Risiken gewarnt werden. [F30]</p>
+            Benutzer sollten vor dem Ausführen / beim Herunterladen einer Datei vor Risiken gewarnt werden (vgl. F30).</p>
         </td>
     </tr>
     <tr>
@@ -869,7 +869,7 @@
             <p>Manueller Test<br/> Automatisierter Test</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -937,7 +937,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Geheime Konfigurationsparameter werden vertraulich gespeichert [NF21]<br>
+				- Geheime Konfigurationsparameter werden vertraulich gespeichert (vgl. NF21)<br>
 				- OWASP ASVS V1.6.2 wird explizit nicht eingesetzt (vgl. Konzept "Schützen von konfigurierten Geheimnissen produktiver Systeme")<br>
 				Betrifft: A4, A6
 			</p>
@@ -962,7 +962,7 @@
             <p>Manueller Test</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -1030,7 +1030,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Maßnahmen, die die Möglichkeiten privilegierter Benutzer beschränken, Vertraulichkeit und Integrität gespeicherter Gesundheitsdaten zu verletzen, und deren Aufwand ihren Nutzen nicht unangemessen übersteigt, werden implementiert.[NF22]<br>
+				- Maßnahmen, die die Möglichkeiten privilegierter Benutzer beschränken, Vertraulichkeit und Integrität gespeicherter Gesundheitsdaten zu verletzen, und deren Aufwand ihren Nutzen nicht unangemessen übersteigt, werden implementiert (vgl. NF22).<br>
 				- DSGVO schreibt Schutz der Daten gesetzlich vor.<br>
 				Betrifft: A8<br>
 			</p>
@@ -1058,7 +1058,7 @@
             <p>Manueller Test<br>Design Review<br>Code Review</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -1221,7 +1221,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Benutzer sollen ihr Gegenüber zu jeder Zeit eindeutig identifizieren können. [F31]
+				- Benutzer sollen ihr Gegenüber zu jeder Zeit eindeutig identifizieren können (vgl. F31).
 			</p>
         </td>
     </tr>
@@ -1254,7 +1254,7 @@
             </p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>
@@ -1322,7 +1322,7 @@
     <tr>
         <td colspan="6">
             <p>
-				- Die Integrität der Webanwendung, also von HTML-, CSS-, JavaScript- und anderen Ressourcen, muss sichergestellt werden [NF23]
+				- Die Integrität der Webanwendung, also von HTML-, CSS-, JavaScript- und anderen Ressourcen, muss sichergestellt werden (vgl. NF23)
 			</p>
         </td>
     </tr>
@@ -1352,7 +1352,7 @@
             </p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p></p>
         </td>
     </tr>
     </tbody>

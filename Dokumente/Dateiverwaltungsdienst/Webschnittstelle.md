@@ -324,17 +324,15 @@ Dabei ist Status einer der folgenden Werte:
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Es wurden keine Dateien oder Verzeichnisse gelöscht.
 
 ## Operation GET /share/\<Freigabe-ID\>?user=\<Benutzer-ID\>
-Gibt den gespeicherten Dateiinhalt zurück.
+Gibt Informationen über eine bestehende Freigabe zurück, sowie allgemeine Informationen über das Freigabeziel.
 Anfragetyp: leerer Anfragekörper
-Antworttyp: `application/octet-stream` oder `application/json`
+Antworttyp: `application/json`
 
 Parameter:
- - Benutzer-ID: Die ID des Benutzers, der die Datei anfragt. Das sollte der Dateibesitzer oder ein Benutzer, demgenüber Leseberechtigungen für die Datei eingeräumt wurden, sein.
- - Datei-ID: Die ID der angefragten Datei.
+ - Benutzer-ID: Die ID des Benutzers, der die Freigabe anfragt.
+ - Freigabe-ID: Die ID der angefragten Freigabe.
 
-Falls die Aktion erfolgreich ist, enthält die Antwort den Inhalt der angefragten Datei.
-
-Antwortformat im Fehlerfall:
+Antwortformat:
 ```  
 {
 	"status": "<Status>",
@@ -444,7 +442,7 @@ Dabei ist Status einer der folgenden Werte:
  - `internal_error`: Bei der Verarbeitung ist ein Server- oder Datenbankfehler aufgetreten. Die bestehende Freigabe wurde nicht gelöscht.
 
 ## Operation GET /contact/\<Kontakt-ID\>?user=\<Benutzer-ID\>
-Gibt den gespeicherten Dateiinhalt zurück.
+Gibt allgemeine Informationen über einen Benutzer zurück.
 Anfragetyp: leerer Anfragekörper
 Antworttyp: `application/json`
 

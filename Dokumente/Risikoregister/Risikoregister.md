@@ -284,7 +284,7 @@
             <p>Manueller Test<br/>Automatisierter Test<br/>Pentest<br/>Code Review (SAST)</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T11<br/>T12<br/>T13<br/>T14</p>
         </td>
     </tr>
     </tbody>
@@ -382,7 +382,7 @@
             <p>Manueller Test<br>Code Review (SAST)</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T15<br/>T16</p>
         </td>
     </tr>
     </tbody>
@@ -486,7 +486,7 @@
             <p>Manueller Test<br/>Automatisierter Test<br/>Code Review (SAST)</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T17<br/>T18<br/>T19</p>
         </td>
     </tr>
     </tbody>
@@ -576,12 +576,15 @@
 			</p>
         </td>
         <td>
-            Automatisierter Test<br/> 
-            Pentest<br/> 
-            Design Review
+            <p>
+                Automatisierter Test<br/> 
+                Pentest<br/>
+                Code Review<br/>
+                Design Review
+            </p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T20<br>T21<br>T22<br>T23</p>
         </td>
     </tr>
     </tbody>
@@ -679,7 +682,7 @@
             Code Review
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T24<br>T25</p>
         </td>
     </tr>
     </tbody>
@@ -776,7 +779,7 @@
             <p>Manueller Test</p>
         </td>
         <td>
-            <p></p>
+            <p>T26</p>
         </td>
     </tr>
     </tbody>
@@ -866,10 +869,10 @@
             </p>
         </td>
         <td>
-            <p>Manueller Test<br/> Automatisierter Test</p>
+            <p>Manueller Test<p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T27</p>
         </td>
     </tr>
     </tbody>
@@ -962,7 +965,7 @@
             <p>Manueller Test</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T28</p>
         </td>
     </tr>
     </tbody>
@@ -1058,7 +1061,7 @@
             <p>Manueller Test<br>Design Review<br>Code Review</p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T29<br>T30<br>T31</p>
         </td>
     </tr>
     </tbody>
@@ -1147,7 +1150,7 @@
     </tr>
     <tr>
         <td colspan="4">
-            <p>n/a</p>
+            <p>„Principle of least privilege“ wird angewendet: Durch die Aufteilung der Anwendung in einzelne Dienste wird der Kreis der privilegierten Benutzer auf die Administratoren des Authentifizierungsdienstes reduziert.</p>
         </td>
         <td>
             <p>n/a</p>
@@ -1188,7 +1191,7 @@
             <p>&nbsp;R13</p>
         </td>
         <td>
-            <p>Eine Person, die kein Arzt ist, gibt vor, ein Arzt zu sein.</p>
+            <p>Eine Person, gibt vor, eine andere Person zu sein.</p>
         </td>
         <td>
             <p>Mittel</p>
@@ -1210,7 +1213,7 @@
     </tr>
     <tr>
         <td colspan="6">
-            <p>Eine Person gibt sich als Arzt aus, um sich so das Vertrauen von anderen Benutzern erschleichen und sie zum Austausch der Patientendaten animieren.</p>
+            <p>Eine Person gibt sich als Arzt oder anderer Benutzer aus, um sich so das Vertrauen von anderen Benutzern erschleichen und sie zum Austausch der Patientendaten animieren.</p>
         </td>
     </tr>
     <tr>
@@ -1254,7 +1257,7 @@
             </p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T32<br>T33</p>
         </td>
     </tr>
     </tbody>
@@ -1352,7 +1355,7 @@
             </p>
         </td>
         <td>
-            <p>[TId]</p>
+            <p>T33</p>
         </td>
     </tr>
     </tbody>

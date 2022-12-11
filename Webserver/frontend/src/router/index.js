@@ -11,23 +11,16 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: () => import('../views/TestView.vue')
-  },
-  {
     path: '/Anmeldung',
     name: 'Anmeldung',
-    component: () => import('../views/AnmeldungView.vue')
+    component: () => import('../views/AnmeldungView.vue'),
+    meta: {requiresAuth: true},
   },
+  {
+    path:'*',
+    name:'notfound',
+    redirect:'/Anmeldung'
+  }
 ]
 
 const router = new VueRouter({
@@ -36,4 +29,11 @@ const router = new VueRouter({
   routes
 })
 
+// router.beforeEach(async(to)=>{
+//   if(to.name !== 'Anmeldung' && !isAuthenticated){
+//     return{name:'Anmeldung'}
+//   }
+// })
+
 export default router
+

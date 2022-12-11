@@ -10,7 +10,7 @@
                       </v-toolbar>
                       <v-card-text>
                       <form ref="form" @submit.prevent="isRegister ? register() : login()">
-                             <v-text-field
+                             <v-text-field  v-if="isRegister"
                                v-model="Benutzername"
                                name="Benutzername"
                                label="Benutzername"
@@ -21,7 +21,7 @@
                                :rules="rules.required"
                             ></v-text-field>
 
-                            <v-text-field v-if="isRegister"
+                            <v-text-field
                                v-model="Email"
                                name="Email"
                                label="Email"
@@ -31,28 +31,6 @@
                                color="light grey"
                                :rules="(emailRules,rules.required)"
                                
-                            ></v-text-field>
-
-                            <v-text-field v-if="isRegister"
-                               v-model="Vorname"
-                               name="Vorname"
-                               label="Vorname"
-                               type="text"
-                               placeholder="Vorname"
-                               required
-                               color="light grey"
-                               :rules="rules.required"
-                            ></v-text-field>
-
-                            <v-text-field v-if="isRegister"
-                               v-model="Nachname"
-                               name="Nachname"
-                               label="Nachname"
-                               type="text"
-                               placeholder="Nachname"
-                               required
-                               color="light grey"
-                               :rules="rules.required"
                             ></v-text-field>
 
                             <v-text-field
@@ -66,13 +44,13 @@
                                :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
                                  @click:append="() => (value = !value)"
                                  :type="value ? 'password' : 'text'"
-                                 :rules="[rules.password,rules.required]"
+                                 :rules="(rules.password,rules.required)"
                                  @input="_=>userPassword=_" 
                             ></v-text-field>
  
                             <v-text-field v-if="isRegister"
-                               v-model="Passwortbestätigen"
-                               name="Passwort bestätigen"
+                               v-model="PasswortBestätigen"
+                               name="PasswortBestätigen"
                                label="Passwort bestätigen"
                                type="password"
                                placeholder="Passwort bestätigen"
@@ -80,11 +58,13 @@
                                :rules="rules.required"
                                color="light grey"
                             ></v-text-field>
-
+                            <div class="blue--text" v-if="isMailsent">
+                              Der Benutzer wurde erfolgreich registriert. Bitte überprüfen Sie Ihre E-Mail und bestätigen Sie die Registrierung durch Klicken auf den Link in der E-Mail.
+                            </div>
 
                             <div class="red--text"> {{errorMessage}}</div>
 
-                            <v-btn type="submit" class="mt-4" color="light grey" href="./"> {{isRegister ? "Registrieren" :" Anmelden"}} </v-btn>
+                            <v-btn type="submit" class="mt-4" color="light grey"> {{isRegister ? "Registrieren" :" Anmelden"}} </v-btn>
                             <br>
                             <div class="grey--text mt-4">
                               oder
@@ -111,8 +91,11 @@
      return {
        Benutzername: "",
        Passwort: "",
-       confirmPasswort: "",
+       Email: "",
+       PasswortBestätigen: "",
+       emailRules: "",
        isRegister : false,
+       isMailsent: false,
        errorMessage: "",
        valid:true,
        value:true,
@@ -131,14 +114,79 @@
    },
    methods: {
      login() {
-       const { Benutzername } = this;
-       console.log(Benutzername + "logged in")
-     },
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            myHeaders.append("Accept", "application/json");
+            
+            var raw = JSON.stringify({
+            "email": this.Email,
+            "password": this.Passwort
+            });
+            console.log(raw)
+
+            var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+            };
+
+            fetch("http://127.0.0.1/auth/login/", requestOptions)
+            .then(response => {
+               if(response.status>=200 && response.status<300){
+                  this.isRegister = false;
+                  this.isMailsent = true;
+               }
+               else{
+                  this.errorMessage="Es ist ein Fehler aufgetreten"
+                  response.json().then((json)=>{
+                     this.errorMessage = json.detail
+                     console.log(json.detail)
+                  })
+                  
+                  .catch(error => console.log(error));
+               }
+            })
+            .catch(error => console.log(error));
+        },
+
      register() {
-        if(this.Passwort == this.confirmPasswort){
-           this.isRegister = false;
-           this.errorMessage = "";
-           this.$refs.form.reset();
+        if(this.Passwort == this.PasswortBestätigen){
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            myHeaders.append("Accept", "application/json");
+            
+            var raw = JSON.stringify({
+            "username": this.Benutzername,
+            "email": this.Email,
+            "password": this.Passwort,
+            });
+
+            var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+            };
+
+            fetch("http://127.0.0.1/auth/register/", requestOptions)
+            // .then(response =>response.json())
+            .then(response => {
+               if(response.status>=200 && response.status<300){
+                  this.isRegister = false;
+                  this.isMailsent = true;
+               }
+               else{
+                  this.errorMessage="Es ist ein Fehler aufgetreten"
+                  response.json().then((json)=>{
+                     this.errorMessage = json.error
+                     console.log(json.error)
+                  })
+                  
+                  .catch(error => console.log(error));
+               }
+            })
+            .catch(error => console.log(error));
         }
         else {
           this.errorMessage = "Passwort stimmt nicht überein";

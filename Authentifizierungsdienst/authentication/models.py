@@ -62,10 +62,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         while not self.id:
-            newid = random.randbytes(5)
-            if not self.objects.filter(pk=newid).exists():
-                self.id = int.from_bytes(newid, "big")
-        super.save(*args, **kwargs)
+            newid = int.from_bytes(random.randbytes(5))
+            if not User.objects.filter(pk=newid).exists():
+                self.id = newid
+        super(User, self).save()
+
     def tokens(self):
         extra_data = {
             "user_name": self.username,

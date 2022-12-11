@@ -25,7 +25,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from .models import User
 from .utils import Util
 from .serializers import RegisterSerializer, EmailVerificationSerializer, LoginSerializer, \
-    ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer, LogoutSerializer, DeleteSerializer
+    ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer, LogoutSerializer, DeleteSerializer, ChangePasswordAPI
 
 # Django REST Framework imports
 from rest_framework import generics, status, views
@@ -232,7 +232,21 @@ class SetNewPasswordAPIView(generics.GenericAPIView):
     def patch(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)
+
+class ChangePasswordAPIView(generics.GenericAPIView):
+    """
+    Changes a password for a user
+    """
+    serializer_class = ChangePasswordAPI
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({'success': True, 'message': 'Password change success'}, status=status.HTTP_200_OK)
 
 
 class LogoutAPIView(generics.GenericAPIView):

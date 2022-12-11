@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
 # build the Docker image for the Authentifizierungsdienst
-cd Authentifizierungsdienst
-docker build -t patientenakte-auth_api .
-cd ..
+docker build -t patientenakte-auth_api ./Authentifizierungsdienst
 
 # build the Docker image for the Dateiverwaltungsdienst
-cd Dateiverwaltungsdienst
-docker build -t patientenakte-file_api .
-cd ..
+docker build -t patientenakte-file_api ./Dateiverwaltungsdienst
 
 # build the Docker image for the ssl enabled postgres database
 docker build -t ssl-enabled-postgres -f ./Konfiguration/Dockerfiles/ssl-enabled-postgres.txt ./Konfiguration/Dockerfiles
@@ -38,7 +34,4 @@ docker cp patientenakte-build-frontend:/frontend-project/frontend/dist ./Webserv
 docker container rm patientenakte-build-frontend
 
 # build the Docker image for the Webserver
-cd Webserver
-docker build -t patientenakte-bff .
-cd ..
-
+docker build -t patientenakte-bff ./Webserver

@@ -69,6 +69,8 @@ def handle_proxy_file_service(request: HttpRequest, path: str) -> HttpResponse:
     return File_SERVICE.handle(request, path)
 
 def handle_static(request: HttpRequest, path: str, **kwargs) -> HttpResponse:
-    if path.endswith("/") or path == "":
+    if path in settings.ROOT_EQUIVALENT_PATHS:
+        path = "index.html"
+    elif path.endswith("/") or path == "":
         path = path + "index.html"
     return serve(request, path=path, document_root=settings.STATIC_ROOT, **kwargs)

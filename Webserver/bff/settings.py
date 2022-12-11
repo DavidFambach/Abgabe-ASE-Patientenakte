@@ -90,3 +90,8 @@ STATIC_URL = "static/"
 STATIC_ROOT = "./static/"
 
 APPEND_SLASH = False
+
+ROOT_EQUIVALENT_PATHS = [
+    "login",
+    "return/google"
+]

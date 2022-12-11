@@ -12,7 +12,7 @@ class StorageUser(models.Model):
         constraints = []
     objects = models.Manager()
 
-    id = models.AutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     display_name = models.CharField(max_length=256)
     contacts = models.ManyToManyField("StorageUser")
 
@@ -25,7 +25,7 @@ class Directory(models.Model):
         constraints = []
     objects = models.Manager()
 
-    id = models.AutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=256)
     owner = models.ForeignKey("StorageUser", on_delete=models.CASCADE)
     parent = models.ForeignKey("Directory", on_delete=models.RESTRICT, blank=True, null=True)
@@ -51,7 +51,7 @@ class File(models.Model):
         constraints = []
     objects = models.Manager()
 
-    id = models.AutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=256)
     owner = models.ForeignKey("StorageUser", on_delete=models.CASCADE)
     parent_directory = models.ForeignKey("Directory", on_delete=models.RESTRICT)
@@ -76,7 +76,7 @@ class Share(models.Model):
         constraints = []
     objects = models.Manager()
 
-    id = models.AutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     issuer = models.ForeignKey("StorageUser", on_delete=models.CASCADE, related_name="shares_issued")
     subject = models.ForeignKey("StorageUser", on_delete=models.CASCADE, related_name="shares_received")
     target_file = models.ForeignKey("File", on_delete=models.CASCADE, blank=True, null=True)

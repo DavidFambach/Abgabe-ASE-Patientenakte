@@ -240,10 +240,15 @@ class ChangePasswordAPIView(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+        except TokenError:
+            return Response("Token is invalid or expired", status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
 
-        return Response({'success': True, 'message': 'Password change success'}, status=status.HTTP_200_OK)
+        return Response('Password change success', status=status.HTTP_200_OK)
 
 
 class LogoutAPIView(generics.GenericAPIView):

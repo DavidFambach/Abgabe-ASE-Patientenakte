@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from .models import User
 from django.contrib import auth
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_str
@@ -138,22 +138,29 @@ class ChangePasswordAPI(serializers.Serializer):
         min_length=6, max_length=68, write_only=True)
     token = serializers.CharField(
         min_length=1, write_only=True)
+    old_password = serializers.CharField(
+        min_length=6, max_length=68, write_only=True)
     user = User
 
     class Meta:
-        fields = ['password', 'token']
+        fields = ['password', 'old_password', 'token']
 
     def validate(self, attrs):
         self.token = RefreshToken(token=attrs.get('token'))
-        self.token.verify()
-
-        self.password = attrs.get('password')
-        password_validation(password=self.password, user=self.user)
-
         try:
-            self.user = User.objects.get(id=self.token.get("user_id"))
-        except Exception as e:
-            pass
+            self.token.verify()
+        except TokenError:
+            raise serializers.ValidationError("Token is invalid or expired")
+        self.password = attrs.get('password')
+        old_password = attrs.get('old_password')
+
+        self.user = User.objects.get(id=self.token.get("user_id"))
+        print(self.user.__str__())
+        self.user = auth.authenticate(email=self.user.__str__(), password=old_password)
+        print(self.user, not self.user)
+        if not self.user:
+            raise serializers.ValidationError("permissions denied")
+        password_validation(password=self.password, user=self.user)
 
         return self.token
 

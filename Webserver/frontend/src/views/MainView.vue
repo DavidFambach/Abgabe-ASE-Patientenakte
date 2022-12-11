@@ -4,7 +4,8 @@
 
     <manage-contacts-dialog ref="manageContactsDialog" :displayMessage="displayMessage"/>
     <manage-shares-dialog ref="manageSharesDialog" :displayMessage="displayMessage"/>
-    <custom-app-bar :openContactsDialog="() => $refs.manageContactsDialog.show()"
+    <main-navigation-bar :displayMessage="displayMessage"
+      :openContactsDialog="() => $refs.manageContactsDialog.show()"
       :openShareDialog="() => $refs.manageSharesDialog.show()" />
 
     <v-main class="grey lighten-3">
@@ -204,13 +205,14 @@
 
 <script>
   import ActionDialog from '@/components/ActionDialog.vue';
-  import CustomAppBar from '@/components/CustomAppBar.vue';
+  import MainNavigationBar from '@/components/MainNavigationBar.vue';
   import ManageContactsDialog from '@/components/ManageContactsDialog.vue';
   import ManageSharesDialog from '@/components/ManageSharesDialog.vue';
   import SnackbarHelper from '@/components/SnackbarHelper.vue';
   import * as fileservice from "@/fileservice";
-  import { readFileToBlob } from "@/util"
-  
+  import * as session from "@/session";
+  import { readFileToBlob } from "@/util";
+
   const FILE_ICONS = {
     "": "mdi-file-outline",
     "doc": "mdi-file-document-outline",
@@ -410,13 +412,20 @@
   }
 
   export default {
-    name: 'AboutView',
+    name: 'MainView',
     components: {
       ActionDialog,
-      CustomAppBar,
+      MainNavigationBar,
       ManageContactsDialog,
       ManageSharesDialog,
       SnackbarHelper
+    },
+    beforeRouteEnter(to, _from, next) {
+      if(!session.isLoggedIn()) {
+        next({name: "login"});
+        return;
+      }
+      next();
     },
     created() {
       this.displayMessage = displayMessage;
@@ -438,10 +447,10 @@
         ACTION_SHARE_FILE: ACTION_SHARE_FILE,
         ACTION_UPLOAD_FILE: ACTION_UPLOAD_FILE
       });
+      this.$watch(() => this.$route.params, () => this.initialize(), {immediate: true});
     },
     mounted() {
       snackbar = this.$refs.snackbar;
-      this.setActiveView(DISPLAY_MODE_OWN_FILES);
       this.dialogs.confirmation.dialog = this.$refs.confirmationDialog;
       this.dialogs.confirmDeleteDirectory.dialog = this.$refs.confirmationDialogDeleteDirectory;
       this.dialogs.uploadFileDialog.dialog = this.$refs.uploadFileDialog;
@@ -491,9 +500,12 @@
     }),
     computed: {},
     methods: {
-      setActiveView(displayMode) {
+      initialize() {
+        this.setActiveView(DISPLAY_MODE_OWN_FILES, true);
+      },
+      setActiveView(displayMode, force=false) {
 
-        if(activeDisplayMode === displayMode)
+        if(activeDisplayMode === displayMode && !force)
           return;
         activeDisplayMode = displayMode;
 
@@ -517,6 +529,7 @@
             children: []
           }
         ];
+
         this.ensureTreeOpenEntriesSync();
         this.displayedListEntriesOpen = [];
         setImmediate(() => {

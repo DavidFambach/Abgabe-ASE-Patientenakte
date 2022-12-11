@@ -208,8 +208,9 @@ class DeleteSerializer(serializers.Serializer):
 
     def save(self):
         try:
-            token = self.validated_data
-            user = User.objects.get(id=token.get('user_id'))
+            user = User.objects.get(id=self.token.get('user_id'))
             user.delete()
         except Exception as e:
             raise e
+
+        self.token.blacklist()

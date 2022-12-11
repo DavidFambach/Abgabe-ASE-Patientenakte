@@ -9,6 +9,7 @@ import jwt
 
 # Third party library imports
 import pika
+from django.db import IntegrityError
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 # Django imports
@@ -67,35 +68,31 @@ class RegisterView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
-        except ValidationError as serialize_exeption:
-            if "email" in serialize_exeption.args[0] and \
-                    serialize_exeption.args[0]["email"][0] == "user with this email already exists.":
-                # If an error occurs during serialization, this could be due to the fact that there is already an
-                # account with the same email address. In this case, the password should be taken from this request and
-                # a validation mail should be sent again.
-                try:
-                    user = User.objects.get(email=serializer.data["email"])
-                    # If the user has already been verified, a notice is returned and the registration process is
-                    # aborted.
-                    if user.is_verified:
-                        return Response("user is already verified", status=status.HTTP_200_OK)
+        except IntegrityError as serialize_exeption:
+            try:
+                user = User.objects.get(email=serializer.data["email"])
+                # If the user has already been verified, a notice is returned and the registration process is
+                # aborted.
+                if user.is_verified:
+                    return Response("user is already verified", status=status.HTTP_200_OK)
 
-                    # delete user and try again
-                    user.delete()
+                # delete user and try again
+                user.delete()
 
-                    serializer.is_valid(raise_exception=True)
-                    serializer.save()
-                except KeyError:
-                    # If it is not the case that a user registers with the same username and the same email address,
-                    # the exception from the serialization is raised here.
-                    return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
-                except ValidationError as serialize_exeption:
-                    return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
-                except Exception as e:
-                    logging.exception("Error while reregister user.")
-                    raise e
-            else:
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+            except KeyError:
+                # If it is not the case that a user registers with the same username and the same email address,
+                # the exception from the serialization is raised here.
                 return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
+            except ValidationError as serialize_exeption:
+                return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                logging.exception("Error while reregister user.")
+                raise e
+
+        except Exception as e:
+            raise e
 
         # Prepare the verification mail
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))

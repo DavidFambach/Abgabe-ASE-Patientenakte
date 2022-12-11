@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.password_validation import validate_password as password_validation
 from rest_framework import serializers
 
@@ -20,21 +22,24 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email', 'username', 'password']
 
     def validate(self, attrs):
-        username = attrs.get('username', '')
-        email = attrs.get('email', '')
-        password = attrs.get('password', '')
+        email = attrs.get('email')
+        username = attrs.get('username')
+        username_regex = r'[-\w.\s]+'
+        password = attrs.get('password')
+
+        if not re.fullmatch(username_regex, username):
+            raise serializers.ValidationError("The username should only contain  hyphens, alphanumeric characters, "
+                                              "underscores, periods and whitespace")
+
+        password_validation(password=password, user=User.objects.create_user_object(username, email, password))
+
         try:
-            password_validation(password=password,
-                                user=User.objects.create_user_object(username, email, password))
-        except Exception as e:
-            raise serializers.ValidationError("The password does not meet the guidelines.")
-
-
-    def validate_username(self, username):
-        if not username.isalnum():
-            raise serializers.ValidationError("The username should only contain alphanumeric characters.")
-
-
+            user = User.objects.get(email=email)
+            if not user.is_verified:
+                user.delete()
+        except:
+            pass
+        return attrs
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -124,6 +129,39 @@ class SetNewPasswordSerializer(serializers.Serializer):
             user.set_password(password)
             user.save()
             return user
+        except Exception as e:
+            raise e
+
+
+class ChangePasswordAPI(serializers.Serializer):
+    password = serializers.CharField(
+        min_length=6, max_length=68, write_only=True)
+    token = serializers.CharField(
+        min_length=1, write_only=True)
+    user = User
+
+    class Meta:
+        fields = ['password', 'token']
+
+    def validate(self, attrs):
+        self.token = RefreshToken(token=attrs.get('token'))
+        self.token.verify()
+
+        self.password = attrs.get('password')
+        password_validation(password=self.password, user=self.user)
+
+        try:
+            self.user = User.objects.get(id=self.token.get("user_id"))
+        except Exception as e:
+            pass
+
+        return self.token
+
+
+    def save(self):
+        try:
+            self.user.set_password(self.password)
+            self.user.save()
         except Exception as e:
             raise e
 

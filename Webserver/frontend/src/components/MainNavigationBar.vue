@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar app color="primary" flat>
+	<v-app-bar app fixed="top" elevate-on-scroll color="primary">
 		
 		<v-img class="shrink mr-2" width="40" alt="Logo"
 			transition="scale-transition" contain
@@ -65,7 +65,7 @@
 				dialogs.changePasswordDialog.newPasswordRepeated = '';
 			}">
 			<template v-slot:extra>
-				<v-text-field label="Altes Passwort" placeholder="Passwort" color="secondary"
+				<v-text-field label="Altes Passwort" placeholder="Passwort" type="password" color="secondary"
 					v-model="dialogs.changePasswordDialog.oldPassword"/>
 				<v-text-field key="textfieldPassword"
 					name="Passwort" label="Passwort"
@@ -152,7 +152,7 @@
 						showPassword: false,
 						rules: {
 							notEmpty: value => value == null || value === "" ? "Dieses Feld ist erforderlich" : true,
-							validPassword: value => typeof(value) !== "string" || value.match(/^.{6,}$/) == null ? "Das Passwort muss mindestens 6 Zeichen lang sein" : true,
+							validPassword: value => typeof(value) !== "string" || value.match(/^.{10,}$/) == null ? "Das Passwort muss mindestens 10 Zeichen lang sein" : true,
 							matchesPassword: value => value !== this.dialogs.changePasswordDialog.newPassword ? "Die Passwörter stimmen nicht überein" : true
 						}
 					},
@@ -170,7 +170,9 @@
 		},
 		methods: {
 			changePassword() {
-				this.displayMessage({userMessage: "Diese Operation wird noch nicht unterstützt."});
+				authservice.changePassword(session.getRefreshToken(), this.dialogs.changePasswordDialog.oldPassword, this.dialogs.changePasswordDialog.newPassword)
+					.then(() => this.displayMessage({userMessage: "Passwort erfolgreich geändert.", icon: "mdi-information", color: "green"}))
+					.catch(err => this.displayMessage({message: "Failed to change password"}, err));
 			},
 			deleteUser() {
 				authservice.deleteUser(session.getRefreshToken())

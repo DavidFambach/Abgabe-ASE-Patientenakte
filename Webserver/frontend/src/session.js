@@ -7,6 +7,7 @@ const SESSION_STORAGE_ACCESS_TOKEN_KEY = "session-user-token";
 const SESSION_STORAGE_REFRESH_TOKEN_KEY = "session-user-token-refresh";
 
 const SESSION_STORAGE_EMAIL_KEY = "session-user-email";
+const SESSION_STORAGE_GOOGLE_OAUTH_INFO = "session-google-oauth-info";
 
 let USER_ID = null;
 let ACCESS_TOKEN = null;
@@ -59,7 +60,7 @@ export function storeToken() {
 }
 
 export function isLoggedIn(durationMillis=30000) {
-	return USER_ID != null && isTokenValid(REFRESH_TOKEN, durationMillis) || restoreToken();
+	return USER_ID != null && isTokenValid(REFRESH_TOKEN, durationMillis) || restoreToken() && isTokenValid(REFRESH_TOKEN, durationMillis);
 }
 
 export function restoreToken() {
@@ -93,8 +94,19 @@ export function setExtraUserEMail(email) {
 		sessionStorage.setItem(SESSION_STORAGE_EMAIL_KEY, email);
 }
 
+export function setExtraGoogleOAuthInfo(data) {
+	if(data == null)
+		sessionStorage.removeItem(SESSION_STORAGE_GOOGLE_OAUTH_INFO);
+	else
+		sessionStorage.setItem(SESSION_STORAGE_GOOGLE_OAUTH_INFO, data);
+}
+
 export function getExtraUserEMail() {
 	return sessionStorage.getItem(SESSION_STORAGE_EMAIL_KEY);
+}
+
+export function getExtraGoogleOAuthInfo() {
+	return sessionStorage.getItem(SESSION_STORAGE_GOOGLE_OAUTH_INFO);
 }
 
 export async function getCurrentAccessToken(durationMillis=30000) {

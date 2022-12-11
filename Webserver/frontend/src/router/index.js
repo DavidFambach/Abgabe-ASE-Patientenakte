@@ -1,9 +1,18 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import * as session from "@/session";
 
 Vue.use(VueRouter);
 
 const routes = [
+	{
+		path: "/return/google",
+		name: "return-google",
+		redirect: to => {
+			session.setExtraGoogleOAuthInfo(to.query.code);
+			return {name: "login"};
+		}
+	},
 	{
 		path: "/",
 		name: "main",

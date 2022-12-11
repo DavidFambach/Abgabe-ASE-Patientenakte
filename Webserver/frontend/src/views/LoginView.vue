@@ -1,6 +1,7 @@
 <template>
 	<v-app>
 		<v-main>
+
 			<v-container fluid fill-height>
 				<v-layout align-center justify-center>
 					<v-flex xs12 sm8 md6>
@@ -71,22 +72,36 @@
 					</v-flex>
 				</v-layout>
 			</v-container>
+
+			<action-dialog ref="registrationSuccessfulDialog" />
+
 		</v-main>
 	</v-app>
 </template>
  
 <script>
 
+	import ActionDialog from "@/components/ActionDialog.vue";
 	import * as authservice from "@/authservice";
 	import * as session from "@/session";
 
 	export default {
 		name: "LoginView",
+		components: {
+			ActionDialog
+		},
 		mounted() {
+			this.dialogs.registrationSuccessfulDialog.dialog = this.$refs.registrationSuccessfulDialog;
 			this.$refs.textfieldEMail.focus();
+			this.checkActiveAuth();
 		},
 		data() {
 			return {
+				dialogs: {
+					registrationSuccessfulDialog: {
+						dialog: null
+					}
+				},
 				password: "",
 				passwordRepeated: "",
 				showPassword: false,
@@ -101,12 +116,24 @@
 				rules: {
 					notEmpty: value => value == null || value === "" ? "Dieses Feld ist erforderlich" : true,
 					email: value => typeof(value) !== "string" || value.match(/^.+@.+\..+$/) == null ? "Bitte geben Sie eine gültige E-Mail-Adresse ein" : true,
-					validPassword: value => typeof(value) !== "string" || value.match(/^.{6,}$/) == null ? "Das Passwort muss mindestens 6 Zeichen lang sein" : true,
+					validPassword: value => typeof(value) !== "string" || value.match(/^.{10,}$/) == null ? "Das Passwort muss mindestens 10 Zeichen lang sein" : true,
 					matchesPassword: value => value !== this.password ? "Die Passwörter stimmen nicht überein" : true
 				}
 			};
 		},
 		methods: {
+			checkActiveAuth() {
+				const googleOAuthCode = session.getExtraGoogleOAuthInfo();
+				if(googleOAuthCode != null) {
+					session.setExtraGoogleOAuthInfo(null);
+					authservice.finalizeLogInWithGoogle(googleOAuthCode)
+						.then(this.handleLoginResponse)
+						.catch(err => {
+							console.log(err);
+							this.errorMessage = "Die Anmeldung mit Google ist fehlgeschlagen.";
+						});
+				}
+			},
 			switchMode() {
 				if(this.isRegister) {
 					this.isRegister = false;
@@ -118,13 +145,8 @@
 			},
 			logIn() {
 				authservice.logIn(this.user.email, this.password)
-					.then(loginResponse => {
-						if(!session.importToken(loginResponse.tokens.access, loginResponse.tokens.refresh)
-							|| !session.storeToken())
-							throw {status: 400, message: "Failed to handle login response"};
-						session.setExtraUserEMail(loginResponse.email);
-						this.$router.push({name: "main"});
-					}).catch(err => {
+					.then(this.handleLoginResponse)
+					.catch(err => {
 						console.log("Failed to log in:");
 						console.log(err);
 						if(err.status === 401) {
@@ -137,6 +159,7 @@
 					});
 			},
 			logInWithGoogle() {
+				authservice.logInWithGoogle().then(console.log).catch(console.log);
 				this.errorMessage = "Diese Operation wird noch nicht unterstützt.";
 			},
 			signUp() {
@@ -147,12 +170,16 @@
 					return;
 				const username = (this.user.title == null || this.user.title === "" ? "" : this.user.title + " ") + this.user.firstname + " " + this.user.lastname;
 				authservice.createUser(this.user.email, username, this.password)
-					.then(console.log)
+					.then(() => {
+						this.isRegister = false;
+						setImmediate((() => this.$refs.textfieldEMail.focus()).bind(this));
+						this.dialogs.registrationSuccessfulDialog.dialog.open("E-Mail bestätigen", "Wir haben eine Verifikations-E-Mail an Sie versendet, die einen Verifikationslink enthält. Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Link, um Ihr Konto zu aktivieren.", [{text: "Schließen", color: "green"}])
+					})
 					.catch(err => {
 						console.log(err);
 						if(err.status === 400 || err.body != null) {
-							if(err.body.password != null && typeof(err.body.password[0]) === "string") {
-								this.errorMessage = "Das verwendete Passwort ist nicht gültig: " + err.body.password[0];
+							if(err.body.error != null && typeof(err.body.error[0]) === "string") {
+								this.errorMessage = "Das verwendete Passwort ist nicht gültig: " + err.body.error[0];
 								return;
 							}
 							for(let key in Object.keys(err.body)) {
@@ -164,6 +191,13 @@
 						}
 						this.errorMessage = "Es ist ein unerwarteter Fehler bei der Registrierung aufgetreten.";
 					});
+			},
+			handleLoginResponse(loginResponse) {
+				if(!session.importToken(loginResponse.tokens.access, loginResponse.tokens.refresh)
+					|| !session.storeToken())
+					throw {status: 400, message: "Failed to handle login response"};
+				session.setExtraUserEMail(loginResponse.email);
+				this.$router.push({name: "main"});
 			}
 		}
 	};

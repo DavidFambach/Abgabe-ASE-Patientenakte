@@ -1,13 +1,14 @@
 <template>
-	<v-app>
+	<v-app class="overflow-hidden">
 
 		<manage-contacts-dialog ref="manageContactsDialog" :displayMessage="displayMessage"/>
 		<manage-shares-dialog ref="manageSharesDialog" :displayMessage="displayMessage"/>
-		<main-navigation-bar :displayMessage="displayMessage"
-		:openContactsDialog="() => $refs.manageContactsDialog.show()"
-		:openShareDialog="() => $refs.manageSharesDialog.show()" />
 
-		<v-main class="grey lighten-3">
+		<main-navigation-bar :displayMessage="displayMessage"
+			:openContactsDialog="() => $refs.manageContactsDialog.show()"
+			:openShareDialog="() => $refs.manageSharesDialog.show()" />
+
+		<v-main class="grey lighten-3 pt-2">
 			<v-row>
 				<v-col cols="2">
 					<v-sheet >
@@ -693,10 +694,10 @@
 				// entries have been changed
 				if(this.displayedListEntriesOpenChanged) {
 					try {
-					this.$refs.fileTree.emitOpen();
+						this.$refs.fileTree.emitOpen();
 					} catch(err) {
-					console.log("Failed to force tree sync")
-					console.log(err);
+						console.log("Failed to force tree sync")
+						console.log(err);
 					}
 					this.displayedListEntriesOpenChanged = false;
 				}

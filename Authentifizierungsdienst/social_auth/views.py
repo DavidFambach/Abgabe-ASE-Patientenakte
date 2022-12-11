@@ -21,7 +21,9 @@ class GoogleSocialAuthView(GenericAPIView):
 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        data = ((serializer.validated_data)['auth_token'])
+        data = serializer.validated_data
+        if serializer.validated_data == {'error': 'invalid_grant', 'error_description': 'Bad Request'}:
+            return Response(serializer.validated_data, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_200_OK)
 
 class GoogleClientIDView(GenericAPIView):

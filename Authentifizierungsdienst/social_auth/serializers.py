@@ -20,7 +20,6 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         payload = urlencode({'code': code,
                              'redirect_uri': redirect_uri,
                              'client_id': os.getenv("GOOGLE_CLIENT_ID"),
-                             'client_secret': os.getenv("GOOGLE_CLIENT_ID"),
                              'client_secret': os.getenv("SOCIAL_SECRET"),
                              'grant_type': 'authorization_code'})
         headers = {
@@ -32,6 +31,7 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         if response.json() == {'error': 'invalid_grant', 'error_description': 'Bad Request'}:
             return {'error': 'invalid_grant', 'error_description': 'Bad Request'}
 
+        print(response.json())
         id_token = response.json()["id_token"]
 
         user_data = google.Google.validate(id_token)

@@ -639,6 +639,8 @@
 								.catch(err => {
 									if(err.body != null && err.body.status === "duplicate_name")
 										displayMessage({message: "Failed to upload file \"" + f.name + "\"", userMessage: "Eine Datei mit dem Namen \"" + f.name + "\" existiert bereits."}, err);
+									else if(err.status === 413)
+										displayMessage({message: "Failed to upload file \"" + f.name + "\"", userMessage: "Die Datei ist zu groß, um dem Benutzerkonto hinzugefügt zu werden."}, err);
 									else
 										displayMessage({message: "Failed to upload file \"" + f.name + "\""}, err);
 									throw err;

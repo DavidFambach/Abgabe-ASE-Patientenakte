@@ -5,11 +5,14 @@ import re
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction
+from django.db import connection, transaction
 from django.http import HttpRequest, HttpResponse
 from typing import Callable, List, Union
 
 from .serializers import *
+
+LIMIT_SINGLE_FILE_SIZE = 128 * 1024 * 1024
+LIMIT_USER_TOTAL_SIZE = 1024 * 1024 * 1024
 
 STATUS_OK = ("ok", 200)
 STATUS_CREATED = ("ok", 201)
@@ -24,15 +27,13 @@ STATUS_UNMOVABLE_DIRECTORY = ("unmovable_directory", 422)
 STATUS_DIRECTORY_NOT_EMPTY = ("not_empty", 422)
 STATUS_INVALID_SHARE_SUBJECT = ("invalid_subject", 422)
 STATUS_INVALID_CONTACT = ("invalid_contact", 422)
-STATUS_QUOTA_EXCEEDED = ("quota_exceeded", 422)
+STATUS_QUOTA_EXCEEDED = ("quota_exceeded", 413)
 STAUTS_INTERNAL_ERROR = ("internal_error", 500)
 
 AUTHORIZATION_HEADER_NAME = "Authorization"
 
 CLAIM_USER_ID = "user_id"
 CLAIM_USER_NAME = "user_name"
-
-# TODO use randomized UUIDs rather than serial numbers for ids, because incremental IDs allow guessing the number of objects crated
 
 class AbstractView:
 
@@ -68,6 +69,8 @@ class AbstractView:
             return _response_for_json(STATUS_INVALID_SHARE_SUBJECT)
         except _ErrorInvalidContact:
             return _response_for_json(STATUS_INVALID_CONTACT)
+        except _ErrorQuotaExceeded:
+            return _response_for_json(STATUS_QUOTA_EXCEEDED)
         except _ErrorNotFound:
             return _response_for_json(STATUS_NOT_FOUND)
         except ObjectDoesNotExist:
@@ -119,9 +122,12 @@ class FileView(AbstractView):
         _verify_can_access(user_id, parent_directory, is_write=True)
         _verify_unique_names(file_name, parent_directory)
 
-        # TODO check quota
+        if len(request.body) > LIMIT_SINGLE_FILE_SIZE:
+            raise _ErrorQuotaExceeded()
 
-        file = File.objects.create(name=file_name, owner=parent_directory.owner, parent_directory=parent_directory, data=request.body)
+        with transaction.atomic():
+            _verify_quota(user_id, len(request.body))
+            file = File.objects.create(name=file_name, owner=parent_directory.owner, parent_directory=parent_directory, data=request.body)
 
         return _response_for_json(STATUS_OK, file=serialize_file(file))
 
@@ -140,24 +146,25 @@ class FileView(AbstractView):
         file = File.objects.get(id=file_id)
         _verify_can_access(user_id, file, is_write=True)
 
-        if file_name is not None or parent_directory_id is not None:
-            current_dir = file.parent_directory
-            _verify_can_access(user_id, current_dir, is_write=True)
-            target_dir = current_dir
-            if parent_directory_id is not None:
-                target_dir = Directory.objects.get(id=parent_directory_id)
-                _verify_can_access(user_id, target_dir, is_write=True)
-                _verify_same_owner(file, current_dir, target_dir)
-                if current_dir != target_dir:
-                    file.parent_directory = target_dir
-            if file_name is not None:
-                file.name = file_name
-            _verify_unique_names(file, target_dir)
-        if write_body:
-            # TODO verify quota
-            file.data = request.body
+        with transaction.atomic():
+            if file_name is not None or parent_directory_id is not None:
+                current_dir = file.parent_directory
+                _verify_can_access(user_id, current_dir, is_write=True)
+                target_dir = current_dir
+                if parent_directory_id is not None:
+                    target_dir = Directory.objects.get(id=parent_directory_id)
+                    _verify_can_access(user_id, target_dir, is_write=True)
+                    _verify_same_owner(file, current_dir, target_dir)
+                    if current_dir != target_dir:
+                        file.parent_directory = target_dir
+                if file_name is not None:
+                    file.name = file_name
+                _verify_unique_names(file, target_dir)
+            if write_body:
+                _verify_quota(user_id, len(request.body), file.id)
+                file.data = request.body
 
-        file.save()
+            file.save()
 
         return _response_for_json(STATUS_OK, file=serialize_file(file))
 
@@ -219,22 +226,24 @@ class DirectoryView(AbstractView):
         directory = Directory.objects.get(id=directory_id)
         _verify_can_access(user_id, directory, is_write=True)
 
-        if directory_name is not None or parent_directory_id is not None:
-            current_dir = directory.parent
-            _verify_can_access(user_id, current_dir, is_write=True)
-            target_dir = current_dir
-            if parent_directory_id is not None:
-                target_dir = Directory.objects.get(id=parent_directory_id)
-                _verify_can_access(user_id, target_dir, is_write=True)
-                _verify_movable(directory, target_dir)
-                _verify_same_owner(directory, current_dir, target_dir)
-                if current_dir != target_dir:
-                    directory.parent = target_dir
-            if directory_name is not None:
-                directory.name = directory_name
-            _verify_unique_names(directory, target_dir)
+        with transaction.atomic():
+            connection.cursor().execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
+            if directory_name is not None or parent_directory_id is not None:
+                current_dir = directory.parent
+                _verify_can_access(user_id, current_dir, is_write=True)
+                target_dir = current_dir
+                if parent_directory_id is not None:
+                    target_dir = Directory.objects.get(id=parent_directory_id)
+                    _verify_can_access(user_id, target_dir, is_write=True)
+                    _verify_movable(directory, target_dir)
+                    _verify_same_owner(directory, current_dir, target_dir)
+                    if current_dir != target_dir:
+                        directory.parent = target_dir
+                if directory_name is not None:
+                    directory.name = directory_name
+                _verify_unique_names(directory, target_dir)
 
-        directory.save()
+            directory.save()
 
         return _response_for_json(STATUS_OK, directory=serialize_directory(directory))
 
@@ -253,17 +262,17 @@ class DirectoryView(AbstractView):
         _verify_can_access(user_id, parent_directory, is_write=True)
         cascade = _get_query_param(request, "cascade", required=False, converter=_get_converter_for_enum([""])) == ""
         if cascade:
-            # TODO this needs to be guarded by a transaction
-            to_delete_list = [directory]
-            while len(to_delete_list) > 0:
-                to_delete = to_delete_list.pop()
-                children = to_delete.directory_set.all()
-                if len(children) == 0:
-                    for file in to_delete.file_set.all():
-                        file.delete()
-                    to_delete.delete()
-                else:
-                    to_delete_list += [to_delete] + list(children)
+            with transaction.atomic():
+                to_delete_list = [directory]
+                while len(to_delete_list) > 0:
+                    to_delete = to_delete_list.pop()
+                    children = to_delete.directory_set.all()
+                    if len(children) == 0:
+                        for file in to_delete.file_set.all():
+                            file.delete()
+                        to_delete.delete()
+                    else:
+                        to_delete_list += [to_delete] + list(children)
         else:
             _verify_empty(directory)
             directory.delete()
@@ -403,6 +412,9 @@ class _ErrorInvalidShareSubject(Exception):
 class _ErrorInvalidContact(Exception):
     pass
 
+class _ErrorQuotaExceeded(Exception):
+    pass
+
 def _get_kwarg(kwargs: dict[str, Any], name: str, required=True, default=None, converter: Callable[[str], Any]=lambda x: x) -> Any:
     if name in kwargs:
         try:
@@ -508,7 +520,6 @@ def _verify_unique_names(to_check: Union[str, File, Directory], dir: Directory) 
 def _verify_movable(to_check: Directory, target_dir: Directory) -> None:
     if to_check.parent is None:
         raise _ErrorUnmovableDirectory()
-    # TODO if this check is not enforced by the database, this check needs to be guarded by a transaction
     while target_dir is not None:
         if to_check == target_dir:
             raise _ErrorCyclicDirectoryTree()
@@ -517,6 +528,19 @@ def _verify_movable(to_check: Directory, target_dir: Directory) -> None:
 def _verify_empty(to_check: Directory):
     if len(to_check.file_set.all()) > 0 or len(to_check.directory_set.all()) > 0:
         raise _ErrorDirectoryNotEmpty()
+
+def _verify_quota(user_id: int, upload_size: int, excluded_file_id: Union[int, None]=None) -> None:
+    with connection.cursor() as c:
+        if excluded_file_id is None:
+            c.execute("SELECT COALESCE(SUM(LENGTH(data)), 0) AS sum FROM \"File\" WHERE owner_id = %s", [user_id])
+        else:
+            c.execute("SELECT COALESCE(SUM(LENGTH(data)), 0) AS sum FROM \"File\" WHERE owner_id = %s AND id <> %s", [user_id, excluded_file_id])
+        size_response = c.fetchone()
+        if size_response is None:
+            raise _ErrorQuotaExceeded()
+        size = size_response[0]
+    if size + upload_size > LIMIT_USER_TOTAL_SIZE:
+        raise _ErrorQuotaExceeded()
 
 def _response_for_json(status: [str, int], **kwargs) -> HttpResponse:
     return _create_json_response({

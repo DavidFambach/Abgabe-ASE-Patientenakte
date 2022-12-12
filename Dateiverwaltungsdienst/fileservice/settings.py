@@ -141,3 +141,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 APPEND_SLASH = False
 
 SIMPLE_JWT = {"ALGORITHM": "HS256"}
+
+# Note: Handling large files in memory is non-advisable, because it makes the server
+# far more susceptible to DoS attacks, especially though slow uploads. Django does
+# provide a meacanism to save large requests to a file instead. However, the file
+# service currently saves the user data within the relational db using the Django
+# model system (rather than using model FileFields), by writing a bytestring to a
+# model field. Doing so requires the file to be in memory anyway.
+# When changing to a more suitable file storage, large files should be streamed to
+# that storage rather than being loaded to memory and this setting should be
+# significantly reduced, to allow loading reasonably small files to memory only.
+DATA_UPLOAD_MAX_MEMORY_SIZE = 128 * 1024 * 1024

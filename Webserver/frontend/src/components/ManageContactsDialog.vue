@@ -165,7 +165,13 @@
             deleteContact(contact) {
                 if(!this.contacts.map(c => c.id).includes(contact.id))
                     return;
-                fileservice.removeContact(contact.id)
+				fileservice.getUserInfo()
+					.then(async userinfoResponse => {
+						await Promise.all(userinfoResponse.userinfo.ownShares
+							.filter(share => share.subject.id === contact.id)
+							.map(share => fileservice.deleteShare(share.id)
+						));
+					}).then(() => fileservice.removeContact(contact.id))
                     .then(() => {
                         const index = this.contacts.map(c => c.id).indexOf(contact.id);
                         if(index >= 0)

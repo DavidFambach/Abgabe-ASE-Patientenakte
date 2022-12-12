@@ -10,12 +10,10 @@ Parameter:
  - email: Die Emailadresse, die zur Authentifizierung verwendet wird.
  - password: Das Passwort, das zur Authentifizierung verwendet wird.
 
-Falls die Aktion erfolgreich ist, enthält die Antwort den Inhalt der angefragten Datei.
-
 Antwortformat:
 ``` json
 {
-    "username": <username>,
+	"username": <username>,
 	"email": <email>
 }
 ```
@@ -32,11 +30,11 @@ Parameter:
 Antwortformat:
 ``` json
 {
-    "email": <Emailadresse>,
-    "tokens": {
-        "refresh": <Refresh Token>,
-        "access": <Access Token>
-    }
+	"email": <Emailadresse>,
+	"tokens": {
+		"refresh": <Refresh Token>,
+		"access": <Access Token>
+	}
 }
 ```
 
@@ -51,12 +49,10 @@ Parameter:
 Antwortformat:
 ``` json
 {
-    "success": true,
-    "message": "Loged out successfully"
+	"success": true,
+	"message": "Loged out successfully"
 }
 ```
-
-Dabei ist Besitzer-ID die ID des Dateibesitzers und Besitzer-Anzeigename der Anzeigename des Besitzers. Der Schlüssel `file` ist nur vorhanden, wenn die Aktion erfolgreich war.
 
 ## Operation GET /email-verify/?token=\<token\>
 Wird beim Abschliesen der Registrierung, zur Validierung der Emailadresse aufgerufen.
@@ -71,7 +67,7 @@ Antwortformat:
 ```
 
 ## Operation POST /password-change/
-Ändert das Password auf den im Anfragekörper enthaltenen Wert. Die Anfrage ist nur dann gültig, wenn der Token valide und das alte Kennwort korrekt ist. 
+Ändert das Passwort auf den im Anfragekörper enthaltenen Wert. Die Anfrage ist nur dann gültig, wenn der Token valide und das alte Kennwort korrekt ist. 
 
 Anfragetyp: `application/json`
 Antworttyp: `application/json`
@@ -79,13 +75,13 @@ Antworttyp: `application/json`
 Parameter:
 - password: Das neue Anmeldekennwort
 - token: Benutzerbezogener Refreshtoken im JWT Format.
-- old_password: Das bissher gültige Anmeldekennwort
+- old_password: Das bisher gültige Anmeldekennwort
 
 Antwortformat:
 ``` json
 {
-    "success": true,
-    "message": "Password change success"
+	"success": true,
+	"message": "Password change success"
 }
 ```
 
@@ -117,7 +113,7 @@ Parameter:
 Antwortformat:
 ``` json
 {
-    "result": "User was successfully deleted"
+	"result": "User was successfully deleted"
 }
 ```
 
@@ -133,15 +129,13 @@ Parameter:
 Antwortformat:
 ``` json
 {
-    "email": <Emailadresse>,
-    "tokens": {
-        "refresh": <Refresh Token>,
-        "access": <Access Token>
-    }
+	"email": <Emailadresse>,
+	"tokens": {
+		"refresh": <Refresh Token>,
+		"access": <Access Token>
+	}
 }
 ```
-
-Dabei ist Besitzer-ID die ID des Verzeichnisbesitzers und Besitzer-Anzeigename der Anzeigename des Besitzers. Der Schlüssel `directory` ist nur vorhanden, wenn die Aktion erfolgreich war.
 
 ## Operation GET /google/client-id
 Gibt die im Authentifizierungsdienst verwendete Google Client ID zurück.
@@ -150,7 +144,7 @@ Antworttyp: `application/json`
 
 Antwortformat:
 ``` json
-    <Client-ID>
+<Client-ID>
 ```
 
 Dabei ist Client-ID ein JSON-String.

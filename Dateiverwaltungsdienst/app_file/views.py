@@ -6,6 +6,7 @@ import re
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection, transaction
+from django.db.utils import DatabaseError
 from django.http import HttpRequest, HttpResponse
 from typing import Callable, List, Union
 
@@ -479,13 +480,19 @@ def _verify_authenticated(req: HttpRequest, user_id: int) -> (StorageUser, dict[
             logging.info("Encountered a valid token for user with ID %s which is missing the required claim \"%s\"" % (user_id, key))
             raise _ErrorUnauthorized()
 
-    with transaction.atomic():
+    try:
+        with transaction.atomic():
+            try:
+                user = StorageUser.objects.get(id=user_id)
+            except ObjectDoesNotExist:
+                user = StorageUser.objects.create(id=user_id, display_name=token[CLAIM_USER_NAME])
+                Directory.objects.create(name="root", owner=user, parent=None)
+                logging.info("Created new user with ID %s and display name \"%s\"" % (user_id, token[CLAIM_USER_NAME]))
+    except DatabaseError as db_error:
         try:
             user = StorageUser.objects.get(id=user_id)
         except ObjectDoesNotExist:
-            user = StorageUser.objects.create(id=user_id, display_name=token[CLAIM_USER_NAME])
-            Directory.objects.create(name="root", owner=user, parent=None)
-            logging.info("Created new user with ID %s and display name \"%s\"" % (user_id, token[CLAIM_USER_NAME]))
+            raise db_error
 
     return user, token
 

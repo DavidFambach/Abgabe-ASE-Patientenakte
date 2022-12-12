@@ -16,7 +16,8 @@ RUN set -x \
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && rm /etc/nginx/sites-enabled/default \
-	&& apt-get autopurge
+	&& apt-get autopurge \
+	&& rm -rf /var/lib/apt/lists/*
 COPY ./config/nginx-proxy.conf /etc/nginx/sites-enabled/proxy-redirect.conf
 # Need privileged execution to allow starting the nginx service. To reduce privileges of the Django server, the starup script needs to drop privileges selectively.
 CMD ["python", "./run.py"]

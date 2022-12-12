@@ -14,6 +14,11 @@ const routes = [
 		}
 	},
 	{
+		path: "/verify",
+		name: "verify",
+		redirect: () => ({name: "login"})
+	},
+	{
 		path: "/",
 		name: "main",
 		component: () => import("@/views/MainView.vue")

@@ -3,8 +3,7 @@ import logging
 from . import messaging
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-
-# TODO db constraints, e.g. for unique names, for ownership, for user-root-directory, unique issuer-subject-target-canwrite
+from random import randint
 
 class StorageUser(models.Model):
     class Meta:
@@ -25,10 +24,17 @@ class Directory(models.Model):
         constraints = []
     objects = models.Manager()
 
-    id = models.BigAutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True, blank=True)
     name = models.CharField(max_length=256)
     owner = models.ForeignKey("StorageUser", on_delete=models.CASCADE)
     parent = models.ForeignKey("Directory", on_delete=models.RESTRICT, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        while not self.id:
+            rnd_id = _create_random_id()
+            if not Directory.objects.filter(pk=rnd_id).exists():
+                self.id = rnd_id
+        super(Directory, self).save()
 
     def can_access(self, user_id: int, is_write: bool) -> bool:
         # The owner always has permissions
@@ -51,11 +57,18 @@ class File(models.Model):
         constraints = []
     objects = models.Manager()
 
-    id = models.BigAutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True, blank=True)
     name = models.CharField(max_length=256)
     owner = models.ForeignKey("StorageUser", on_delete=models.CASCADE)
     parent_directory = models.ForeignKey("Directory", on_delete=models.RESTRICT)
     data = models.BinaryField()
+
+    def save(self, *args, **kwargs):
+        while not self.id:
+            rnd_id = _create_random_id()
+            if not File.objects.filter(pk=rnd_id).exists():
+                self.id = rnd_id
+        super(File, self).save()
 
     def can_access(self, user_id: int, is_write: bool) -> bool:
         # The owner always has permissions
@@ -76,12 +89,19 @@ class Share(models.Model):
         constraints = []
     objects = models.Manager()
 
-    id = models.BigAutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True, blank=True)
     issuer = models.ForeignKey("StorageUser", on_delete=models.CASCADE, related_name="shares_issued")
     subject = models.ForeignKey("StorageUser", on_delete=models.CASCADE, related_name="shares_received")
     target_file = models.ForeignKey("File", on_delete=models.CASCADE, blank=True, null=True)
     target_directory = models.ForeignKey("Directory", on_delete=models.CASCADE, blank=True, null=True)
     can_write = models.BooleanField()
+
+    def save(self, *args, **kwargs):
+        while not self.id:
+            rnd_id = _create_random_id()
+            if not Share.objects.filter(pk=rnd_id).exists():
+                self.id = rnd_id
+        super(Share, self).save()
 
     def can_access(self, user_id: int, is_write: bool) -> bool:
         if self.issuer.id == user_id:
@@ -89,7 +109,6 @@ class Share(models.Model):
         if not is_write and self.subject.id == user_id:
             return True
         return False
-
 
 def _delete_user(user_id: int) -> None:
     try:
@@ -99,3 +118,6 @@ def _delete_user(user_id: int) -> None:
     user.delete()
     logging.info("Successfully deleted user with ID %s" % user_id)
 messaging.DELETE_USER_CALLBACK = _delete_user
+
+def _create_random_id():
+    return randint(1, 9007199254740992)

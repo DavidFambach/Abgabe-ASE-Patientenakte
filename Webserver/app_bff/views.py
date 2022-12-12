@@ -10,7 +10,7 @@ from urllib3.util import Url
 
 ALLOWED_PROXY_METHODS = ["OPTIONS", "HEAD", "GET", "POST", "PUT", "DELETE"]
 CLIENT_TO_PROXY_HEADERS = ["authorization", "content-type"]
-PROXY_TO_CLIENT_HEADERS = ["content-type"]
+PROXY_TO_CLIENT_HEADERS = ["content-type", "location"]
 
 class _ProxyConfiguration:
     def __init__(self, scheme: str, host: str, port: int, path: str, ca_certificate_path: Union[str, None]):
@@ -28,7 +28,7 @@ class _ProxyConfiguration:
             url = Url(scheme=self.scheme, host=self.host, port=self.port, path=path, query=urlencode(request.GET))
             url = url.url
             headers = {header: value for header, value in request.headers.items() if header.lower() in CLIENT_TO_PROXY_HEADERS}
-            response = requests.request(method=request.method, url=url, headers=headers, data=request.body, verify=self.ca_certificate_path)
+            response = requests.request(method=request.method, url=url, headers=headers, data=request.body, allow_redirects=False, verify=self.ca_certificate_path)
             headers = {header: value for header, value in response.headers.items() if header.lower() in PROXY_TO_CLIENT_HEADERS}
             return HttpResponse(status=response.status_code, headers=headers, content=response.content)
         except Exception as e:

@@ -2,7 +2,9 @@ version: "3.1"
 
 services:
   auth_db:
-    image: ssl-enabled-postgres
+    image: patientenakte-ssl-enabled-postgres
+    container_name: patientenakte-auth-db
+    hostname: auth-db
     environment:
       - POSTGRES_DB=${AUTH_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${AUTH_SERVICE_POSTGRES_USERNAME}
@@ -15,7 +17,9 @@ services:
       - ./Konfiguration/TLS Zertifikate/authentication-db-cert.pem:/etc/postgresql/ssl/cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/authentication-db-key.pem:/etc/postgresql/ssl/key.pem:ro
   file_db:
-    image: ssl-enabled-postgres
+    image: patientenakte-ssl-enabled-postgres
+    container_name: patientenakte-file-db
+    hostname: file-db
     environment:
       - POSTGRES_DB=${FILE_SERVICE_POSTGRES_DATABASE}
       - POSTGRES_USER=${FILE_SERVICE_POSTGRES_USERNAME}
@@ -30,6 +34,8 @@ services:
   
   auth_api:
     image: patientenakte-auth_api
+    container_name: patientenakte-auth-api
+    hostname: auth-api
     depends_on:
       - auth_db
       - user_update_queue
@@ -63,6 +69,8 @@ services:
       - ./Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
   file_api:
     image: patientenakte-file_api
+    container_name: patientenakte-file-api
+    hostname: file-api
     depends_on:
       - file_db
       - user_update_queue
@@ -91,6 +99,8 @@ services:
       - ./Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
   bff:
     image: patientenakte-bff
+    container_name: patientenakte-bff
+    hostname: bff
     depends_on:
       - auth_api
       - file_api
@@ -130,6 +140,8 @@ services:
   
   user_update_queue:
     image: rabbitmq
+    container_name: patientenakte-user-update-queue
+    hostname: user-update-queue
     environment:
       - RABBITMQ_DEFAULT_USER=${USER_UPDATE_QUEUE_USERNAME}
       - RABBITMQ_DEFAULT_PASS=${USER_UPDATE_QUEUE_PASSWORD}

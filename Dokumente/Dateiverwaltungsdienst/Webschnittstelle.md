@@ -21,8 +21,44 @@ Antwortformat:
               },
               ...
 		],
-		"ownShares": [<ID einer eigenen Freigabe>, ...],
-		"receivedShares": [<ID einer erhaltenen Freigabe>, ...]
+		"ownShares": [
+			{
+				"id": <ID einer eigenen Freigabe>,
+				"issuer": {
+					"id": <Benutzer-ID des Freigabeerstellers>,
+					"displayName": "<Benutzer-Anzeigename des Freigabeerstellers>"
+				},
+				"subject": {
+					"id": <Betroffener-ID dieser Freigabe>,
+					"displayName": "<Betroffener-Anzeigename dieser Freigabe>"
+				},
+				"target": {
+					"type": "<Typ des Freigabeziels>",
+					"id": <ID des Freigabeziels>
+				},
+				"canWrite": <Schreibberechtigung der Freigabe>
+			},
+			...
+		],
+		"receivedShares": [
+			{
+				"id": <ID einer erhaltenen Freigabe>,
+				"issuer": {
+					"id": <Benutzer-ID des Freigabeerstellers>,
+					"displayName": "<Benutzer-Anzeigename des Freigabeerstellers>"
+				},
+				"subject": {
+					"id": <Betroffener-ID dieser Freigabe>,
+					"displayName": "<Betroffener-Anzeigename dieser Freigabe>"
+				},
+				"target": {
+					"type": "<Typ des Freigabeziels>",
+					"id": <ID des Freigabeziels>
+				},
+				"canWrite": <Schreibberechtigung der Freigabe>
+			},
+			...
+		]
 	}
 }
 ```
@@ -34,8 +70,8 @@ Dabei ist Status einer der folgenden Werte:
 
 Dabei ist Verzeichnis-ID die ID des Wurzelverzeichnisses der persönlichen Dateiablage des Benutzers, Kontakt-ID die Benutzer-ID eines Kontakts und Kontakt-Anzeigename der Anzeigename dieses Kontakts. Der Schlüssel `userinfo` ist nur vorhanden, wenn die Aktion erfolgreich war.
 DIe Liste `contacts` enthält einen Eintrag für jeden Kontakt des Benutzers. Die Reihenfolge der Einträge ist undefiniert.
-Die Liste `ownShares` enthält die IDs der vom Benutzer erstellten Freigaben. Die Reihenfolge der IDs ist undefiniert.
-DIe Liste `receivedShares` enthält die IDs der Freigaben, die andere Benutzer dem Benutzer gegenüber eingeräumt haben. Die Reihenfolge der IDs ist undefiniert.
+Die Liste `ownShares` enthält die vom Benutzer erstellten Freigaben. Die Reihenfolge der Einträge ist undefiniert.
+DIe Liste `receivedShares` enthält die Freigaben, die andere Benutzer dem Benutzer gegenüber eingeräumt haben. Die Reihenfolge der Einträge ist undefiniert.
 
 ## Operation GET /file/\<Datei-ID\>?user=\<Benutzer-ID\>
 Gibt den gespeicherten Dateiinhalt zurück.

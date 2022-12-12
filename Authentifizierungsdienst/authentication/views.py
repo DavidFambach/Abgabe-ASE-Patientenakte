@@ -102,7 +102,7 @@ class RegisterView(generics.GenericAPIView):
         token = RefreshToken.for_user(user).access_token
         token.set_exp(from_time=datetime.datetime.now(), lifetime=datetime.timedelta(hours=1))
         callbackurl = settings.ROOT_URI + reverse('email-verify')
-        absurl = 'https://' + callbackurl + "?token=" + str(token)
+        absurl = callbackurl + "?token=" + str(token)
         text_body = "Hi" + user.username + ",\n" + \
                     "You have registered an account on Patientenakte, before you can use your account you must " + \
                     "confirm that this is your email address by clicking here:\n" + \

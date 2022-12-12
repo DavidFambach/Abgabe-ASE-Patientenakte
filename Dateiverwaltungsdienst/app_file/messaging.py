@@ -95,8 +95,8 @@ def stop_listener():
 
 def _handle_message(_channel, _method, _properties, body):
     try:
-        if len(body) != 4:
-            raise ValueError("Expected 4 bytes, got %s" % len(body))
+        if len(body) != 8:
+            raise ValueError("Expected 8 bytes, got %s" % len(body))
         deleted_user_id = int.from_bytes(body, byteorder="big")
     except ValueError:
         logging.info("Encountered an invalid deleted user id. Ignoring that message")

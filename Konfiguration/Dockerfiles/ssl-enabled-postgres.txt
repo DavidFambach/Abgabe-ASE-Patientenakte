@@ -18,4 +18,5 @@ RUN pushd /usr/local/bin\
     && mkdir -p /etc/postgresql/ssl/ \
     && chown root:postgres /etc/postgresql/ssl/ \
     && chmod 770 /etc/postgresql/ssl/
+# Script will drop privileges
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh", "postgres", "-c", "ssl_cert_file=/etc/postgresql/ssl/cert.pem", "-c", "ssl_key_file=/etc/postgresql/ssl/key-private.pem", "-c", "ssl=on"]

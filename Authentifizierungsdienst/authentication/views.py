@@ -290,7 +290,7 @@ class DeleteAccount(generics.GenericAPIView):
 
         channel.exchange_declare(exchange=queue_settings["exchange_name"], exchange_type="fanout")
 
-        message = user_id.to_bytes(4, byteorder="big")
+        message = user_id.to_bytes(8, byteorder="big")
         channel.basic_publish(exchange=queue_settings["exchange_name"], routing_key="", body=message)
         connection.close()
         return Response({"result": "User was successfully deleted"})

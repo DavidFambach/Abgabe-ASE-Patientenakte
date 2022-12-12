@@ -10,6 +10,7 @@ import jwt
 # Third party library imports
 import pika
 from django.db import IntegrityError
+from django.shortcuts import redirect
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 # Django imports
@@ -98,7 +99,7 @@ class RegisterView(generics.GenericAPIView):
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
         user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
-        callbackurl = get_current_site(request).domain.removesuffix(":8000") + "/auth" + reverse('email-verify')
+        callbackurl = settings.ROOT_URI + reverse('email-verify')
         absurl = 'https://' + callbackurl + "?token=" + str(token)
         text_body = "Hi" + user.username + ",\n" + \
                     "You have registered an account on Patientenakte, before you can use your account you must " + \
@@ -123,7 +124,7 @@ class VerifyEmail(views.APIView):
         """
         Accepts a GET request with a token.
         The token is decoded to get the user's id.
-        The user is then verified and a success message is returned.
+        The user is then verified and redirected to frontend.
         """
         token = request.GET.get('token')
         try:
@@ -132,7 +133,8 @@ class VerifyEmail(views.APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            return Response({'success': 'Account is activated'}, status=status.HTTP_200_OK)
+
+            return redirect(settings.FRONTEND_REDIRECT_URI)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:

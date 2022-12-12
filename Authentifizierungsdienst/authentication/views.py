@@ -1,6 +1,7 @@
 """
 This module provides views related to user authentication.
 """
+import datetime
 # Standard library imports
 import os
 import logging
@@ -11,7 +12,7 @@ import jwt
 import pika
 from django.db import IntegrityError
 from django.shortcuts import redirect
-from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError, AccessToken
 
 # Django imports
 from django.template.loader import render_to_string
@@ -99,6 +100,7 @@ class RegisterView(generics.GenericAPIView):
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
         user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
+        token.set_exp(from_time=datetime.datetime.now(), lifetime=datetime.timedelta(hours=1))
         callbackurl = settings.ROOT_URI + reverse('email-verify')
         absurl = 'https://' + callbackurl + "?token=" + str(token)
         text_body = "Hi" + user.username + ",\n" + \

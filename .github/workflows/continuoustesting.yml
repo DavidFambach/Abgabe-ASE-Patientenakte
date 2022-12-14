@@ -70,8 +70,8 @@ jobs:
       - name: Test File API
         if: always()
         run: |
-          docker cp ./Dateiverwaltungsdienst/app_file/test patientenakte-auth-api:/code/app_file/test/
-          docker cp ./Dateiverwaltungsdienst/app_file/fixtures patientenakte-auth-api:/code/app_file/fixtures/
+          docker cp ./Dateiverwaltungsdienst/app_file/test patientenakte-file-api:/code/app_file/test/
+          docker cp ./Dateiverwaltungsdienst/app_file/fixtures patientenakte-file-api:/code/app_file/fixtures/
           docker exec patientenakte-file-api python manage.py test
 
       - name: Stop containers

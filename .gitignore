@@ -7,3 +7,7 @@
 /Authentifizierungsdienst/setup_environment.cmd
 /Authentifizierungsdienst/authentication/migrations/
 /Konfiguration/TLS Zertifikate/
+/Konfiguration/Signature Key Pair/
+/Authentifizierungsdienst/config/jwt-signature-rsa-private.pem
+/Authentifizierungsdienst/config/jwt-signature-rsa-public.pem
+/Dateiverwaltungsdienst/config/jwt-signature-rsa-public.pem

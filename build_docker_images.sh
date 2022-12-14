@@ -11,6 +11,8 @@ if [ $(docker image ls | grep "^patientenakte-auth_api " | wc -l) -gt 0 ]; then
 	echo Authentication service image is already present. Skipping build.
 else
 	echo Building authentication service
+	cp "./Konfiguration/Signature Key Pair/jwt-signature-rsa-private.pem" ./Authentifizierungsdienst/config/
+	cp "./Konfiguration/Signature Key Pair/jwt-signature-rsa-public.pem" ./Authentifizierungsdienst/config/
 	docker build -t patientenakte-auth_api ./Authentifizierungsdienst
 fi
 
@@ -18,6 +20,7 @@ if [ $(docker image ls | grep "^patientenakte-file_api " | wc -l) -gt 0 ]; then
 	echo File service image is already present. Skipping build.
 else
 	echo Building file service
+	cp "./Konfiguration/Signature Key Pair/jwt-signature-rsa-public.pem" ./Dateiverwaltungsdienst/config/
 	docker build -t patientenakte-file_api ./Dateiverwaltungsdienst
 fi
 

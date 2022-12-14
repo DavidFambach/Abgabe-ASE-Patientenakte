@@ -13,6 +13,8 @@ import os
 import datetime
 from pathlib import Path
 
+import datetime as datetime
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -118,7 +120,9 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=float(os.environ.get("ACCESS_TOKEN_LIFETIME", "1"))),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
-    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': open(BASE_DIR.__str__() + "/config/jwt-signature-rsa-private.pem", "rb").read(),
+    'VERIFYING_KEY': open(BASE_DIR.__str__() + "/config/jwt-signature-rsa-public.pem", "rb").read(),
+    'ALGORITHM': 'RS512',
 }
 
 if not DEBUG and SIMPLE_JWT.get("ACCESS_TOKEN_LIFETIME") > datetime.timedelta(minutes=3):

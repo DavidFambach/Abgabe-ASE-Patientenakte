@@ -140,7 +140,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 APPEND_SLASH = False
 
-SIMPLE_JWT = {"ALGORITHM": "HS256"}
+SIMPLE_JWT = {
+    "ALGORITHM": "RS512",
+    'VERIFYING_KEY': open(BASE_DIR.__str__() + "/config/jwt-signature-rsa-public.pem", "rb").read(),
+}
 
 # Note: Handling large files in memory is non-advisable, because it makes the server
 # far more susceptible to DoS attacks, especially though slow uploads. Django does

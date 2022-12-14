@@ -462,7 +462,7 @@ def _verify_authenticated(req: HttpRequest, user_id: int) -> (StorageUser, dict[
     token = regex.sub("\\1", token)
 
     try:
-        token = jwt.decode(token, settings.SECRET_KEY, settings.SIMPLE_JWT["ALGORITHM"])
+        token = jwt.decode(token, settings.SIMPLE_JWT["VERIFYING_KEY"], settings.SIMPLE_JWT["ALGORITHM"])
     except Exception as e:
         logging.info("An invalid token was supplied for user with ID %s" % user_id)
         raise _ErrorUnauthorized()

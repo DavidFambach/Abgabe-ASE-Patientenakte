@@ -160,7 +160,6 @@
 			},
 			logInWithGoogle() {
 				authservice.logInWithGoogle().then(console.log).catch(console.log);
-				this.errorMessage = "Diese Operation wird noch nicht unterstützt.";
 			},
 			signUp() {
 				if(this.user.email == null || this.user.email === ""

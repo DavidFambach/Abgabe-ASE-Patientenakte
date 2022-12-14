@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+import psycopg2.extensions
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
+# No CSRF protection is safe, because there are no endpoints witout authentciation and
+# authentication is performed using a Bearer token, which is non-automatic.
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -81,7 +85,8 @@ DATABASES = {
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
         "OPTIONS": {
             "sslmode": "verify-full",
-            "sslrootcert": os.environ["POSTGRES_SSL_CA_PATH"] if "POSTGRES_SSL_CA_PATH" in os.environ else os.path.join("/", "etc", "patientenakte", "ssl", "db-ca-cert.pem")
+            "sslrootcert": os.environ["POSTGRES_SSL_CA_PATH"] if "POSTGRES_SSL_CA_PATH" in os.environ else os.path.join("/", "etc", "patientenakte", "ssl", "db-ca-cert.pem"),
+            "isolation_level": psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ
         }
     }
 }

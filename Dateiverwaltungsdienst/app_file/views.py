@@ -2,15 +2,17 @@ import json
 import jwt
 import logging
 import re
+import time
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection, transaction
 from django.db.utils import DatabaseError
 from django.http import HttpRequest, HttpResponse
-from typing import Callable, List, Union
+from typing import Any, Callable, List, Union
 
-from .serializers import *
+from .models import StorageUser, File, Directory, Share
+from .serializers import serialize_user_info, serialize_storage_user, serialize_file, serialize_directory, serialize_share
 
 LIMIT_SINGLE_FILE_SIZE = 128 * 1024 * 1024
 LIMIT_USER_TOTAL_SIZE = 1024 * 1024 * 1024
@@ -35,21 +37,25 @@ AUTHORIZATION_HEADER_NAME = "Authorization"
 
 CLAIM_USER_ID = "user_id"
 CLAIM_USER_NAME = "user_name"
+CLAIM_ISSUED_AT = "iat"
+CLAIM_EXPIRES_AT = "exp"
+CLAIM_TOKEN_TYPE = "token_type"
+
+ACCESS_TOKEN_TYPE = "access"
 
 class AbstractView:
 
+    def __init__(self):
+        self.method_by_verb: dict[str, Callable[[HttpRequest, Any], HttpResponse]] = {
+            "GET": self._handle_get,
+            "POST": self._handle_post,
+            "PUT": self._handle_put,
+            "DELETE": self._handle_delete
+        }
+
     def handle(self, request: HttpRequest, **kwargs) -> HttpResponse:
         try:
-            if request.method == "GET":
-                return self._handle_get(request, **kwargs)
-            elif request.method == "POST":
-                return self._handle_post(request, **kwargs)
-            elif request.method == "PUT":
-                return self._handle_put(request, **kwargs)
-            elif request.method == "DELETE":
-                return self._handle_delete(request, **kwargs)
-            else:
-                raise _ErrorBadRequest("Unsupported method: %s" % request.method)
+            return self.method_by_verb.get(request.method, self._handle_unsupported_method)(request, **kwargs)
         except _ErrorBadRequest as e:
             return _response_for_json(STATUS_BAD_REQUEST, message=e.msg)
         except _ErrorUnauthorized:
@@ -76,17 +82,20 @@ class AbstractView:
             return _response_for_json(STATUS_NOT_FOUND)
         except ObjectDoesNotExist:
             return _response_for_json(STATUS_NOT_FOUND)
-        except BaseException as e:
+        except Exception as e:
             logging.exception(e)
             return _response_for_json(STAUTS_INTERNAL_ERROR)
 
-    def _handle_get(self, request: HttpRequest, **kwargs):
+    def _handle_unsupported_method(self, request):
+        raise _ErrorBadRequest("Unsupported method: %s" % request.method)
+
+    def _handle_get(self, request: HttpRequest, **kwargs) -> HttpResponse:
         raise _ErrorBadRequest("Unsupported method: GET")
-    def _handle_post(self, request: HttpRequest, **kwargs):
+    def _handle_post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         raise _ErrorBadRequest("Unsupported method: POST")
-    def _handle_put(self, request: HttpRequest, **kwargs):
+    def _handle_put(self, request: HttpRequest, **kwargs) -> HttpResponse:
         raise _ErrorBadRequest("Unsupported method: PUT")
-    def _handle_delete(self, request: HttpRequest, **kwargs):
+    def _handle_delete(self, request: HttpRequest, **kwargs) -> HttpResponse:
         raise _ErrorBadRequest("Unsupported method: DELETE")
 
 class UserInfoView(AbstractView):
@@ -106,10 +115,10 @@ class FileView(AbstractView):
         _verify_authenticated(request, user_id)
 
         file_id = _get_kwarg(kwargs, "file_id", converter=int)
-        file = File.objects.get(id=file_id)
-        _verify_can_access(user_id, file, is_write=False)
+        file_obj = File.objects.get(id=file_id)
+        _verify_can_access(user_id, file_obj, is_write=False)
 
-        return _response_for_binary(STATUS_OK, file.data)
+        return _response_for_binary(STATUS_OK, file_obj.data)
 
     def _handle_post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         _verify_kwargs(kwargs, [])
@@ -128,9 +137,9 @@ class FileView(AbstractView):
 
         with transaction.atomic():
             _verify_quota(user_id, len(request.body))
-            file = File.objects.create(name=file_name, owner=parent_directory.owner, parent_directory=parent_directory, data=request.body)
+            file_obj = File.objects.create(name=file_name, owner=parent_directory.owner, parent_directory=parent_directory, data=request.body)
 
-        return _response_for_json(STATUS_OK, file=serialize_file(file))
+        return _response_for_json(STATUS_OK, file=serialize_file(file_obj))
 
     def _handle_put(self, request: HttpRequest, **kwargs) -> HttpResponse:
         _verify_kwargs(kwargs, ["file_id"])
@@ -144,30 +153,30 @@ class FileView(AbstractView):
         if not write_body and len(request.body) > 0:
             raise _ErrorBadRequest("Cannot have a request body when not editing the file content")
         file_id = _get_kwarg(kwargs, "file_id", converter=int)
-        file = File.objects.get(id=file_id)
-        _verify_can_access(user_id, file, is_write=True)
+        file_obj = File.objects.get(id=file_id)
+        _verify_can_access(user_id, file_obj, is_write=True)
 
         with transaction.atomic():
             if file_name is not None or parent_directory_id is not None:
-                current_dir = file.parent_directory
+                current_dir = file_obj.parent_directory
                 _verify_can_access(user_id, current_dir, is_write=True)
                 target_dir = current_dir
                 if parent_directory_id is not None:
                     target_dir = Directory.objects.get(id=parent_directory_id)
                     _verify_can_access(user_id, target_dir, is_write=True)
-                    _verify_same_owner(file, current_dir, target_dir)
+                    _verify_same_owner(file_obj, current_dir, target_dir)
                     if current_dir != target_dir:
-                        file.parent_directory = target_dir
+                        file_obj.parent_directory = target_dir
                 if file_name is not None:
-                    file.name = file_name
-                _verify_unique_names(file, target_dir)
+                    file_obj.name = file_name
+                _verify_unique_names(file_obj, target_dir)
             if write_body:
-                _verify_quota(user_id, len(request.body), file.id)
-                file.data = request.body
+                _verify_quota(user_id, len(request.body), file_obj.id)
+                file_obj.data = request.body
 
-            file.save()
+            file_obj.save()
 
-        return _response_for_json(STATUS_OK, file=serialize_file(file))
+        return _response_for_json(STATUS_OK, file=serialize_file(file_obj))
 
     def _handle_delete(self, request: HttpRequest, **kwargs):
         _verify_kwargs(kwargs, ["file_id"])
@@ -176,12 +185,12 @@ class FileView(AbstractView):
         _verify_authenticated(request, user_id)
 
         file_id = _get_kwarg(kwargs, "file_id", converter=int)
-        file = File.objects.get(id=file_id)
-        _verify_can_access(user_id, file, is_write=True)
-        parent_directory = file.parent_directory
+        file_obj = File.objects.get(id=file_id)
+        _verify_can_access(user_id, file_obj, is_write=True)
+        parent_directory = file_obj.parent_directory
         _verify_can_access(user_id, parent_directory, is_write=True)
 
-        file.delete()
+        file_obj.delete()
 
         return _response_for_json(STATUS_OK)
 
@@ -228,7 +237,6 @@ class DirectoryView(AbstractView):
         _verify_can_access(user_id, directory, is_write=True)
 
         with transaction.atomic():
-            connection.cursor().execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
             if directory_name is not None or parent_directory_id is not None:
                 current_dir = directory.parent
                 _verify_can_access(user_id, current_dir, is_write=True)
@@ -444,7 +452,7 @@ def _get_query_param(req: HttpRequest, name: str, required=True, default=None, c
 
 def _get_converter_for_enum(accepted_values: List[str], converter: Callable[[str], Any]=lambda x: x) -> Callable[[str], Any]:
     def res(x: str):
-        if not x in accepted_values:
+        if x not in accepted_values:
             raise ValueError(str(x) + " is not a permitted value")
         return converter(x)
     return res
@@ -463,22 +471,31 @@ def _verify_authenticated(req: HttpRequest, user_id: int) -> (StorageUser, dict[
 
     try:
         token = jwt.decode(token, settings.SIMPLE_JWT["VERIFYING_KEY"], settings.SIMPLE_JWT["ALGORITHM"])
-    except Exception as e:
+    except Exception:
         logging.info("An invalid token was supplied for user with ID %s" % user_id)
         raise _ErrorUnauthorized()
 
-    claimed_user_id = token.get(CLAIM_USER_ID, None)
-    if claimed_user_id is None:
-        logging.info("Encountered a valid token with no user_id set")
-        raise _ErrorUnauthorized()
-    if claimed_user_id != user_id:
-        logging.info("User with ID %s attempted to authenticate as user with ID %s" % (claimed_user_id, user_id))
-        raise _ErrorUnauthorized()
-
-    for key in [CLAIM_USER_NAME]:
+    for key, expected_type in [(CLAIM_USER_ID, int), (CLAIM_USER_NAME, str), (CLAIM_ISSUED_AT, int), (CLAIM_EXPIRES_AT, int), (CLAIM_TOKEN_TYPE, str)]:
         if key not in token:
             logging.info("Encountered a valid token for user with ID %s which is missing the required claim \"%s\"" % (user_id, key))
             raise _ErrorUnauthorized()
+        if expected_type != type(token[key]):
+            logging.info("Encountered a valid token for user with ID %s which contains an invalid value for the required claim \"%s\"" % (user_id, key))
+            raise _ErrorUnauthorized()
+    claimed_user_id = token[CLAIM_USER_ID]
+    if claimed_user_id != user_id:
+        logging.info("User with ID %s attempted to authenticate as user with ID %s" % (claimed_user_id, user_id))
+        raise _ErrorUnauthorized()
+    now = int(time.time())
+    if now > token[CLAIM_EXPIRES_AT]:
+        logging.info("User with ID %s attempted to authenticate using an expired token" % user_id)
+        raise _ErrorUnauthorized()
+    if now < token[CLAIM_ISSUED_AT]:
+        logging.info("User with ID %s attempted to authenticate using a token issued in the future. This may be due to incorrect system time configuration" % user_id)
+        raise _ErrorUnauthorized()
+    if ACCESS_TOKEN_TYPE != token[CLAIM_TOKEN_TYPE]:
+        logging.info("User with ID %s attempted to authenticate using a token of a type other than \"%s\"" % (user_id, ACCESS_TOKEN_TYPE))
+        raise _ErrorUnauthorized()
 
     try:
         with transaction.atomic():
@@ -514,13 +531,13 @@ def _verify_same_owner(*args: Union[File, Directory]) -> None:
         if e.owner != owner:
             raise _ErrorTransferralRejected()
 
-def _verify_unique_names(to_check: Union[str, File, Directory], dir: Directory) -> None:
+def _verify_unique_names(to_check: Union[str, File, Directory], directory: Directory) -> None:
     if type(to_check) == str:
-        for e in [*dir.file_set.all(), *dir.directory_set.all()]:
+        for e in [*directory.file_set.all(), *directory.directory_set.all()]:
             if e.name == to_check:
                 raise _ErrorDuplicateName()
     else:
-        for e in [*dir.file_set.all(), *dir.directory_set.all()]:
+        for e in [*directory.file_set.all(), *directory.directory_set.all()]:
             if e != to_check and e.name == to_check.name:
                 raise _ErrorDuplicateName()
 

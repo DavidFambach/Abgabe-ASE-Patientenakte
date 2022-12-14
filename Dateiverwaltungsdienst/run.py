@@ -7,6 +7,7 @@ import time
 from threading import Thread
 
 APP_NAME = "app_file"
+MANAGEMENT_SCRIPT_NAME = "manage.py"
 WSGI_APP_NAME = "fileservice.wsgi:application"
 
 class RunnableThread(Thread):
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     nginx_thread.daemon = True
     nginx_thread.start()
 
-    _read_all(subprocess.Popen(["python", "manage.py", "makemigrations", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    _read_all(subprocess.Popen(["python", "manage.py", "migrate"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
-    _read_all(subprocess.Popen(["python", "manage.py", "migrate", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", MANAGEMENT_SCRIPT_NAME, "makemigrations", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", MANAGEMENT_SCRIPT_NAME, "migrate"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
+    _read_all(subprocess.Popen(["python", MANAGEMENT_SCRIPT_NAME, "migrate", APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))
     _read_all(subprocess.Popen(["python", "-m", "waitress", "--listen=*:8000", WSGI_APP_NAME], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT))

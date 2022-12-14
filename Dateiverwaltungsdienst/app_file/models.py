@@ -3,7 +3,10 @@ import logging
 from . import messaging
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from random import randint
+from secrets import SystemRandom
+from typing import Any
+
+RNG = SystemRandom()
 
 class StorageUser(models.Model):
     class Meta:
@@ -28,6 +31,9 @@ class Directory(models.Model):
     name = models.CharField(max_length=256)
     owner = models.ForeignKey("StorageUser", on_delete=models.CASCADE)
     parent = models.ForeignKey("Directory", on_delete=models.RESTRICT, blank=True, null=True)
+
+    file_set: Any
+    directory_set: Any
 
     def save(self, *args, **kwargs):
         while not self.id:
@@ -120,4 +126,4 @@ def _delete_user(user_id: int) -> None:
 messaging.DELETE_USER_CALLBACK = _delete_user
 
 def _create_random_id():
-    return randint(1, 9007199254740992)
+    return RNG.randint(1, 9007199254740992)

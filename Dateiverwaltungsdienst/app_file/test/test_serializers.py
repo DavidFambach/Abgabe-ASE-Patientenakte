@@ -96,7 +96,7 @@ SERIALIZED_USER_INFO_2 = json.loads("""
             "canWrite": false
         }
     ]
-}""");
+}""")
 
 SERIALIZED_USER_1 = json.loads("""
 {
@@ -107,7 +107,7 @@ SERIALIZED_USER_2 = json.loads("""
 {
     "id": 2,
     "displayName": "Testarzt"
-}""");
+}""")
 
 SERIALIZED_FILE_1 = json.loads("""
 {
@@ -475,29 +475,32 @@ class TestSerializers(TestCase):
     def preprocess_unordered_distinct_lists(self, unordered_lists, target):
         target = target.copy()
         for unordered_list in unordered_lists:
-            parent: Union[dict[str, Any], None] = None
-            key_in_parent: Union[str, None] = None
-            current: Any = target
-            found: bool = True
-            for next_key in unordered_list:
-                if next_key in current:
-                    parent = current
-                    key_in_parent = next_key
-                    current = current[next_key]
+            found, dict_element, parent_dict, key_in_parent = self._find_path_in_dict(target, unordered_list)
+            if found and isinstance(dict_element, list):
+                list_len = len(dict_element)
+                for index, element in enumerate(dict_element):
+                    dict_element[index] = _ForceHashable(element)
+                dict_element = set(dict_element)
+                self.assertEqual(list_len, len(dict_element), msg="Expected list to contain distinct elements only, but got duplicates")
+                if parent_dict is None:
+                    target = dict_element
                 else:
-                    found = False
-                    break
-            if found and isinstance(current, list):
-                list_len = len(current)
-                for index, element in enumerate(current):
-                    current[index] = _ForceHashable(element)
-                current = set(current)
-                self.assertEqual(list_len, len(current), msg="Expected list to contain distinct elements only, but got duplicates")
-                if parent is None:
-                    target = current
-                else:
-                    parent[key_in_parent] = current
+                    parent_dict[key_in_parent] = dict_element
         return target
+
+    @staticmethod
+    def _find_path_in_dict(target_dict, path):
+        parent_dict: Union[dict[str, Any], None] = None
+        key_in_parent: Union[str, None] = None
+        element: any = target_dict
+        for next_key in path:
+            if next_key in element:
+                parent_dict = element
+                key_in_parent = next_key
+                element = element[next_key]
+            else:
+                return False, None, None, None
+        return True, element, parent_dict, key_in_parent
 
 class _ForceHashable:
     def __init__(self, wrapped):

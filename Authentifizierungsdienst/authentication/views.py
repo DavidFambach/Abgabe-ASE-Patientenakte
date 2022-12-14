@@ -62,32 +62,8 @@ class RegisterView(generics.GenericAPIView):
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
-
-        except IntegrityError as serialize_exeption:
-            try:
-                user = User.objects.get(email=serializer.data["email"])
-                # If the user has already been verified, a notice is returned and the registration process is
-                # aborted.
-                if user.is_verified:
-                    return Response("user is already verified", status=status.HTTP_200_OK)
-
-                # delete user and try again
-                user.delete()
-
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
-            except KeyError:
-                # If it is not the case that a user registers with the same username and the same email address,
-                # the exception from the serialization is raised here.
-                return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
-            except ValidationError as serialize_exeption:
-                return Response(serialize_exeption.detail, status=status.HTTP_400_BAD_REQUEST)
-            except Exception as e:
-                logging.exception("Error while reregister user.")
-                raise e
-
-        except Exception as e:
-            raise e
+        except ValidationError as e:
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
         # Prepare the verification mail
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))

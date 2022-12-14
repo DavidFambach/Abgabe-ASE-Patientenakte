@@ -1,6 +1,7 @@
 import re
 
 from django.contrib.auth.password_validation import validate_password as password_validation
+from django.db import IntegrityError
 from rest_framework import serializers
 
 from .models import User
@@ -35,9 +36,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         try:
             user = User.objects.get(email=email)
-            if not user.is_verified:
+            if user.is_verified:
+                raise serializers.ValidationError("User is already verified")
+            else:
                 user.delete()
-        except:
+        except ValidationError as e:
+            raise e
+        except Exception as e:
             pass
         return attrs
 

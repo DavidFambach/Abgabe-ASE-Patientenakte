@@ -4,14 +4,12 @@ This module provides views related to user authentication.
 import datetime
 # Standard library imports
 import os
-import logging
 import jwt
 
 # Third party library imports
 import pika
-from django.db import IntegrityError
 from django.shortcuts import redirect
-from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from rest_framework_simplejwt.tokens import TokenError
 
 # Django imports
 from django.template.loader import render_to_string
@@ -94,8 +92,12 @@ class RegisterView(generics.GenericAPIView):
         # Prepare the verification mail
         user_data = dict((k, serializer.data[k]) for k in ("email", "username"))
         user = User.objects.get(email=user_data['email'])
-        token = RefreshToken.for_user(user).access_token
-        token.set_exp(from_time=datetime.datetime.now(), lifetime=datetime.timedelta(hours=1))
+        token_payload = {
+            "iat": datetime.datetime.now(),
+            "exp": datetime.datetime.now() + datetime.timedelta(hours=1),
+            "iss": user.id
+        }
+        token = jwt.encode(token_payload, settings.SECRET_KEY + str(user.id), "HS256")
         callbackurl = settings.ROOT_URI + reverse('email-verify')
         absurl = callbackurl + "?token=" + str(token)
         text_body = "Hi" + user.username + ",\n" + \
@@ -125,8 +127,9 @@ class VerifyEmail(views.APIView):
         """
         token = request.GET.get('token')
         try:
-            payload = jwt.decode(token, settings.SIMPLE_JWT["VERIFYING_KEY"], algorithms=settings.SIMPLE_JWT["ALGORITHM"])
-            user = User.objects.get(id=payload['user_id'])
+            id = jwt.decode(token, options={"verify_signature": False})["iss"]
+            payload = jwt.decode(token, settings.SECRET_KEY + str(id), "HS256")
+            user = User.objects.get(id=payload['iss'])
             if not user.is_verified:
                 user.is_verified = True
                 user.save()

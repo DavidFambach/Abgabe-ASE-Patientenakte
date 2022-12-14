@@ -29,6 +29,7 @@ jobs:
           echo "${{ secrets.FILE_DB_KEY }}" >> file-db-key.pem
           echo "${{ secrets.FILE_SERVICE_HTTPS_CERT }}" >> file-service-https-cert.pem
           echo "${{ secrets.FILE_SERVICE_HTTPS_KEY }}" >> file-service-https-key.pem
+          mkdir ../"Signature Key Pair"/
           cd ../"Signature Key Pair"/
           echo "${{ secrets.JWT_SIGNATURE_RSA_PRIVATE }}" >> jwt-signature-rsa-private.pem
           echo "${{ secrets.JWT_SIGNATURE_RSA_PUBLIC }}" >> jwt-signature-rsa-public.pem

@@ -69,6 +69,8 @@ services:
       - ./Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/authentication-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/authentication-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
+      - ./Konfiguration/Signature Key Pair/jwt-signature-rsa-private.pem:/code/config/jwt-signature-rsa-private.pem:ro
+      - ./Konfiguration/Signature Key Pair/jwt-signature-rsa-public.pem:/code/config/jwt-signature-rsa-public.pem:ro
   file_api:
     image: patientenakte-file_api
     container_name: patientenakte-file-api
@@ -99,6 +101,7 @@ services:
       - ./Konfiguration/TLS Zertifikate/ca-cert.pem:/etc/patientenakte/ssl/db-ca-cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/file-service-https-cert.pem:/etc/nginx/ssl/cert.pem:ro
       - ./Konfiguration/TLS Zertifikate/file-service-https-key.pem:/etc/nginx/ssl/key.pem:ro
+      - ./Konfiguration/Signature Key Pair/jwt-signature-rsa-public.pem:/code/config/jwt-signature-rsa-public.pem:ro
   bff:
     image: patientenakte-bff
     container_name: patientenakte-bff

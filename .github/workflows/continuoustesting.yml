@@ -29,7 +29,9 @@ jobs:
           echo "${{ secrets.FILE_DB_KEY }}" >> file-db-key.pem
           echo "${{ secrets.FILE_SERVICE_HTTPS_CERT }}" >> file-service-https-cert.pem
           echo "${{ secrets.FILE_SERVICE_HTTPS_KEY }}" >> file-service-https-key.pem
-
+          cd ../"Signature Key Pair"/
+          echo "${{ secrets.JWT_SIGNATURE_RSA_PRIVATE }}" >> jwt-signature-rsa-private.pem
+          echo "${{ secrets.JWT_SIGNATURE_RSA_PUBLIC }}" >> jwt-signature-rsa-public.pem
       - name: Build Container Images
         run: |
           chmod 700 ./build_docker_images.sh
@@ -46,6 +48,8 @@ jobs:
           AUTH_SERVICE_EMAIL_HOST_USER: ${{ secrets.AUTH_SERVICE_EMAIL_HOST_USER }}
           AUTH_SERVICE_EMAIL_HOST_PASSWORD: ${{ secrets.AUTH_SERVICE_EMAIL_HOST_PASSWORD }}
           AUTH_SERVICE_ACCESS_TOKEN_LIFETIME: ${{ secrets.AUTH_SERVICE_ACCESS_TOKEN_LIFETIME }}
+          AUTH_SERVICE_FRONTEND_REDIRECT_URI:  ${{ secrets.AUTH_SERVICE_FRONTEND_REDIRECT_URI }}
+          AUTH_SERVICE_ROOT_URI:  ${{ secrets.AUTH_SERVICE_ROOT_URI }}
           FILE_SERVICE_POSTGRES_DATABASE: ${{ secrets.FILE_SERVICE_POSTGRES_DATABASE }}
           FILE_SERVICE_POSTGRES_USERNAME: ${{ secrets.FILE_SERVICE_POSTGRES_USERNAME }}
           FILE_SERVICE_POSTGRES_PASSWORD: ${{ secrets.FILE_SERVICE_POSTGRES_PASSWORD }}

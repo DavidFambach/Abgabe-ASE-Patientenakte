@@ -33,6 +33,7 @@ jobs:
           cd ../"Signature Key Pair"/
           echo "${{ secrets.JWT_SIGNATURE_RSA_PRIVATE }}" >> jwt-signature-rsa-private.pem
           echo "${{ secrets.JWT_SIGNATURE_RSA_PUBLIC }}" >> jwt-signature-rsa-public.pem
+
       - name: Build Container Images
         run: |
           chmod 700 ./build_docker_images.sh
@@ -64,14 +65,14 @@ jobs:
         run: |
           docker cp ./Authentifizierungsdienst/authentication/test sbd-5-tinf20cs1-auth_api-1:/code/authentication/test/
           docker cp ./Authentifizierungsdienst/authentication/fixtures sbd-5-tinf20cs1-auth_api-1:/code/authentication/fixtures/
-          docker exec sbd-5-tinf20cs1-auth_api-1 python manage.py test
+          docker exec patientenakte-auth-api python manage.py test
 
       - name: Test File API
         if: always()
         run: |
           docker cp ./Dateiverwaltungsdienst/app_file/test sbd-5-tinf20cs1-file_api-1:/code/app_file/test/
           docker cp ./Dateiverwaltungsdienst/app_file/fixtures sbd-5-tinf20cs1-file_api-1:/code/app_file/fixtures/
-          docker exec sbd-5-tinf20cs1-file_api-1 python manage.py test
+          docker exec patientenakte-file-api python manage.py test
 
       - name: Stop containers
         if: always()

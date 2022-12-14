@@ -147,7 +147,6 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=${USER_UPDATE_QUEUE_USERNAME}
       - RABBITMQ_DEFAULT_PASS=${USER_UPDATE_QUEUE_PASSWORD}
-    hostname: user_update_queue
     networks:
       user_update_queue_net:
     restart: on-failure

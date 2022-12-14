@@ -12,7 +12,6 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
     redirect_uri = serializers.CharField()
 
     def validate(self, attrs):
-        print(attrs)
         redirect_uri = attrs.get('redirect_uri', '')
         code = attrs.get('code', '')
         url = "https://oauth2.googleapis.com/token"
@@ -31,7 +30,6 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         if response.json() == {'error': 'invalid_grant', 'error_description': 'Bad Request'}:
             return {'error': 'invalid_grant', 'error_description': 'Bad Request'}
 
-        print(response.json())
         id_token = response.json()["id_token"]
 
         user_data = google.Google.validate(id_token)
@@ -53,5 +51,4 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
 
         _validated_data = register_social_user(
             provider=provider, user_id=user_id, email=email, name=name)
-        print(_validated_data)
         return _validated_data

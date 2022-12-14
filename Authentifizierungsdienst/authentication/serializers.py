@@ -121,9 +121,7 @@ class ChangePasswordAPI(serializers.Serializer):
         old_password = attrs.get('old_password')
 
         self.user = User.objects.get(id=self.token.get("user_id"))
-        print(self.user.__str__())
         self.user = auth.authenticate(email=self.user.__str__(), password=old_password)
-        print(self.user, not self.user)
         if not self.user:
             raise serializers.ValidationError("permissions denied")
         password_validation(password=self.password, user=self.user)

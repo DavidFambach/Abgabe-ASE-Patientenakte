@@ -113,7 +113,7 @@ class VerifyEmail(views.APIView):
             return redirect(settings.FRONTEND_REDIRECT_URI)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
-        except jwt.exceptions.DecodeError:
+        except Exception:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -144,6 +144,9 @@ class ChangePasswordAPIView(generics.GenericAPIView):
         try:
             serializer.is_valid(raise_exception=True)
         except ValidationError as e:
+            if e.args[0].__str__() == "{'error': [ErrorDetail(string='permissions denied', code='invalid')]}" or \
+                    e.args[0].__str__() == "{'error': [ErrorDetail(string='permissions denied', code='invalid')]}":
+                return Response(e.detail, status=status.HTTP_401_UNAUTHORIZED)
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
         except TokenError:
             return Response("Token is invalid or expired", status=status.HTTP_400_BAD_REQUEST)

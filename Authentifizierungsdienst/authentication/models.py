@@ -1,5 +1,4 @@
-import random
-import uuid
+
 
 from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
@@ -7,6 +6,8 @@ from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, Permi
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
+from secrets import SystemRandom
+RNG = SystemRandom()
 
 class UserManager(BaseUserManager):
 
@@ -62,7 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         while not self.id:
-            newid = int.from_bytes(random.randbytes(5))
+            newid = int.from_bytes(RNG.randbytes(5))
             if not User.objects.filter(pk=newid).exists():
                 self.id = newid
         super(User, self).save()

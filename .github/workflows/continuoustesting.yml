@@ -60,12 +60,9 @@ jobs:
           USER_UPDATE_QUEUE_PASSWORD: ${{ secrets.USER_UPDATE_QUEUE_PASSWORD }}
           USER_UPDATE_QUEUE_EXCHANGE_NAME: ${{ secrets.USER_UPDATE_QUEUE_EXCHANGE_NAME }}
 
-      - name: Test Auth API
-        if: always()
-        run: |
-          docker cp ./Authentifizierungsdienst/authentication/test patientenakte-auth-api:/code/authentication/test/
-          docker cp ./Authentifizierungsdienst/authentication/fixtures patientenakte-auth-api:/code/authentication/fixtures/
-          docker exec patientenakte-auth-api python manage.py test
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
 
       - name: Test File API
         if: always()
@@ -73,6 +70,13 @@ jobs:
           docker cp ./Dateiverwaltungsdienst/app_file/test patientenakte-file-api:/code/app_file/test/
           docker cp ./Dateiverwaltungsdienst/app_file/fixtures patientenakte-file-api:/code/app_file/fixtures/
           docker exec patientenakte-file-api python manage.py test
+
+      - name: Test Auth API
+        if: always()
+        run: |
+          docker cp ./Authentifizierungsdienst/authentication/test patientenakte-auth-api:/code/authentication/test/
+          docker cp ./Authentifizierungsdienst/authentication/fixtures patientenakte-auth-api:/code/authentication/fixtures/
+          docker exec patientenakte-auth-api python manage.py test
 
       - name: Stop containers
         if: always()

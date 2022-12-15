@@ -9,11 +9,7 @@ from rest_framework.exceptions import AuthenticationFailed
 def generate_username(name):
 
     username = "".join(name.split(' ')).lower()
-    if not User.objects.filter(username=username).exists():
-        return username
-    else:
-        random_username = username + str(random.randint(0, 1000))
-        return generate_username(random_username)
+    return username
 
 
 def register_social_user(provider, user_id, email, name):

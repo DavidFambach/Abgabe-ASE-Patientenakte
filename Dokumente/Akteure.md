@@ -19,79 +19,63 @@ Patienten laden über das Internet Dateien hoch und verwalten diese über die An
 
 ## 2 Arzt
 
-### 1.1 Kurzbeschreibung
+### 2.1 Kurzbeschreibung
 Ärzte können über das Internet für Sie freigegebene Dateien einsehen und herunterladen. Ärzte können sich selbstständig registrieren.
 
-### 1.2 Eigenschaften
+### 2.2 Eigenschaften
 |                                |                      |
 | ------------------------------ | -------------------- |
 | Zugriffstyp                    | Webzugriff über HTTP |
 | Anzahl gleichzeitiger Benutzer | vgl. NF1             |
 | Datendurchsatz                 | vgl. NF1, RL1        |
 
-### 1.3 Beziehungen
+### 2.3 Beziehungen
 - zu Patienten: Erhalten Zugriff auf Dateien
 
 
-## 3 Plattformadministrator
+## 3 Anwendungsadministrator
 
-### 1.1 Kurzbeschreibung
-Plattformadministratoren sind privilegierte Benutzer, die die Gesamtanwendung verwalten, indem sie Statistiken über die Anwendung, insbesondere Benutzerzahl und Speicherverbrauch einsehen. Sie sind in der Lage, beliebige Benutzer und Dateien zu löschen. Sie sind allerdings nicht in der Lage, die über die Anwendung geteilten Dateien einzusehen oder herunterzuladen.
+### 3.1 Kurzbeschreibung
+Anwendungsadministratoren sind privilegierte Benutzer, die den Dateiverwaltungsdienst und Autorisierungsdienst konfigurieren und warten.
 
-### 1.2 Eigenschaften
-|                                |                      |
-| ------------------------------ | -------------------- |
-| Zugriffstyp                    | Webzugriff über HTTP |
-| Anzahl gleichzeitiger Benutzer | 1                    |
-| Datendurchsatz                 | vernachlässigbar     |
-
-### 1.3 Beziehungen
-keine
-
-
-## 4 Anwendungsadministrator
-
-### 1.1 Kurzbeschreibung
-Anwendungsadministratoren sind privilegierte Benutzer, die den Dateiverwaltungsdienst und Authorisierungsdienst konfigurieren und warten.
-
-### 1.2 Eigenschaften
+### 3.2 Eigenschaften
 |                                |                                                                                 |
 | ------------------------------ |---------------------------------------------------------------------------------|
-| Zugriffstyp                    | Systemzugriff auf den Dateiverwaltungsdienst und Authorisierungsdienst über SSH |
+| Zugriffstyp                    | Systemzugriff auf den Dateiverwaltungsdienst und Autorisierungsdienst über SSH |
 | Anzahl gleichzeitiger Benutzer | 1                                                                               |
 | Datendurchsatz                 | vernachlässigbar                                                                |
 
-### 1.3 Beziehungen
+### 3.3 Beziehungen
 keine
 
 
-## 5 Datenbankadministrator
+## 4 Datenbankadministrator
 
-### 1.1 Kurzbeschreibung
+### 4.1 Kurzbeschreibung
 Datenbankadministratoren sind privilegierte Benutzer, die den Datenbankserver konfigurieren und warten.
 
-### 1.2 Eigenschaften
+### 4.2 Eigenschaften
 |                                |                                                |
 | ------------------------------ | ---------------------------------------------- |
 | Zugriffstyp                    | Systemzugriff auf den Datenbankserver über SSH |
 | Anzahl gleichzeitiger Benutzer | 1                                              |
 | Datendurchsatz                 | vernachlässigbar                               |
 
-### 1.3 Beziehungen
+### 4.3 Beziehungen
 keine
 
 
-## 6 Webserveradministrator
+## 5 Webserveradministrator
 
-### 1.1 Kurzbeschreibung
+### 5.1 Kurzbeschreibung
 Webserveradministrator sind privilegierte Benutzer, die den Webserver konfigurieren und warten.
 
-### 1.2 Eigenschaften
+### 5.2 Eigenschaften
 |                                |                                          |
 | ------------------------------ | ---------------------------------------- |
 | Zugriffstyp                    | Systemzugriff auf den Webserver über SSH |
 | Anzahl gleichzeitiger Benutzer | 1                                        |
 | Datendurchsatz                 | vernachlässigbar                         |
 
-### 1.3 Beziehungen
+### 5.3 Beziehungen
 keine
